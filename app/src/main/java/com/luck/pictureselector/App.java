@@ -11,6 +11,8 @@ import com.luck.picture.lib.app.IApp;
 import com.luck.picture.lib.app.PictureAppMaster;
 import com.luck.picture.lib.engine.PictureSelectorEngine;
 
+import io.microshow.rxffmpeg.RxFFmpegInvoke;
+
 
 /**
  * @author：luck
@@ -25,6 +27,7 @@ public class App extends Application implements IApp, CameraXConfig.Provider {
     public void onCreate() {
         super.onCreate();
         PictureAppMaster.getInstance().setApp(this);
+        RxFFmpegInvoke.getInstance().setDebug(false);
     }
 
     @Override

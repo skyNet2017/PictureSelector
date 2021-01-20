@@ -1,6 +1,7 @@
 package com.luck.pictureselector;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -102,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private int animationMode = AnimationType.DEFAULT_ANIMATION;
 
 
+    static Activity activity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,6 +112,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else {
             clearCache();
         }
+        activity = this;
         setContentView(R.layout.activity_main);
         themeId = R.style.picture_default_style;
         mSelectorUIStyle = PictureSelectorUIStyle.ofDefaultStyle();
@@ -619,12 +622,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.i(TAG, "宽高: " + media.getWidth() + "x" + media.getHeight());
                 Log.i(TAG, "Size: " + media.getSize());
                 // TODO 可以通过PictureSelectorExternalUtils.getExifInterface();方法获取一些额外的资源信息，如旋转角度、经纬度等信息
+
+                if(media.getRealPath().endsWith(".mp4")){
+                    RxVideoCompressor.compress(activity,media.getRealPath());
+                }
             }
             if (mAdapterWeakReference.get() != null) {
                 mAdapterWeakReference.get().setList(result);
                 mAdapterWeakReference.get().notifyDataSetChanged();
             }
         }
+
+
 
         @Override
         public void onCancel() {

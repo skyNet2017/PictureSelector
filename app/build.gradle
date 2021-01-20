@@ -40,4 +40,20 @@ dependencies {
     implementation "androidx.camera:camera-camera2:${cfgs.camerax_version}"
     implementation "com.github.bumptech.glide:glide:${cfgs.glide_version}"
     implementation "com.squareup.picasso:picasso:${cfgs.picasso_version}"
+
+
+
+    //视频压缩
+    implementation 'com.iceteck.silicompressorr:silicompressor:2.2.4'//画质太差
+    implementation 'com.googlecode.mp4parser:isoparser:1.1.22'
+
+    implementation 'com.github.yellowcath:VideoProcessor:2.4.2'
+
+
+
+    //完整版
+    implementation 'com.github.microshow:RxFFmpeg:4.9.0'
+
+    //极速版 (预计占用 4M 左右空间)，主要移除了一些不常用的编解码器
+    //implementation 'com.github.microshow:RxFFmpeg:4.9.0-lite'
 }
