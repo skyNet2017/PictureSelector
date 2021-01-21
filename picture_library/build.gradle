@@ -38,4 +38,8 @@ dependencies {
     implementation "androidx.localbroadcastmanager:localbroadcastmanager:${cfgs.localbroadcastmanager}"
     implementation "androidx.camera:camera-view:${cfgs.camerax_view}"
     api project(':ucrop')
+
+    /*implementation ('com.hjq:xxpermissions:9.6'){
+        exclude group :'com.android.support', module : 'support-compat'
+    }*/
 }

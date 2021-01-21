@@ -6,6 +6,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.camera.camera2.Camera2Config;
 import androidx.camera.core.CameraXConfig;
+import androidx.multidex.MultiDexApplication;
 
 import com.luck.picture.lib.app.IApp;
 import com.luck.picture.lib.app.PictureAppMaster;
@@ -20,7 +21,7 @@ import io.microshow.rxffmpeg.RxFFmpegInvoke;
  * @describe：Application
  */
 
-public class App extends Application implements IApp, CameraXConfig.Provider {
+public class App extends MultiDexApplication implements IApp, CameraXConfig.Provider {
     private static final String TAG = App.class.getSimpleName();
 
     @Override

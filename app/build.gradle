@@ -9,6 +9,7 @@ android {
         targetSdkVersion cfgs.targetSdkVersion
         versionCode cfgs.versionCode
         versionName cfgs.versionName
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -47,13 +48,13 @@ dependencies {
     implementation 'com.iceteck.silicompressorr:silicompressor:2.2.4'//画质太差
     implementation 'com.googlecode.mp4parser:isoparser:1.1.22'
 
+    //画质较差,不能自定义码率
     implementation 'com.github.yellowcath:VideoProcessor:2.4.2'
 
 
 
     //完整版
     implementation 'com.github.microshow:RxFFmpeg:4.9.0'
-
     //极速版 (预计占用 4M 左右空间)，主要移除了一些不常用的编解码器
     //implementation 'com.github.microshow:RxFFmpeg:4.9.0-lite'
 }

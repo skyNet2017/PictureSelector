@@ -299,8 +299,8 @@ public class RxVideoCompressor {
                 .endTimeMs(endTimeMs)    //用于剪辑视频
                 .speed(speed)            //改变视频速率，用于快慢放
                 .changeAudioSpeed(changeAudioSpeed) //改变视频速率时，音频是否同步变化*/
-                .bitrate(6000)       //输出视频比特率
-               // .frameRate(frameRate)   //帧率 30 24  60
+                .bitrate(1000)       //输出视频比特率
+               // .frameRate(24)   //帧率 30 24  60
                // .iFrameInterval(iFrameInterval)  //关键帧距，为0时可输出全关键帧视频（部分机器上需为-1）
                 //.progressListener(listener)      //可输出视频处理进度
                 .process();
