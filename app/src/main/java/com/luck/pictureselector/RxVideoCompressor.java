@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -21,6 +22,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
 
 import io.microshow.rxffmpeg.RxFFmpegCommandList;
 import io.microshow.rxffmpeg.RxFFmpegInvoke;
@@ -134,13 +137,49 @@ public class RxVideoCompressor {
         cmdlist.append("-vcodec");
         cmdlist.append("libx264");
         cmdlist.append("-preset");
-        cmdlist.append("veryslow");
+        cmdlist.append("superfast");
         cmdlist.append(out.getAbsolutePath());
         return cmdlist.build();
     }
 
+    /**
+     * videostream_codecpar_width=544
+     * videostream_codecpar_height=960
+     * videostream_avcodocname=h264
+     *
+     * videostream_nb_frames=880
+     * bit_rate=1126.506000 kbs
+     * videostream_duration=29333.333333
+     *
+     * videostream_avg_frame_rate=30.000000 fps
+     * videostream_r_frame_rate=30.000000 fps
+     * @param file
+     * @return
+     */
+   public static Map<String,String> getMediaInfo(File file){
+        Log.d("info","path:"+file.getAbsolutePath());
+        String str = RxFFmpegInvoke.getInstance().getMediaInfo(file.getAbsolutePath());
+        String[] strings = str.split(";");
+        Map<String,String> map =  new HashMap<>();
+        for (String string : strings) {
+            if(!TextUtils.isEmpty(string)){
+                Log.d("info",string);
+                if(string.contains("=")){
+                    String[] kv = string.split("=");
+                    if(kv.length> 1){
+                        map.put(kv[0],kv[1]);
+                    }
+                }
+            }
+        }
+        return map;
+
+
+    }
+
 
     private static void runRx(File file, long start,Activity activity) {
+        getMediaInfo(file);
         File out = new File(file.getParent(),file.getName().replace(".mp4","-compressed-rx-r30-crf28.mp4"));
 
         //注意还需要判断下视频的旋转角度，不然也会crash
