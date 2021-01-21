@@ -14,8 +14,11 @@ import androidx.appcompat.app.AlertDialog;
 import com.hw.videoprocessor.VideoProcessor;
 import com.iceteck.silicompressorr.SiliCompressor;
 import com.luck.picture.lib.app.PictureAppMaster;
+import com.yalantis.ucrop.util.FileUtils;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.URISyntaxException;
 
@@ -68,14 +71,23 @@ public class RxVideoCompressor {
         cmdlist.append("-y");
         cmdlist.append("-i");
         cmdlist.append(file.getAbsolutePath());
-        cmdlist.append("-b");
-        cmdlist.append("2097k");
+        //关键在于码率的设置: 4k视频,推荐5000k
+        //1080p视频,推荐2084k
+        //cmdlist.append("-b");
+        //cmdlist.append("6000k");
+        //量化比例的范围为0～51，其中0为无损模式，23为缺省值，51可能是最差的
+        //若Crf值加6，输出码率大概减少一半；若Crf值减6，输出码率翻倍
+        cmdlist.append("-crf");
+        cmdlist.append("33");
+        //cmdlist.append("1500k");
         cmdlist.append("-r");
-        cmdlist.append("30");
+        cmdlist.append("24");
+        //cmdlist.append("-vf");
+        //cmdlist.append("scale=720:1080");
         cmdlist.append("-vcodec");
         cmdlist.append("libx264");
         cmdlist.append("-preset");
-        cmdlist.append("superfast");
+        cmdlist.append("ultrafast");
         cmdlist.append(out.getAbsolutePath());
         return cmdlist.build();
     }
@@ -89,6 +101,14 @@ public class RxVideoCompressor {
      * r23-b4096 38M->6 14s
      *
      * 码率推荐; https://blog.csdn.net/benkaoya/article/details/79558896
+     *
+     * https://blog.csdn.net/rootusers/article/details/41646557
+     *
+     * https://blog.csdn.net/DONGHONGBAI/article/details/84776431
+     *
+     * https://blog.csdn.net/Martin_chen2/article/details/105772872
+     *
+     * crf vs b
      * @param file
      * @param out
      * @return
@@ -98,23 +118,30 @@ public class RxVideoCompressor {
         cmdlist.append("-y");
         cmdlist.append("-i");
         cmdlist.append(file.getAbsolutePath());
-        //关键在于码率的设置: 4k视频,推荐6000k
-        //1080p视频,推荐3084k
-        cmdlist.append("-b");
-        cmdlist.append("6000k");
+        //关键在于码率的设置: 4k视频,推荐5000k
+        //1080p视频,推荐2084k
+        //cmdlist.append("-b");
+        //cmdlist.append("6000k");
+        //量化比例的范围为0～51，其中0为无损模式，23为缺省值，51可能是最差的
+        //若Crf值加6，输出码率大概减少一半；若Crf值减6，输出码率翻倍
+        cmdlist.append("-crf");
+        cmdlist.append("28");
+        //cmdlist.append("1500k");
         cmdlist.append("-r");
-        cmdlist.append("20");
+        cmdlist.append("30");
+        //cmdlist.append("-vf");
+        //cmdlist.append("scale=720:1080");
         cmdlist.append("-vcodec");
         cmdlist.append("libx264");
         cmdlist.append("-preset");
-        cmdlist.append("superfast");
+        cmdlist.append("veryslow");
         cmdlist.append(out.getAbsolutePath());
         return cmdlist.build();
     }
 
 
     private static void runRx(File file, long start,Activity activity) {
-        File out = new File(file.getParent(),file.getName().replace(".mp4","-compressed-rx-r20-b6000k.mp4"));
+        File out = new File(file.getParent(),file.getName().replace(".mp4","-compressed-rx-r30-crf28.mp4"));
 
         //注意还需要判断下视频的旋转角度，不然也会crash
        // -vf scale=-1:720
@@ -150,7 +177,7 @@ public class RxVideoCompressor {
                         if(dialog[0] != null){
                             dialog[0].dismiss();
                         }
-                        showInfo(file,out,start,activity);
+                        showInfo(file,out,start,activity,handler);
                     }
                 });
             }
@@ -248,7 +275,7 @@ public class RxVideoCompressor {
         Log.i("dd","compressed file size:"+file.length()/1024/1024+"M->"+out.length()/1024.0f/1024.0f+"M");
     }
 
-    private static void showInfo(File file, File out, long start, Activity activity) {
+    private static void showInfo(File file, File out, long start, Activity activity, Handler handler) {
 
         StringBuilder sb = new StringBuilder("compressed:\n")
                 .append(out.getAbsolutePath())
@@ -258,12 +285,49 @@ public class RxVideoCompressor {
         new AlertDialog.Builder(activity)
                 .setTitle("压缩完成")
                 .setMessage(sb.toString())
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                .setPositiveButton("覆盖原文件", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        FileUtils.copyFile(new FileInputStream(out),file.getAbsolutePath());
+                                        handler.post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Toast.makeText(activity,"覆盖成功",Toast.LENGTH_LONG).show();
+                                            }
+                                        });
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        handler.post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Toast.makeText(activity,"覆盖失败:"+e.getMessage(),Toast.LENGTH_LONG).show();
+                                            }
+                                        });
+
+                                    }
+
+                                }
+                            }).start();
+
+
+
                     }
-                }).create().show();
+                }).setNegativeButton("两个文件都保留", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        }).setNegativeButton("删除压缩的文件", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                out.delete();
+            }
+        }).create().show();
 
     }
 
