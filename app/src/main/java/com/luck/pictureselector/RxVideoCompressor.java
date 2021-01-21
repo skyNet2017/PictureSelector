@@ -81,7 +81,7 @@ public class RxVideoCompressor {
         //量化比例的范围为0～51，其中0为无损模式，23为缺省值，51可能是最差的
         //若Crf值加6，输出码率大概减少一半；若Crf值减6，输出码率翻倍
         cmdlist.append("-crf");
-        cmdlist.append("33");
+        cmdlist.append("32");
         //cmdlist.append("1500k");
         cmdlist.append("-r");
         cmdlist.append("24");
@@ -324,6 +324,7 @@ public class RxVideoCompressor {
         new AlertDialog.Builder(activity)
                 .setTitle("压缩完成")
                 .setMessage(sb.toString())
+                .setCancelable(false)
                 .setPositiveButton("覆盖原文件", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -333,6 +334,7 @@ public class RxVideoCompressor {
                                 public void run() {
                                     try {
                                         FileUtils.copyFile(new FileInputStream(out),file.getAbsolutePath());
+                                        out.delete();
                                         handler.post(new Runnable() {
                                             @Override
                                             public void run() {
