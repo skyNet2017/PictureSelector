@@ -8,6 +8,7 @@ import androidx.camera.camera2.Camera2Config;
 import androidx.camera.core.CameraXConfig;
 import androidx.multidex.MultiDexApplication;
 
+
 import com.luck.picture.lib.app.IApp;
 import com.luck.picture.lib.app.PictureAppMaster;
 import com.luck.picture.lib.engine.PictureSelectorEngine;
@@ -29,6 +30,7 @@ public class App extends MultiDexApplication implements IApp, CameraXConfig.Prov
         super.onCreate();
         PictureAppMaster.getInstance().setApp(this);
         RxFFmpegInvoke.getInstance().setDebug(false);
+        //VideoUtil2.call();
     }
 
     @Override
