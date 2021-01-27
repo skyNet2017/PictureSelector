@@ -12,8 +12,9 @@ import androidx.multidex.MultiDexApplication;
 import com.luck.picture.lib.app.IApp;
 import com.luck.picture.lib.app.PictureAppMaster;
 import com.luck.picture.lib.engine.PictureSelectorEngine;
+import com.shuyu.gsyvideoplayer.player.PlayerFactory;
+import com.shuyu.gsyvideoplayer.player.SystemPlayerManager;
 
-import io.microshow.rxffmpeg.RxFFmpegInvoke;
 
 
 /**
@@ -29,8 +30,9 @@ public class App extends MultiDexApplication implements IApp, CameraXConfig.Prov
     public void onCreate() {
         super.onCreate();
         PictureAppMaster.getInstance().setApp(this);
-        RxFFmpegInvoke.getInstance().setDebug(false);
         //VideoUtil2.call();
+        //EXOPlayer内核，支持格式更多
+        PlayerFactory.setPlayManager(SystemPlayerManager.class);
     }
 
     @Override

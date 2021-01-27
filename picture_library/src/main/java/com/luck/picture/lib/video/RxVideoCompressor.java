@@ -1,27 +1,29 @@
-package com.luck.pictureselector;
+package com.luck.picture.lib.video;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.media.MediaMetadataRetriever;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
+import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 
-import com.hw.videoprocessor.VideoProcessor;
-import com.iceteck.silicompressorr.SiliCompressor;
-import com.luck.picture.lib.app.PictureAppMaster;
+
 import com.yalantis.ucrop.util.FileUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.net.URISyntaxException;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -128,7 +130,7 @@ public class RxVideoCompressor {
         //量化比例的范围为0～51，其中0为无损模式，23为缺省值，51可能是最差的
         //若Crf值加6，输出码率大概减少一半；若Crf值减6，输出码率翻倍
         cmdlist.append("-crf");
-        cmdlist.append("28");
+        cmdlist.append("26");
         //cmdlist.append("1500k");
         cmdlist.append("-r");
         cmdlist.append("30");
@@ -173,14 +175,87 @@ public class RxVideoCompressor {
             }
         }
         return map;
+    }
+
+    public static String getKeyMediaInfo(String path){
+       File file = new File(path);
+        Map<String,String> map = getMediaInfo(file);
+        StringBuilder stringBuilder = new StringBuilder();
+        String duration = map.get("videostream_duration");
+        if(duration.contains(".")){
+            duration = duration.substring(0,duration.indexOf("."));
+        }
+        int dura = 0;
+        String bitRate = "0" ;
+        try {
+            dura =  Integer.parseInt(duration)/1000;
+            bitRate = (int) (file.length()/dura)/1024 +"kbps";
+        }catch (Throwable throwable){
+            throwable.printStackTrace();
+            bitRate = map.get("bit_rate");
+        }
+
+        stringBuilder.append(file.getName())
+                .append("\n")
+                .append(size(file))
+                .append("\n")
+                .append(map.get("videostream_codecpar_width"))
+                .append("x")
+                .append(map.get("videostream_codecpar_height"))
+                .append("\n")
+                .append("bit_rate:")
+                .append(bitRate)
+                .append("\n")
+                .append("len:")
+                .append(dura)  .append("s") ;
+        return stringBuilder.toString();
+    }
 
 
+    public static String getKeyInfo2(String path){
+        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        retriever.setDataSource(path);
+        String width = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH); //宽
+        String height = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT); //高
+        String rotation = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION);//视频的方向角度
+        long duration = Long.valueOf(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)) /1000;//视频的长度
+
+        File file = new File(path);
+        StringBuilder stringBuilder = new StringBuilder();
+      String  bitRate = (int) (file.length()/duration)/1024 +"kbps";
+        stringBuilder.append(file.getName())
+                .append("\n")
+                .append(size(file))
+                .append("\n")
+                .append(width)
+                .append("x")
+                .append(height)
+                .append(", rotation:")
+                .append(rotation)
+                .append("\n")
+                .append("bit_rate:")
+                .append(bitRate)
+                .append("\n")
+                .append("len:")
+                .append(duration)  .append("s") ;
+        return stringBuilder.toString();
+    }
+
+    private static String size(File file) {
+        long len = file.length();
+        String size = "";
+        if(len> 1024*1024){
+            size = len/1024/1024+"MB";
+        }else {
+            size = len/1024+"kB";
+        }
+        return size;
     }
 
 
     private static void runRx(File file, long start,Activity activity) {
-        getMediaInfo(file);
-        File out = new File(file.getParent(),file.getName().replace(".mp4","-compressed-rx-r30-crf28.mp4"));
+        //getMediaInfo(file);
+        File out = new File(file.getParent(),file.getName().replace(".mp4","-compressed-rx-r30-crf26.mp4"));
 
         //注意还需要判断下视频的旋转角度，不然也会crash
        // -vf scale=-1:720
@@ -216,7 +291,8 @@ public class RxVideoCompressor {
                         if(dialog[0] != null){
                             dialog[0].dismiss();
                         }
-                        showInfo(file,out,start,activity,handler);
+                        //showInfo(file,out,start,activity,handler);
+                        CompressCompareActivity.start(activity,file.getAbsolutePath(),out.getAbsolutePath(),start);
                     }
                 });
             }
@@ -252,9 +328,9 @@ public class RxVideoCompressor {
                 });
             }
         });
-        log(file,out,start);
+        //log(file,out,start);
 
-        Log.i("dd","info:"+RxFFmpegInvoke.getInstance().getMediaInfo(out.getAbsolutePath()));
+       // Log.i("dd","info:"+RxFFmpegInvoke.getInstance().getMediaInfo(out.getAbsolutePath()));
 
         //major_brand=isom;minor_version=512;compatible_brands=isomiso2avc1mp41;encoder=Lavf58.12.100;
         // location-eng=+23.1319+114.4192/;location=+23.1319+114.4192/;
@@ -287,24 +363,24 @@ public class RxVideoCompressor {
      */
     private static void compressByVideoCompressor(File file, long start, long original) throws Exception{
         File out = new File(file.getParent(),file.getName().replace(".mp4","-compressed-3.mp4"));
-        VideoProcessor.processor(PictureAppMaster.getInstance().getAppContext())
+       /* VideoProcessor.processor(PictureAppMaster.getInstance().getAppContext())
                 .input(file.getAbsolutePath()) // .input(inputVideoUri)
                 .output(out.getAbsolutePath())
                 //.outWidth(1080)
                 //.outHeight(1920)
                 //以下参数全部为可选
-               /* .outWidth(width)
+               *//* .outWidth(width)
                 .outHeight(height)
                 .startTimeMs(startTimeMs)//用于剪辑视频
                 .endTimeMs(endTimeMs)    //用于剪辑视频
                 .speed(speed)            //改变视频速率，用于快慢放
-                .changeAudioSpeed(changeAudioSpeed) //改变视频速率时，音频是否同步变化*/
+                .changeAudioSpeed(changeAudioSpeed) //改变视频速率时，音频是否同步变化*//*
                 .bitrate(1000)       //输出视频比特率
                // .frameRate(24)   //帧率 30 24  60
                // .iFrameInterval(iFrameInterval)  //关键帧距，为0时可输出全关键帧视频（部分机器上需为-1）
                 //.progressListener(listener)      //可输出视频处理进度
                 .process();
-                log(file,out,start);
+                log(file,out,start);*/
     }
 
     private static void log(File file, File out, long start) {
@@ -316,12 +392,15 @@ public class RxVideoCompressor {
 
     private static void showInfo(File file, File out, long start, Activity activity, Handler handler) {
 
+
         StringBuilder sb = new StringBuilder("compressed:\n")
                 .append(out.getAbsolutePath())
                 .append("\n")
                 .append("cost:"+(System.currentTimeMillis() - start)/1000+"s\n")
-                .append("compressed file size:"+file.length()/1024/1024+"M->"+out.length()/1024.0f/1024.0f+"M");
-        new AlertDialog.Builder(activity)
+                .append("compressed file size:"+file.length()/1024/1024+"M->"+out.length()/1024.0f/1024.0f+"M")
+                .append("\n").append("\n")
+                .append(getKeyInfo2(out.getAbsolutePath()));
+        AlertDialog dialog =    new AlertDialog.Builder(activity)
                 .setTitle("压缩完成")
                 .setMessage(sb.toString())
                 .setCancelable(false)
@@ -358,7 +437,7 @@ public class RxVideoCompressor {
 
 
                     }
-                }).setNegativeButton("两个文件都保留", new DialogInterface.OnClickListener() {
+                }).setNeutralButton("两个文件都保留", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
@@ -368,15 +447,111 @@ public class RxVideoCompressor {
             public void onClick(DialogInterface dialog, int which) {
                 out.delete();
             }
-        }).create().show();
+        }).create();
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
 
     }
 
 
     //SiliCompressor 画质很差
     private static void compressBySili(File file, long start, long original) throws Exception{
-        String filePath = SiliCompressor.with(PictureAppMaster.getInstance().getAppContext()).compressVideo(file.getAbsolutePath(), file.getParent());
-       log(file,new File(filePath),start);
+       /* String filePath = SiliCompressor.with(PictureAppMaster.getInstance().getAppContext()).compressVideo(file.getAbsolutePath(), file.getParent());
+       log(file,new File(filePath),start);*/
 
+    }
+
+
+
+    public static  void refreshMediaCenter(Context activity, String filePath){
+       /* File file  = new File(filePath);
+        try {
+            MediaStore.Images.Media.insertImage(activity.getContentResolver(),file.getAbsolutePath(), file.getName(), null);
+        } catch (FileNotFoundException e) {
+            ExceptionReporterHelper.reportException(e);
+        }*/
+
+
+        if (Build.VERSION.SDK_INT>19){
+            String mineType =getMineType(filePath);
+
+            saveImageSendScanner(activity,new MyMediaScannerConnectionClient(filePath,mineType));
+        }else {
+
+            saveImageSendBroadcast(activity,filePath);
+        }
+    }
+
+    public static String getMineType(String filePath) {
+
+        String type = "text/plain";
+        String extension = MimeTypeMap.getFileExtensionFromUrl(filePath);
+        if (extension != null) {
+            MimeTypeMap mime = MimeTypeMap.getSingleton();
+            type = mime.getMimeTypeFromExtension(extension);
+        }
+        return type;
+
+
+       /* MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+        String mime = "text/plain";
+        if (filePath != null) {
+            try {
+                mmr.setDataSource(filePath);
+                mime = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_MIMETYPE);
+            } catch (IllegalStateException e) {
+                return mime;
+            } catch (IllegalArgumentException e) {
+                return mime;
+            } catch (RuntimeException e) {
+                return mime;
+            }
+        }
+        return mime;*/
+    }
+
+    /**
+     * 保存后用广播扫描，Android4.4以下使用这个方法
+     * @author YOLANDA
+     */
+    private static void saveImageSendBroadcast(Context activity, String filePath){
+        activity.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + filePath)));
+    }
+
+    /**
+     * 保存后用MediaScanner扫描，通用的方法
+     *
+     */
+    private static void saveImageSendScanner (Context context, MyMediaScannerConnectionClient scannerClient) {
+
+        final MediaScannerConnection scanner = new MediaScannerConnection(context, scannerClient);
+        scannerClient.setScanner(scanner);
+        scanner.connect();
+    }
+    private   static class MyMediaScannerConnectionClient implements MediaScannerConnection.MediaScannerConnectionClient {
+
+        private MediaScannerConnection mScanner;
+
+        private String mScanPath;
+        private String mimeType;
+
+        public MyMediaScannerConnectionClient(String scanPath, String mimeType) {
+            mScanPath = scanPath;
+            this.mimeType = mimeType;
+        }
+
+        public void setScanner(MediaScannerConnection con) {
+            mScanner = con;
+        }
+
+        @Override
+        public void onMediaScannerConnected() {
+            mScanner.scanFile(mScanPath, mimeType);
+        }
+
+        @Override
+        public void onScanCompleted(String path, Uri uri) {
+            mScanner.disconnect();
+        }
     }
 }

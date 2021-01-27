@@ -23,6 +23,7 @@ import com.luck.picture.lib.config.PictureSelectionConfig;
 import com.luck.picture.lib.dialog.PictureCustomDialog;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.luck.picture.lib.listener.OnPhotoSelectChangedListener;
+import com.luck.picture.lib.thread.PictureThreadUtils;
 import com.luck.picture.lib.tools.AnimUtils;
 import com.luck.picture.lib.tools.AttrsUtils;
 import com.luck.picture.lib.tools.DateUtils;
@@ -30,6 +31,7 @@ import com.luck.picture.lib.tools.MediaUtils;
 import com.luck.picture.lib.tools.StringUtils;
 import com.luck.picture.lib.tools.ToastUtils;
 import com.luck.picture.lib.tools.VoiceUtils;
+import com.luck.picture.lib.video.RxVideoCompressor;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -175,6 +177,7 @@ public class PictureImageGridAdapter extends RecyclerView.Adapter<RecyclerView.V
                 }
             }
             contentHolder.tvIsGif.setVisibility(PictureMimeType.isGif(mimeType) ? View.VISIBLE : View.GONE);
+
             if (PictureMimeType.isHasImage(image.getMimeType())) {
                 if (image.loadLongImageStatus == PictureConfig.NORMAL) {
                     image.isLongImage = MediaUtils.isLongImg(image);
@@ -186,9 +189,12 @@ public class PictureImageGridAdapter extends RecyclerView.Adapter<RecyclerView.V
                 contentHolder.tvLongChart.setVisibility(View.GONE);
             }
             boolean isHasVideo = PictureMimeType.isHasVideo(mimeType);
+            //显示文件大小,分辨率
+            showInfo(isHasVideo,image,contentHolder);
             if (isHasVideo || PictureMimeType.isHasAudio(mimeType)) {
                 contentHolder.tvDuration.setVisibility(View.VISIBLE);
                 contentHolder.tvDuration.setText(DateUtils.formatDurationTime(image.getDuration()));
+
                 if (PictureSelectionConfig.uiStyle != null) {
                     if (isHasVideo) {
                         if (PictureSelectionConfig.uiStyle.picture_adapter_item_video_textLeftDrawable != 0) {
@@ -315,6 +321,10 @@ public class PictureImageGridAdapter extends RecyclerView.Adapter<RecyclerView.V
         }
     }
 
+    private void showInfo(boolean isHasVideo, LocalMedia image, ViewHolder contentHolder) {
+        contentHolder.tvInfo.setText(RxVideoCompressor.getKeyInfo2(image.getRealPath()));
+    }
+
     /**
      * Handle mask effects
      *
@@ -414,6 +424,7 @@ public class PictureImageGridAdapter extends RecyclerView.Adapter<RecyclerView.V
         TextView tvDuration, tvIsGif, tvLongChart;
         View contentView;
         View btnCheck;
+        TextView tvInfo;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -421,6 +432,7 @@ public class PictureImageGridAdapter extends RecyclerView.Adapter<RecyclerView.V
             ivPicture = itemView.findViewById(R.id.ivPicture);
             tvCheck = itemView.findViewById(R.id.tvCheck);
             btnCheck = itemView.findViewById(R.id.btnCheck);
+            tvInfo = itemView.findViewById(R.id.tv_info);
             tvDuration = itemView.findViewById(R.id.tv_duration);
             tvIsGif = itemView.findViewById(R.id.tv_isGif);
             tvLongChart = itemView.findViewById(R.id.tv_long_chart);

@@ -39,6 +39,14 @@ dependencies {
     implementation "androidx.camera:camera-view:${cfgs.camerax_view}"
     api project(':ucrop')
 
+
+    //完整版
+    //api 'com.github.microshow:RxFFmpeg:4.9.0'
+    implementation 'com.github.microshow:RxFFmpeg:4.9.0-lite'
+
+    api 'com.shuyu:gsyVideoPlayer-java:8.0.0'
+    //api 'com.shuyu:GSYVideoPlayer-exo2:8.0.0'
+    //api 'com.shuyu:GSYVideoPlayer:8.0.0'
     /*implementation ('com.hjq:xxpermissions:9.6'){
         exclude group :'com.android.support', module : 'support-compat'
     }*/

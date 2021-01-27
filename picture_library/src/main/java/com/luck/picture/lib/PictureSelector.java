@@ -13,6 +13,7 @@ import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.luck.picture.lib.style.PictureParameterStyle;
 import com.luck.picture.lib.tools.DoubleUtils;
+import com.luck.picture.lib.video.PictureVideoPlayByGSYActivity;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -196,7 +197,7 @@ public final class PictureSelector {
     public void externalPictureVideo(String path) {
         if (!DoubleUtils.isFastDoubleClick()) {
             if (getActivity() != null) {
-                Intent intent = new Intent(getActivity(), PictureVideoPlayActivity.class);
+                Intent intent = new Intent(getActivity(), PictureVideoPlayByGSYActivity.class);
                 intent.putExtra(PictureConfig.EXTRA_VIDEO_PATH, path);
                 intent.putExtra(PictureConfig.EXTRA_PREVIEW_VIDEO, true);
                 getActivity().startActivity(intent);

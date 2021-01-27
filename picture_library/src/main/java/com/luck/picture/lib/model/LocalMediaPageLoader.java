@@ -22,8 +22,10 @@ import com.luck.picture.lib.tools.PictureFileUtils;
 import com.luck.picture.lib.tools.SdkVersionUtils;
 import com.luck.picture.lib.tools.ValueOf;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -357,6 +359,9 @@ public final class LocalMediaPageLoader {
                                 result.add(image);
 
                             } while (data.moveToNext());
+
+                            //按文件大小排序
+                            sort(result);
                         }
                         return new MediaData(data.getCount() > 0, result);
                     }
@@ -377,6 +382,15 @@ public final class LocalMediaPageLoader {
                 if (listener != null && result != null) {
                     listener.onComplete(result.data, page, result.isHasNextMore);
                 }
+            }
+        });
+    }
+
+    private void sort(List<LocalMedia> result) {
+        Collections.sort(result, new Comparator<LocalMedia>() {
+            @Override
+            public int compare(LocalMedia o1, LocalMedia o2) {
+                return (int) (new File(o2.getRealPath()).length() - new File(o1.getRealPath()).length());
             }
         });
     }

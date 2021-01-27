@@ -7,7 +7,8 @@ import android.os.Bundle;
 
 import com.luck.picture.lib.PicturePreviewActivity;
 import com.luck.picture.lib.PictureSelectorPreviewWeChatStyleActivity;
-import com.luck.picture.lib.PictureVideoPlayActivity;
+import com.luck.picture.lib.config.PictureConfig;
+import com.luck.picture.lib.video.PictureVideoPlayByGSYActivity;
 
 /**
  * @author：luck
@@ -24,7 +25,7 @@ public class JumpUtils {
     public static void startPictureVideoPlayActivity(Context context, Bundle bundle, int requestCode) {
         if (!DoubleUtils.isFastDoubleClick()) {
             Intent intent = new Intent();
-            intent.setClass(context, PictureVideoPlayActivity.class);
+            intent.setClass(context, PictureVideoPlayByGSYActivity.class);
             intent.putExtras(bundle);
             if (!(context instanceof Activity)) {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -32,6 +33,21 @@ public class JumpUtils {
             } else {
                 ((Activity) context).startActivityForResult(intent, requestCode);
             }
+        }
+    }
+
+    public static void previeVideo(Context context,String path){
+        Intent intent = new Intent();
+        intent.setClass(context, PictureVideoPlayByGSYActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(PictureConfig.EXTRA_PREVIEW_VIDEO, true);
+        bundle.putString(PictureConfig.EXTRA_VIDEO_PATH, path);
+        intent.putExtras(bundle);
+        if (!(context instanceof Activity)) {
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+        } else {
+            ((Activity) context).startActivityForResult(intent, 999);
         }
     }
 

@@ -66,4 +66,16 @@
         android:textColor="@color/picture_color_white"
         android:textSize="11sp"
         android:visibility="gone" />
+    <TextView
+        android:id="@+id/tv_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"
+        android:drawablePadding="5dp"
+        android:paddingLeft="5dp"
+        android:paddingTop="8dp"
+        android:text="info"
+        android:textColor="@color/picture_color_white"
+        android:textSize="11sp"
+        android:visibility="visible" />
 </com.luck.picture.lib.widget.SquareRelativeLayout>
