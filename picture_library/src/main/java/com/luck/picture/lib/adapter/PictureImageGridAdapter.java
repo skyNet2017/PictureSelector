@@ -2,6 +2,7 @@ package com.luck.picture.lib.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -32,6 +33,7 @@ import com.luck.picture.lib.tools.StringUtils;
 import com.luck.picture.lib.tools.ToastUtils;
 import com.luck.picture.lib.tools.VoiceUtils;
 import com.luck.picture.lib.video.RxVideoCompressor;
+import com.luck.picture.lib.video.VideoInfo;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -322,7 +324,13 @@ public class PictureImageGridAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
 
     private void showInfo(boolean isHasVideo, LocalMedia image, ViewHolder contentHolder) {
-        contentHolder.tvInfo.setText(RxVideoCompressor.getKeyInfo2(image.getRealPath()));
+        VideoInfo info = VideoInfo.getInfo(image.getRealPath());
+        contentHolder.tvInfo.setText(info.getInfoForList());
+        if(info.bitRates > 2500*8){
+            contentHolder.tvInfo.setTextColor(Color.YELLOW);
+        }else {
+            contentHolder.tvInfo.setTextColor(Color.WHITE);
+        }
     }
 
     /**
