@@ -12,8 +12,8 @@ import java.io.File;
 
 public class DefaultDialogCompressListener implements ICompressListener {
    protected Handler handler  = new Handler(Looper.getMainLooper());
-    final ProgressDialog[] dialog = {null};
-    ICompressListener listener;
+    protected final ProgressDialog[] dialog = {null};
+    protected ICompressListener listener;
 
     public DefaultDialogCompressListener(Activity activity,ICompressListener listener) {
         this.activity = activity;

@@ -1,5 +1,8 @@
 package com.hss01248.videocompress.mediacodec;
 
+import android.media.MediaMetadataRetriever;
+import android.util.Log;
+
 import com.hss01248.videocompress.CompressType;
 import com.hss01248.videocompress.CompressorConfig;
 import com.hss01248.videocompress.VideoCompressUtil;
@@ -29,9 +32,45 @@ public class MediaCodecCompressImpl implements ICompressor {
             public void run() {
                 try {
                     VideoInfo info = VideoInfo.getInfo(inputPath);
-                    listener.onStart(inputPath, outPath);
                     long start = System.currentTimeMillis();
-                    VideoProcessor.Processor process =   VideoProcessor.processor(VideoCompressUtil.context)
+
+
+                    MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+                    retriever.setDataSource(inputPath);
+                    int originWidth = Integer.parseInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH));
+                    int originHeight = Integer.parseInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT));
+                    int bitrate = Integer.parseInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE));
+
+                    int outWidth = originWidth / 2;
+                    int outHeight = originHeight / 2;
+                    VideoProcessor.processor(VideoCompressUtil.context)
+                            .input(inputPath)
+                            .output(outPath)
+                            .outWidth(outWidth)
+                            .outHeight(outHeight)
+                            //.startTimeMs(startMs)
+                           // .endTimeMs(endMs)
+                            .bitrate(bitrate / 2)
+                            .progressListener(new VideoProgressListener() {
+                                @Override
+                                public void onProgress(float progress) {
+                                    //Log.d("progress","P:"+progress);
+                                    listener.onProgress((int) (progress*100),System.currentTimeMillis() - start);
+                                    if(progress == 1.0f){
+                                        listener.onFinish(outPath);
+                                    }
+
+                                }
+                            })
+                            .process();
+
+
+
+
+
+
+
+                   /* VideoProcessor.Processor process =   VideoProcessor.processor(VideoCompressUtil.context)
                             .input(inputPath) // .input(inputVideoUri)
                             .output(outPath);
                             //以下参数全部为可选
@@ -59,8 +98,8 @@ public class MediaCodecCompressImpl implements ICompressor {
                                     listener.onProgress((int) (progress*100),System.currentTimeMillis() - start);
                                 }
                             })      //可输出视频处理进度
-                            .process();
-                    listener.onFinish(outPath);
+                            .process();*/
+
                 } catch (Throwable e) {
                     e.printStackTrace();
                     listener.onError(e.getClass().getName()+": "+e.getMessage());

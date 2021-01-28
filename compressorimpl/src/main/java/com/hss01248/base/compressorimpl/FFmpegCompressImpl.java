@@ -29,7 +29,7 @@ public class FFmpegCompressImpl implements ICompressor {
             @Override
             public void onProgress(int progress, long progressTime) {
                 if(listener != null){
-                    listener.onProgress(progress,progressTime);
+                    listener.onProgress(progress,progressTime/1000);
                 }
             }
 

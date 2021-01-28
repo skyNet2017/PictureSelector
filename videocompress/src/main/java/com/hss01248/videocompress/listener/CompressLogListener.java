@@ -29,7 +29,7 @@ public class CompressLogListener implements ICompressListener {
     @Override
     public void onProgress(int progress, long progressTime) {
         listener.onProgress(progress, progressTime);
-        logd("progress:"+progress+" , time cost:"+progressTime/1000/1000+"s");
+        logd("progress:"+progress+" , time cost:"+progressTime/1000+"s");
 
     }
 
