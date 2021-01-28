@@ -1,6 +1,8 @@
 package com.luck.picture.lib.video;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -12,6 +14,8 @@ import com.luck.picture.lib.entity.LocalMedia;
 import com.luck.picture.lib.tools.VoiceUtils;
 import com.shuyu.gsyvideoplayer.GSYBaseActivityDetail;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
+import com.shuyu.gsyvideoplayer.listener.GSYStateUiListener;
+import com.shuyu.gsyvideoplayer.listener.GSYVideoProgressListener;
 import com.shuyu.gsyvideoplayer.player.PlayerFactory;
 import com.shuyu.gsyvideoplayer.player.SystemPlayerManager;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
@@ -19,6 +23,8 @@ import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import java.io.File;
 
 import javax.xml.transform.sax.TemplatesHandler;
+
+import static com.shuyu.gsyvideoplayer.video.base.GSYVideoView.CURRENT_STATE_AUTO_COMPLETE;
 
 public class PictureVideoPlayByGSYActivity extends GSYBaseActivityDetail<StandardGSYVideoPlayer> {
     StandardGSYVideoPlayer detailPlayer;
@@ -115,6 +121,33 @@ public class PictureVideoPlayByGSYActivity extends GSYBaseActivityDetail<Standar
                 .setStartAfterPrepared(true)
                 .setShowFullAnimation(false)
                 .setNeedLockFull(true)
+                .setGSYStateUiListener(new GSYStateUiListener() {
+                    @Override
+                    public void onStateChanged(int state) {
+                        if(state == CURRENT_STATE_AUTO_COMPLETE){
+                            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    finish();
+                                }
+                            },300);
+                        }
+                    }
+                })
+                /*.setGSYVideoProgressListener(new GSYVideoProgressListener() {
+                    @Override
+                    public void onProgress(int progress, int secProgress, int currentPosition, int duration) {
+                        if(progress == 100 || progress == 99){
+                            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    finish();
+                                }
+                            },500);
+
+                        }
+                    }
+                })*/
                 //.setThumbPlay(true)
                 .setSeekRatio(1);
     }

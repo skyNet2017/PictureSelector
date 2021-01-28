@@ -45,21 +45,31 @@ public class SimpleActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     public void compress(View view) {
+        doSelectAndCompress(false);
 
+    }
+
+    public void compress720p(View view) {
+        doSelectAndCompress(true);
+
+    }
+
+    private void doSelectAndCompress(boolean forUpload) {
         //系统内核模式
         PictureSelector.create(this)
                 .openGallery(PictureMimeType.ofVideo())
                 .loadImageEngine(GlideEngine.createGlideEngine())
                 .maxSelectNum(1)
                 .imageSpanCount(2)
+                .videoMaxSecond(forUpload? 15 : 600)
                 //播放4k视频卡顿,黑屏:
                 // 可以实现bindCustomPlayVideoCallback接口，自定义播放界面，PictureSelector自带的是系统的VideoView,兼容性不是特别好
-               /* .bindCustomPlayVideoCallback(new OnVideoSelectedPlayCallback() {
-                    @Override
-                    public void startPlayVideo(Object data) {
+                /* .bindCustomPlayVideoCallback(new OnVideoSelectedPlayCallback() {
+                     @Override
+                     public void startPlayVideo(Object data) {
 
-                    }
-                })*/
+                     }
+                 })*/
                 .forResult(new OnResultCallbackListener<LocalMedia>() {
                     @Override
                     public void onResult(List<LocalMedia> result) {
@@ -67,7 +77,7 @@ public class SimpleActivity extends AppCompatActivity implements View.OnClickLis
                         if(result != null){
                             LocalMedia media = result.get(0);
                             if(media.getRealPath().endsWith(".mp4") || media.getRealPath().endsWith(".MP4")){
-                                RxVideoCompressor.compress(SimpleActivity.this,media.getRealPath());
+                                RxVideoCompressor.compress(SimpleActivity.this,media.getRealPath(),forUpload);
                             }
                         }else {
                             Toast.makeText(SimpleActivity.this,"result is 0",Toast.LENGTH_LONG).show();
@@ -81,4 +91,6 @@ public class SimpleActivity extends AppCompatActivity implements View.OnClickLis
                     }
                 });
     }
+
+
 }

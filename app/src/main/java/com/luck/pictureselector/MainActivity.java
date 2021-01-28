@@ -625,7 +625,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // TODO 可以通过PictureSelectorExternalUtils.getExifInterface();方法获取一些额外的资源信息，如旋转角度、经纬度等信息
 
                 if(media.getRealPath().endsWith(".mp4")){
-                    RxVideoCompressor.compress(activity,media.getRealPath());
+                    RxVideoCompressor.compress(activity,media.getRealPath(),true);
                 }
             }
             if (mAdapterWeakReference.get() != null) {

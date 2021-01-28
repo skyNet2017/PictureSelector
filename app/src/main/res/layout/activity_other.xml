@@ -28,6 +28,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="选择视频并压缩"
+        android:text="选择视频并压缩-本地收藏,质量较好"
+        android:textAllCaps="false" />
+    <Button
+        android:onClick="compress720p"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="选择视频并压缩-上传用,压到720p"
         android:textAllCaps="false" />
 </LinearLayout>

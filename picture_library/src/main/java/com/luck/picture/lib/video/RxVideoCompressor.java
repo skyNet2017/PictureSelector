@@ -19,6 +19,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 
 
+import com.luck.picture.lib.tools.ValueOf;
 import com.yalantis.ucrop.util.FileUtils;
 
 import java.io.File;
@@ -32,7 +33,7 @@ import io.microshow.rxffmpeg.RxFFmpegInvoke;
 
 public class RxVideoCompressor {
 
-    public static void compress(Activity activity,String path){
+    public static void compress(Activity activity,String path,boolean forUpload){
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -50,7 +51,7 @@ public class RxVideoCompressor {
                 try {
                     //compressByVideoCompressor(file,start,original);
 
-                    runRx(file,System.currentTimeMillis(),activity);
+                    runRx(file,System.currentTimeMillis(),activity,forUpload);
                     //compressBySili(file,start,original);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -70,8 +71,11 @@ public class RxVideoCompressor {
      * ffmpeg -y -i /storage/emulated/0/1/input.mp4 -b 2097k -r 30 -vcodec libx264 -preset superfast /storage/emulated/0/1/result.mp4
      *
      * 40s 4k视频 原大小: 137M->10.69M 耗时60s 清晰度还不错
+     *
+     * 上传规则: 视频压缩到720p(720x1280).码率限制到1000kbps.
      */
-    public static String[] getBoxblurForUpload( File file,File out) {
+    public static String[] compressForUpload( File file,File out) {
+
         RxFFmpegCommandList cmdlist = new RxFFmpegCommandList();
         cmdlist.append("-y");
         cmdlist.append("-i");
@@ -79,22 +83,50 @@ public class RxVideoCompressor {
         //关键在于码率的设置: 4k视频,推荐5000k
         //1080p视频,推荐2084k
         //cmdlist.append("-b");
-        //cmdlist.append("6000k");
+       // cmdlist.append("1000k");
         //量化比例的范围为0～51，其中0为无损模式，23为缺省值，51可能是最差的
         //若Crf值加6，输出码率大概减少一半；若Crf值减6，输出码率翻倍
         cmdlist.append("-crf");
-        cmdlist.append("32");
+        cmdlist.append("28");
         //cmdlist.append("1500k");
         cmdlist.append("-r");
         cmdlist.append("24");
-        //cmdlist.append("-vf");
-        //cmdlist.append("scale=720:1080");
+        String str  =  calScaleStr(720,file.getAbsolutePath());
+        if(!TextUtils.isEmpty(str)){
+            cmdlist.append("-vf");
+            cmdlist.append("scale="+str);//720:1080
+        }
         cmdlist.append("-vcodec");
         cmdlist.append("libx264");
         cmdlist.append("-preset");
         cmdlist.append("ultrafast");
         cmdlist.append(out.getAbsolutePath());
         return cmdlist.build();
+    }
+
+    private static String calScaleStr(int target, String absolutePath) {
+        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        retriever.setDataSource(absolutePath);
+        int rotation = ValueOf.toInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION));//视频的方向角度
+        int width = ValueOf.toInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH)); //宽
+        int height = ValueOf.toInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)); //高
+        String str  = "";
+        if(rotation == 90 || rotation == 270){
+            int tmp = width;
+            width = height;
+            height = tmp;
+        }
+        if(width <= height){
+            if(width > target){
+                str = target + ":-2";
+            }
+
+        }else {
+            if(height > target){
+                str = "-2:"+target;
+            }
+        }
+        return str;
     }
 
     /**
@@ -118,7 +150,7 @@ public class RxVideoCompressor {
      * @param out
      * @return
      */
-    public static String[] getBoxblurForLocal( File file,File out) {
+    public static String[] compressForLocal(File file, File out) {
         RxFFmpegCommandList cmdlist = new RxFFmpegCommandList();
         cmdlist.append("-y");
         cmdlist.append("-i");
@@ -253,9 +285,10 @@ public class RxVideoCompressor {
     }
 
 
-    private static void runRx(File file, long start,Activity activity) {
+    private static void runRx(File file, long start,Activity activity,boolean forUpload) {
         //getMediaInfo(file);
-        File out = new File(file.getParent(),file.getName().replace(".mp4","-compressed-rx-r30-crf26.mp4"));
+        File out = new File(file.getParent(),file.getName().replace(".mp4",
+                forUpload? "-r24-crf28-720p.mp4" : "-r30-crf26.mp4"));
 
         //注意还需要判断下视频的旋转角度，不然也会crash
        // -vf scale=-1:720
@@ -282,7 +315,8 @@ public class RxVideoCompressor {
             }
         });
 
-        RxFFmpegInvoke.getInstance().runCommand(getBoxblurForLocal(file, out), new RxFFmpegInvoke.IFFmpegListener() {
+        RxFFmpegInvoke.getInstance().runCommand(forUpload ? compressForUpload(file, out) : compressForLocal(file, out),
+                new RxFFmpegInvoke.IFFmpegListener() {
             @Override
             public void onFinish() {
                 handler.post(new Runnable() {
