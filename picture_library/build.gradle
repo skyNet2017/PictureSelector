@@ -38,11 +38,12 @@ dependencies {
     implementation "androidx.localbroadcastmanager:localbroadcastmanager:${cfgs.localbroadcastmanager}"
     implementation "androidx.camera:camera-view:${cfgs.camerax_view}"
     api project(':ucrop')
+    api project(':videocompress')
 
 
     //完整版
     //api 'com.github.microshow:RxFFmpeg:4.9.0'
-    implementation 'com.github.microshow:RxFFmpeg:4.9.0-lite'
+    //implementation 'com.github.microshow:RxFFmpeg:4.9.0-lite'
 
     api 'com.shuyu:gsyVideoPlayer-java:8.0.0'
     //api 'com.shuyu:GSYVideoPlayer-exo2:8.0.0'

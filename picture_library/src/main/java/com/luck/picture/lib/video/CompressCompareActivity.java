@@ -11,6 +11,8 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.hss01248.videocompress.CompressHepler;
+import com.hss01248.videocompress.VideoInfo;
 import com.luck.picture.lib.R;
 import com.luck.picture.lib.config.PictureSelectionConfig;
 import com.luck.picture.lib.tools.JumpUtils;
@@ -69,7 +71,7 @@ public class CompressCompareActivity extends AppCompatActivity {
                 try {
                     FileUtils.copyFile(new FileInputStream(compressedFile),originalFile);
                     new File(compressedFile).delete();
-                    RxVideoCompressor.refreshMediaCenter(getApplication(),originalFile);
+                    CompressHepler.refreshMediaCenter(getApplication(),originalFile);
                     toast("覆盖成功");
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -84,7 +86,7 @@ public class CompressCompareActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if(new File(compressedFile).exists()){
-            RxVideoCompressor.refreshMediaCenter(getApplication(),compressedFile);
+            CompressHepler.refreshMediaCenter(getApplication(),compressedFile);
         }
         super.onBackPressed();
     }
@@ -92,7 +94,7 @@ public class CompressCompareActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         if(new File(compressedFile).exists()){
-            RxVideoCompressor.refreshMediaCenter(getApplication(),compressedFile);
+            CompressHepler.refreshMediaCenter(getApplication(),compressedFile);
         }
         super.onDestroy();
     }
@@ -103,7 +105,7 @@ public class CompressCompareActivity extends AppCompatActivity {
     }
 
     public void keepBoth(View view) {
-        RxVideoCompressor.refreshMediaCenter(getApplication(),compressedFile);
+        CompressHepler.refreshMediaCenter(getApplication(),compressedFile);
         toast("ok");
     }
 

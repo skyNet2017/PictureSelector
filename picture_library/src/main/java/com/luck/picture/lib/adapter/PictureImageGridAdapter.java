@@ -17,6 +17,7 @@ import android.widget.TextView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hss01248.videocompress.VideoInfo;
 import com.luck.picture.lib.R;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
@@ -24,7 +25,7 @@ import com.luck.picture.lib.config.PictureSelectionConfig;
 import com.luck.picture.lib.dialog.PictureCustomDialog;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.luck.picture.lib.listener.OnPhotoSelectChangedListener;
-import com.luck.picture.lib.thread.PictureThreadUtils;
+
 import com.luck.picture.lib.tools.AnimUtils;
 import com.luck.picture.lib.tools.AttrsUtils;
 import com.luck.picture.lib.tools.DateUtils;
@@ -32,8 +33,7 @@ import com.luck.picture.lib.tools.MediaUtils;
 import com.luck.picture.lib.tools.StringUtils;
 import com.luck.picture.lib.tools.ToastUtils;
 import com.luck.picture.lib.tools.VoiceUtils;
-import com.luck.picture.lib.video.RxVideoCompressor;
-import com.luck.picture.lib.video.VideoInfo;
+
 
 import org.jetbrains.annotations.NotNull;
 

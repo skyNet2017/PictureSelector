@@ -8,11 +8,14 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.hss01248.videocompress.CompressType;
+import com.hss01248.videocompress.VideoCompressUtil;
+import com.hss01248.videocompress.listener.ICompressListener;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.luck.picture.lib.listener.OnResultCallbackListener;
-import com.luck.picture.lib.video.RxVideoCompressor;
+import com.luck.picture.lib.video.DefaultDialogCompressListener2;
 
 
 import java.util.List;
@@ -77,7 +80,16 @@ public class SimpleActivity extends AppCompatActivity implements View.OnClickLis
                         if(result != null){
                             LocalMedia media = result.get(0);
                             if(media.getRealPath().endsWith(".mp4") || media.getRealPath().endsWith(".MP4")){
-                                RxVideoCompressor.compress(SimpleActivity.this,media.getRealPath(),forUpload);
+                                //RxVideoCompressor.compress(SimpleActivity.this,media.getRealPath(),forUpload);
+                                VideoCompressUtil.doCompressAsync(media.getRealPath(), "",
+                                        forUpload ? CompressType.TYPE_UPLOAD_720P : CompressType.TYPE_LOCAL_STORE,
+                                        new DefaultDialogCompressListener2(SimpleActivity.this,
+                                                new ICompressListener() {
+                                            @Override
+                                            public void onFinish(String outputFilePath) {
+
+                                            }
+                                        }));
                             }
                         }else {
                             Toast.makeText(SimpleActivity.this,"result is 0",Toast.LENGTH_LONG).show();

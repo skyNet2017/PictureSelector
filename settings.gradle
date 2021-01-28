@@ -1,2 +1,5 @@
+include ':compressorimpl'
+include ':videocompress'
+include ':api'
 include ':ffmpegso'
 include ':app', ':picture_library', ':ucrop'

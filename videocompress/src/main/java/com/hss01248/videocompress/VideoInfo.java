@@ -1,12 +1,13 @@
-package com.luck.picture.lib.video;
+package com.hss01248.videocompress;
 
 import android.media.MediaMetadataRetriever;
+import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.annotation.Keep;
 
-import com.luck.picture.lib.tools.ValueOf;
+
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -35,11 +36,13 @@ public class VideoInfo {
         File file = new File(path);
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         retriever.setDataSource(path);
-        info.width = ValueOf.toInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH)); //宽
-        info.height = ValueOf.toInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)); //高
-        info.rotation = ValueOf.toInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION));//视频的方向角度
-        info.duration = ValueOf.toInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)) / 1000;//视频的长度 s
-        info.bitRates = ValueOf.toInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE)) / 1024; //kbps 按字节计算. 不按比特
+        info.width = toInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH)); //宽
+        info.height = toInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)); //高
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            info.rotation = toInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION));//视频的方向角度
+        }
+        info.duration = toInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)) / 1000;//视频的长度 s
+        info.bitRates = toInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE)) / 1024; //kbps 按字节计算. 不按比特
         if (info.bitRates <= 0) {
             info.bitRates = (int) (file.length() * 8 / info.duration) / 1024 ;
         }
@@ -146,6 +149,29 @@ public class VideoInfo {
                 .append("len:")
                 .append(duration)  .append("s") ;
         return stringBuilder.toString();
+    }
+
+    public static int toInt(Object o, int defaultValue) {
+        if (o == null) {
+            return defaultValue;
+        }
+        int value;
+        try {
+            String s = o.toString().trim();
+            if (s.contains(".")) {
+                value = Integer.valueOf(s.substring(0, s.lastIndexOf(".")));
+            } else {
+                value = Integer.valueOf(s);
+            }
+        } catch (Exception e) {
+            value = defaultValue;
+        }
+
+        return value;
+    }
+
+    public static int toInt(Object o) {
+        return toInt(o, 0);
     }
 
 }

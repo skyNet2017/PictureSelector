@@ -32,6 +32,9 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hss01248.videocompress.CompressType;
+import com.hss01248.videocompress.VideoCompressUtil;
+import com.hss01248.videocompress.listener.ICompressListener;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.animators.AnimationType;
 import com.luck.picture.lib.broadcast.BroadcastAction;
@@ -56,7 +59,7 @@ import com.luck.picture.lib.tools.ScreenUtils;
 import com.luck.picture.lib.tools.SdkVersionUtils;
 import com.luck.picture.lib.tools.ToastUtils;
 import com.luck.picture.lib.tools.ValueOf;
-import com.luck.picture.lib.video.RxVideoCompressor;
+
 import com.luck.pictureselector.adapter.GridImageAdapter;
 import com.luck.pictureselector.listener.DragListener;
 
@@ -625,7 +628,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // TODO 可以通过PictureSelectorExternalUtils.getExifInterface();方法获取一些额外的资源信息，如旋转角度、经纬度等信息
 
                 if(media.getRealPath().endsWith(".mp4")){
-                    RxVideoCompressor.compress(activity,media.getRealPath(),true);
+                    VideoCompressUtil.doCompressAsync(media.getRealPath(), "",
+                            true ? CompressType.TYPE_UPLOAD_720P : CompressType.TYPE_LOCAL_STORE, new ICompressListener() {
+                                @Override
+                                public void onFinish(String outputFilePath) {
+
+                                }
+                            });
                 }
             }
             if (mAdapterWeakReference.get() != null) {
