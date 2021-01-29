@@ -30,7 +30,7 @@ public class Config720pUpload implements CompressorConfig {
         cmdlist.append("28");
         //cmdlist.append("1500k");
         cmdlist.append("-r");
-        cmdlist.append("24");
+        cmdlist.append("25");
         String str  =  FFmpegCompressImpl.calScaleStr(720,inputFilePath);
         if(!TextUtils.isEmpty(str)){
             cmdlist.append("-vf");
