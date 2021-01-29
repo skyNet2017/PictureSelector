@@ -24,9 +24,10 @@ public class TakePhotoUtil3 {
 
     public static void pickImage(FragmentActivity activity,TakePhotoListener listener){
         PictureSelector.create(activity)
-                .openGallery(PictureMimeType.ofImage())
+                .openGallery(PictureMimeType.ofAll())
                 //.loadImageEngine(GlideEngine.createGlideEngine())
-                .maxSelectNum(3)
+                .maxSelectNum(9)
+                .videoMaxSecond(15)
                 .imageSpanCount(3)
                 .forResult(new OnResultCallbackListener<LocalMedia>() {
                     @Override
@@ -52,7 +53,8 @@ public class TakePhotoUtil3 {
 
     public static void pickVideo(FragmentActivity activity,TakePhotoListener listener){
         PictureSelector.create(activity)
-                .openGallery(PictureMimeType.ofVideo())
+                .openCamera(PictureMimeType.ofVideo())
+                //.openGallery(PictureMimeType.ofVideo())
                 //.loadImageEngine(GlideEngine.createGlideEngine())
                 .maxSelectNum(1)
                 .imageSpanCount(2)
