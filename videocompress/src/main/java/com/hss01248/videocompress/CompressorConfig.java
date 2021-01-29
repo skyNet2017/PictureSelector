@@ -22,7 +22,7 @@ public interface CompressorConfig {
      * <p>
      * crf vs b
      */
-    String[] buildCompressParams(String inputFilePath, String outFilePath);
+    String[] buildCompressParams(String inputFilePath, String outFilePath,VideoInfo.RealCompressInfo info);
 
     default String compressedFileName(){
         return getClass().getName()+".mp4";

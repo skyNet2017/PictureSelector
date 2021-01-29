@@ -5,8 +5,10 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
+import com.hss01248.videocompress.CompressHepler;
 import com.hss01248.videocompress.CompressType;
 import com.hss01248.videocompress.VideoCompressUtil;
+import com.hss01248.videocompress.VideoInfo;
 import com.hss01248.videocompress.listener.ICompressListener;
 import com.hss01248.videocompress.ICompressor;
 import com.hw.videoprocessor.VideoProcessor;
@@ -26,7 +28,7 @@ public class MediaCodecCompressImpl implements ICompressor {
      */
     @SuppressWarnings("AlibabaAvoidManuallyCreateThread")
     @Override
-    public void compress(String inputPath, String outPath, @CompressType.Type String compressType,
+    public void compress(VideoInfo.RealCompressInfo info ,String inputPath, String outPath, @CompressType.Type String compressType,
                          ICompressListener listener) {
         new Thread(new Runnable() {
             @Override
@@ -34,31 +36,7 @@ public class MediaCodecCompressImpl implements ICompressor {
                 try {
                     //VideoInfo info = VideoInfo.getInfo(inputPath);
                     long start = System.currentTimeMillis();
-                    MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-                    retriever.setDataSource(inputPath);
-                    int originWidth = Integer.parseInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH));
-                    int originHeight = Integer.parseInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT));
-                    int bitrate = Integer.parseInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE));
 
-                    int expectedRate = getExpectedBitRate(inputPath,originWidth,originHeight,compressType);
-                    Log.i("compress","实际比特率:"+bitrate/1024+",该分辨率("+originWidth+"x"+originHeight+")下期望比特率:"+expectedRate);
-                    /*if(bitrate/1024 < expectedRate){
-                        Log.w("compress","无需压缩: 实际比特率小于期望比特率");
-                        //无需压缩
-                        listener.onFinish(inputPath);
-                        return;
-                    }*/
-                    //boolean needCompress = needCompress(inputPath,originWidth,originHeight,bitrate);
-
-                    //普通上传视频的 码率对应分辨率:
-                    //统一压缩到720p
-                   // 如果是码率模式,那么限定到:1500kps
-                    //        如果是rcf模式,使用rcf=28
-                   // 帧率=25
-                   // 关键帧距= 5
-
-                    //int outWidth = originWidth / 2;
-                    //int outHeight = originHeight / 2;
                     final boolean[] finished = {false};
                     final boolean[] posted = {false};
                     Handler handler = new Handler(Looper.getMainLooper());
@@ -75,19 +53,13 @@ public class MediaCodecCompressImpl implements ICompressor {
                     };
 
 
-
-
-                    VideoProcessor.Processor process =   VideoProcessor.processor(VideoCompressUtil.context)
+                    VideoProcessor.processor(VideoCompressUtil.context)
                             .input(inputPath)
-                            .output(outPath);
-                  boolean needCompress =   processByType(process,originWidth,originHeight,bitrate,inputPath,compressType);
-                  if(!needCompress){
-                      Log.w("compress","无需压缩: 实际比特率和分辨率小于期望比特率");
-                      //无需压缩
-                      listener.onFinish(inputPath);
-                      return;
-                  }
-                    process .progressListener(new VideoProgressListener() {
+                            .output(outPath)
+                            .outWidth(info.outWidth)
+                          .outHeight(info.outHeight)
+                          .bitrate(info.outBitRate)
+                            .progressListener(new VideoProgressListener() {
                                 @Override
                                 public void onProgress(float progress) {
                                     //Log.d("progress","P:"+progress);

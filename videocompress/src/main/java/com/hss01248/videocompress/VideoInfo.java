@@ -176,4 +176,28 @@ public class VideoInfo {
 
 
 
+
+
+
+    @Keep
+    public static class RealCompressInfo{
+        public String inputPath;
+        public String outPath;
+
+        public int inputHeight;
+        public int inputWidth;
+        public int inputBitRate;
+        public int inputFrameCount;
+
+
+        public int outHeight;
+        public int outWidth;
+        public int outBitRate;
+        public int outFrameCount;
+        public int outRsf;
+
+        public boolean needCompress = true;
+
+    }
+
 }

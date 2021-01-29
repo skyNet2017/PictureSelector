@@ -2,11 +2,11 @@ package com.hss01248.videocompress;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
 import com.hss01248.videocompress.listener.CompressLogListener;
-import com.hss01248.videocompress.listener.DefaultDialogCompressListener;
 import com.hss01248.videocompress.listener.ICompressListener;
 import com.hss01248.videocompress.listener.PostProcessorListener;
 import com.hss01248.videocompress.mediacodec.MediaCodecCompressImpl;
@@ -54,7 +54,15 @@ public class VideoCompressUtil {
         if(listener != null){
             listener.onStart(inputPath,outPath);
         }
-        compressor.compress(inputPath,outPath,compressType,listener);
+
+        VideoInfo.RealCompressInfo info = CompressHepler.getRealTargetWHBitrate(inputPath,compressType);
+        if(!info.needCompress){
+            Log.w("compress","无需压缩: 实际比特率和分辨率小于期望比特率");
+            //无需压缩
+            listener.onFinish(inputPath);
+            return;
+        }
+        compressor.compress(info,inputPath,outPath,compressType,listener);
 
     }
 }

@@ -12,13 +12,17 @@ import io.microshow.rxffmpeg.RxFFmpegInvoke;
 
 public class FFmpegCompressImpl implements ICompressor {
     @Override
-    public void compress(String inputPath, String outPath, @CompressType.Type String type, ICompressListener listener) {
+    public void compress(VideoInfo.RealCompressInfo info ,String inputPath, String outPath, @CompressType.Type String type, ICompressListener listener) {
         CompressorConfig compressType = new Config720pUpload();
         if(CompressType.TYPE_LOCAL_STORE.equals(type)){
             compressType = new ConfigLocalStore();
+        }else if(CompressType.TYPE_UPLOAD_1080P.equals(type)){
+            compressType = new Config1080Upload();
+        }else if(CompressType.TYPE_BILIBILI.equals(type)){
+            compressType = new BilibiliUpload();
         }
 
-        RxFFmpegInvoke.getInstance().runCommandAsync(compressType.buildCompressParams(inputPath, outPath), new RxFFmpegInvoke.IFFmpegListener() {
+        RxFFmpegInvoke.getInstance().runCommandAsync(compressType.buildCompressParams(inputPath, outPath,info), new RxFFmpegInvoke.IFFmpegListener() {
             @Override
             public void onFinish() {
                 if(listener != null){

@@ -3,6 +3,7 @@ package com.hss01248.base.compressorimpl;
 import android.text.TextUtils;
 
 import com.hss01248.videocompress.CompressorConfig;
+import com.hss01248.videocompress.VideoInfo;
 
 import io.microshow.rxffmpeg.RxFFmpegCommandList;
 
@@ -15,7 +16,7 @@ public class Config720pUpload implements CompressorConfig {
      * @return
      */
     @Override
-    public String[] buildCompressParams(String inputFilePath,String outFilePath) {
+    public String[] buildCompressParams(String inputFilePath, String outFilePath, VideoInfo.RealCompressInfo info) {
         RxFFmpegCommandList cmdlist = new RxFFmpegCommandList();
         cmdlist.append("-y");
         cmdlist.append("-i");
@@ -26,8 +27,10 @@ public class Config720pUpload implements CompressorConfig {
         // cmdlist.append("1000k");
         //量化比例的范围为0～51，其中0为无损模式，23为缺省值，51可能是最差的
         //若Crf值加6，输出码率大概减少一半；若Crf值减6，输出码率翻倍
-        cmdlist.append("-crf");
-        cmdlist.append("28");
+        /*cmdlist.append("-crf");
+        cmdlist.append("28");*/
+        cmdlist.append("-b");
+        cmdlist.append(info.outBitRate/1024+"k");
         //cmdlist.append("1500k");
         cmdlist.append("-r");
         cmdlist.append("25");
