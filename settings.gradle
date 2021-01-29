@@ -1,5 +1,4 @@
-include ':compressorimpl'
-include ':videocompress'
+include ':videocompress_ffmpeg'
+include ':videocompressbase'
 include ':api'
-include ':ffmpegso'
 include ':app', ':picture_library', ':ucrop'

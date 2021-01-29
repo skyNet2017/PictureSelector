@@ -38,7 +38,7 @@ dependencies {
     implementation "androidx.localbroadcastmanager:localbroadcastmanager:${cfgs.localbroadcastmanager}"
     implementation "androidx.camera:camera-view:${cfgs.camerax_view}"
     api project(':ucrop')
-    api project(':videocompress')
+    api project(':videocompressbase')
 
 
     //完整版

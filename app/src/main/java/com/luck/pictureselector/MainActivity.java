@@ -634,6 +634,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 public void onFinish(String outputFilePath) {
 
                                 }
+
+                                @Override
+                                public void onError(String message) {
+
+                                }
                             });
                 }
             }

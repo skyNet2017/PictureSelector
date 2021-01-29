@@ -31,12 +31,13 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    dynamicFeatures = [':ffmpegso']
+
 }
 
 dependencies {
     implementation project(':picture_library')
-    implementation project(':compressorimpl')
+    implementation project(':api')
+    implementation project(':videocompress_ffmpeg')
     implementation "androidx.appcompat:appcompat:${cfgs.version_appcompat}"
     implementation "androidx.recyclerview:recyclerview:${cfgs.version_recyclerview}"
     implementation "androidx.camera:camera-core:${cfgs.camera_core_version}"

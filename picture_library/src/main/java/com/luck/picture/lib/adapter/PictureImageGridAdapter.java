@@ -324,13 +324,16 @@ public class PictureImageGridAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
 
     private void showInfo(boolean isHasVideo, LocalMedia image, ViewHolder contentHolder) {
-        VideoInfo info = VideoInfo.getInfo(image.getRealPath());
-        contentHolder.tvInfo.setText(info.getInfoForList());
-        if(info.bitRates > 2500*8){
-            contentHolder.tvInfo.setTextColor(Color.YELLOW);
-        }else {
-            contentHolder.tvInfo.setTextColor(Color.WHITE);
+        if(isHasVideo){
+            VideoInfo info = VideoInfo.getInfo(image.getRealPath());
+            contentHolder.tvInfo.setText(info.getInfoForList());
+            if(info.bitRates > 2500*8){
+                contentHolder.tvInfo.setTextColor(Color.YELLOW);
+            }else {
+                contentHolder.tvInfo.setTextColor(Color.WHITE);
+            }
         }
+
     }
 
     /**
