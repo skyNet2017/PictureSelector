@@ -22,19 +22,65 @@
         android:layout_marginTop="10dp"
         android:text="Fragment"
         android:textAllCaps="false" />
+    <TextView
+        android:layout_width="match_parent"
+        android:padding="10dp"
+        android:textStyle="bold"
+        android:text="选择压缩引擎:"
+        android:layout_height="wrap_content"/>
+    <RadioGroup
+        android:id="@+id/rg_compress_engine"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RadioButton
+            android:checked="true"
+            android:id="@+id/ffmpeg"
+            android:layout_width="wrap_content"
+            android:text="ffmpeg"
+            android:layout_height="wrap_content"/>
+        <RadioButton
+            android:id="@+id/mediacodec"
+            android:layout_width="wrap_content"
+            android:text="android mediaCodec"
+            android:layout_height="wrap_content"/>
+    </RadioGroup>
+    <TextView
+        android:layout_width="match_parent"
+        android:padding="10dp"
+        android:layout_marginTop="20dp"
+        android:textStyle="bold"
+        android:text="选择压缩模式:"
+        android:layout_height="wrap_content"/>
+    <RadioGroup
+        android:id="@+id/rg_compress_mode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RadioButton
+            android:checked="true"
+            android:id="@+id/upload720p"
+            android:layout_width="wrap_content"
+            android:text="压到最大720p,上传用"
+            android:layout_height="wrap_content"/>
+        <RadioButton
+            android:id="@+id/upload1080p"
+            android:layout_width="wrap_content"
+            android:text="压到最大10800p,上传用"
+            android:layout_height="wrap_content"/>
+        <RadioButton
+            android:id="@+id/bilibili"
+            android:layout_width="wrap_content"
+            android:text="bilibili标准:最高1080p,质量较好"
+            android:layout_height="wrap_content"/>
+        <RadioButton
+            android:id="@+id/localstore"
+            android:layout_width="wrap_content"
+            android:text="本地视频压缩.收藏用,质量较好,只是减少点体积"
+            android:layout_height="wrap_content"/>
+    </RadioGroup>
+    <Button
+        android:onClick="doCompress"
+        android:text="执行压缩"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
-    <Button
-        android:onClick="compress"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="选择视频并压缩-本地收藏,质量较好"
-        android:textAllCaps="false" />
-    <Button
-        android:onClick="compress720p"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="选择视频并压缩-上传用,压到720p"
-        android:textAllCaps="false" />
 </LinearLayout>

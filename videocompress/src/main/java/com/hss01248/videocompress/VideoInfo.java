@@ -43,7 +43,7 @@ public class VideoInfo {
         }
         info.duration = toInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)) / 1000;//视频的长度 s
         info.bitRates = toInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE)) / 1024; //kbps 按字节计算. 不按比特
-        if (info.bitRates <= 0) {
+        if (info.bitRates <= 0 && info.duration > 0) {
             info.bitRates = (int) (file.length() * 8 / info.duration) / 1024 ;
         }
         info.name = file.getName();
@@ -173,5 +173,7 @@ public class VideoInfo {
     public static int toInt(Object o) {
         return toInt(o, 0);
     }
+
+
 
 }

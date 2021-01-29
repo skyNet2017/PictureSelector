@@ -4,13 +4,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.hss01248.base.compressorimpl.FFmpegCompressImpl;
 import com.hss01248.videocompress.CompressType;
 import com.hss01248.videocompress.VideoCompressUtil;
 import com.hss01248.videocompress.listener.ICompressListener;
+import com.hss01248.videocompress.mediacodec.MediaCodecCompressImpl;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
@@ -23,6 +26,7 @@ import java.util.List;
 public class SimpleActivity extends AppCompatActivity implements View.OnClickListener {
     private Button btn_activity, btn_fragment;
 
+    private RadioGroup rgEngine,rgMode;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +35,8 @@ public class SimpleActivity extends AppCompatActivity implements View.OnClickLis
         btn_fragment = findViewById(R.id.btn_fragment);
         btn_activity.setOnClickListener(this);
         btn_fragment.setOnClickListener(this);
+        rgEngine = findViewById(R.id.rg_compress_engine);
+        rgMode = findViewById(R.id.rg_compress_mode);
     }
 
     @Override
@@ -47,24 +53,16 @@ public class SimpleActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    public void compress(View view) {
-        doSelectAndCompress(false);
 
-    }
 
-    public void compress720p(View view) {
-        doSelectAndCompress(true);
-
-    }
-
-    private void doSelectAndCompress(boolean forUpload) {
+    private void doSelectAndCompress(String mode) {
         //系统内核模式
         PictureSelector.create(this)
                 .openGallery(PictureMimeType.ofVideo())
                 .loadImageEngine(GlideEngine.createGlideEngine())
                 .maxSelectNum(1)
                 .imageSpanCount(2)
-                .videoMaxSecond(forUpload? 15 : 600)
+                //.videoMaxSecond(forUpload? 15 : 600)
                 //播放4k视频卡顿,黑屏:
                 // 可以实现bindCustomPlayVideoCallback接口，自定义播放界面，PictureSelector自带的是系统的VideoView,兼容性不是特别好
                 /* .bindCustomPlayVideoCallback(new OnVideoSelectedPlayCallback() {
@@ -81,8 +79,7 @@ public class SimpleActivity extends AppCompatActivity implements View.OnClickLis
                             LocalMedia media = result.get(0);
                             if(media.getRealPath().endsWith(".mp4") || media.getRealPath().endsWith(".MP4")){
                                 //RxVideoCompressor.compress(SimpleActivity.this,media.getRealPath(),forUpload);
-                                VideoCompressUtil.doCompressAsync(media.getRealPath(), "",
-                                        forUpload ? CompressType.TYPE_UPLOAD_720P : CompressType.TYPE_LOCAL_STORE,
+                                VideoCompressUtil.doCompressAsync(media.getRealPath(), "", mode,
                                         new DefaultDialogCompressListener2(SimpleActivity.this,
                                                 new ICompressListener() {
                                             @Override
@@ -105,4 +102,27 @@ public class SimpleActivity extends AppCompatActivity implements View.OnClickLis
     }
 
 
+    public void doCompress(View view) {
+
+      int id =   rgEngine.getCheckedRadioButtonId();
+      if(id == R.id.ffmpeg){
+          VideoCompressUtil.setCompressor(new FFmpegCompressImpl());
+      }else {
+          VideoCompressUtil.setCompressor(new MediaCodecCompressImpl());
+      }
+
+      int modeId = rgMode.getCheckedRadioButtonId();
+      String mode = CompressType.TYPE_UPLOAD_720P;
+      if(modeId == R.id.upload720p){
+          mode = CompressType.TYPE_UPLOAD_720P;
+      }else if(modeId == R.id.upload1080p){
+          mode = CompressType.TYPE_UPLOAD_720P;
+      }else if(modeId == R.id.localstore){
+          mode = CompressType.TYPE_LOCAL_STORE;
+      }else if(modeId == R.id.bilibili){
+          mode = CompressType.TYPE_BILIBILI;
+      }
+      doSelectAndCompress(mode);
+
+    }
 }
