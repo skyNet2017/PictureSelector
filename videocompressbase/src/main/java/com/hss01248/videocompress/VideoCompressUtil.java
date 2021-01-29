@@ -19,9 +19,12 @@ import java.io.File;
 public class VideoCompressUtil {
 
    public static Context context;
+   public static boolean showLog,showCompareAfterCompress;
 
-    public static void init(Context context){
+    public static void init(Context context,boolean showLog,boolean showCompareAfterCompress){
         VideoCompressUtil.context = context;
+        VideoCompressUtil.showLog = showLog;
+        VideoCompressUtil.showCompareAfterCompress = showCompareAfterCompress;
     }
     public static void setCompressor(ICompressor compressor) {
         VideoCompressUtil.compressor = compressor;
@@ -49,7 +52,10 @@ public class VideoCompressUtil {
 
         String outPath = out.getAbsolutePath();
         //装饰器模式:
-        listener = new CompressLogListener(new PostProcessorListener(listener));
+        listener = new PostProcessorListener(listener);
+        if(VideoCompressUtil.showLog){
+            listener = new CompressLogListener(listener);
+        }
 
         if(listener != null){
             listener.onStart(inputPath,outPath);

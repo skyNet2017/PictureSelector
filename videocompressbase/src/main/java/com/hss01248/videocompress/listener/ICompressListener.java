@@ -7,7 +7,7 @@ public interface ICompressListener {
     /**
      * 执行完成
      */
-   default void onFinish(String outputFilePath){}
+    void onFinish(String outputFilePath);
 
     /**
      * 进度回调
@@ -27,5 +27,5 @@ public interface ICompressListener {
      *
      * @param message
      */
-   default void onError(String message){}
+    void onError(String message);
 }
