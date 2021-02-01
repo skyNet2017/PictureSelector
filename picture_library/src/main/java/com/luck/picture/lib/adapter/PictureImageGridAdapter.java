@@ -2,6 +2,8 @@ package com.luck.picture.lib.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -14,9 +16,11 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.camera.core.ImageInfo;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hss01248.videocompress.VideoCompressUtil;
 import com.hss01248.videocompress.VideoInfo;
 import com.luck.picture.lib.R;
 import com.luck.picture.lib.config.PictureConfig;
@@ -28,6 +32,7 @@ import com.luck.picture.lib.listener.OnPhotoSelectChangedListener;
 
 import com.luck.picture.lib.tools.AnimUtils;
 import com.luck.picture.lib.tools.AttrsUtils;
+import com.luck.picture.lib.tools.BitmapUtils;
 import com.luck.picture.lib.tools.DateUtils;
 import com.luck.picture.lib.tools.MediaUtils;
 import com.luck.picture.lib.tools.StringUtils;
@@ -324,15 +329,37 @@ public class PictureImageGridAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
 
     private void showInfo(boolean isHasVideo, LocalMedia image, ViewHolder contentHolder) {
-        if(isHasVideo){
-            VideoInfo info = VideoInfo.getInfo(image.getRealPath());
-            contentHolder.tvInfo.setText(info.getInfoForList());
-            if(info.bitRates > 2500*8){
-                contentHolder.tvInfo.setTextColor(Color.YELLOW);
+        if(VideoCompressUtil.showLog){
+            contentHolder.tvInfo.setVisibility(View.VISIBLE);
+            if(isHasVideo){
+                VideoInfo info = VideoInfo.getInfo(image.getRealPath());
+                contentHolder.tvInfo.setText(info.getInfoForList());
+                if(info.bitRates > 2500*8){
+                    contentHolder.tvInfo.setTextColor(Color.YELLOW);
+                }else {
+                    contentHolder.tvInfo.setTextColor(Color.WHITE);
+                }
             }else {
+                //显示图片信息
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inJustDecodeBounds = true;
+
+                BitmapFactory.decodeFile(image.getRealPath(),options);
+                String info = options.outWidth+"x"+options.outHeight;
+                float len = new File(image.getRealPath()).length()/1024f;
+                if(len > 1024){
+                    info = info+"\n"+String.format("%.1fM",len/1024f);
+                }else {
+                    info = info+"\n"+String.format("%.1fk",len);
+                }
+                contentHolder.tvInfo.setText(info);
                 contentHolder.tvInfo.setTextColor(Color.WHITE);
+
             }
+        }else {
+            contentHolder.tvInfo.setVisibility( View.GONE);
         }
+
 
     }
 

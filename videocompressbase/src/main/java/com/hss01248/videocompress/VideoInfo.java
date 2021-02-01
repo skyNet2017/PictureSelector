@@ -130,14 +130,14 @@ public class VideoInfo {
         }else {
             byteRate = bitRates/8 +"kBps";
         }
-        stringBuilder.append(file.getName())
-                .append("\n")
+        stringBuilder//.append(file.getName())
+               // .append("\n")
                 .append(size(file.length()))
                 .append("\n")
                 .append(width)
                 .append("x")
                 .append(height)
-                .append(", rotation:")
+                .append(" r:")
                 .append(rotation)
                 .append("\n")
                 .append("bit_rate:")

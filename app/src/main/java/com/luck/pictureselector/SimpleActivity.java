@@ -2,6 +2,7 @@ package com.luck.pictureselector;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioGroup;
@@ -81,19 +82,7 @@ public class SimpleActivity extends AppCompatActivity implements View.OnClickLis
                             LocalMedia media = result.get(0);
                             if(media.getRealPath().endsWith(".mp4") || media.getRealPath().endsWith(".MP4")){
                                 //RxVideoCompressor.compress(SimpleActivity.this,media.getRealPath(),forUpload);
-                                VideoCompressUtil.doCompressAsync(media.getRealPath(), "", mode,
-                                        new DefaultDialogCompressListener2(SimpleActivity.this,
-                                                new ICompressListener() {
-                                            @Override
-                                            public void onFinish(String outputFilePath) {
-
-                                            }
-
-                                                    @Override
-                                                    public void onError(String message) {
-
-                                                    }
-                                                }));
+                                doComressBg(media.getRealPath(),mode);
                             }
                         }else {
                             Toast.makeText(SimpleActivity.this,"result is 0",Toast.LENGTH_LONG).show();
@@ -106,6 +95,33 @@ public class SimpleActivity extends AppCompatActivity implements View.OnClickLis
                         // onCancel Callback
                     }
                 });
+    }
+
+    private void doComressBg(String realPath,String mode) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            PersistableBundle  bundle = new PersistableBundle();
+            bundle.putString("realPath",realPath);
+            MyJobService.doInBg(getApplicationContext(), bundle, new MyJobService.IDoInBackground() {
+                @Override
+                public void run(PersistableBundle bundle) {
+                    VideoCompressUtil.doCompressAsync(bundle.getString("realPath"), "", mode,
+                            new DefaultDialogCompressListener2(SimpleActivity.this,
+                                    new ICompressListener() {
+                                        @Override
+                                        public void onFinish(String outputFilePath) {
+
+                                        }
+
+                                        @Override
+                                        public void onError(String message) {
+
+                                        }
+                                    }));
+                }
+            });
+        }
+
+
     }
 
 
@@ -166,9 +182,10 @@ public class SimpleActivity extends AppCompatActivity implements View.OnClickLis
 
             }
         };
+        doComressBg(path,CompressType.TYPE_UPLOAD_720P);
         //这个应该在上传时自己调用:
-        VideoCompressUtil.doCompressAsync(path,null,
+       /* VideoCompressUtil.doCompressAsync(path,null,
                 CompressType.TYPE_UPLOAD_720P,
-                VideoCompressUtil.showCompareAfterCompress ? new DefaultDialogCompressListener2(this,listener1) : listener1);
+                VideoCompressUtil.showCompareAfterCompress ? new DefaultDialogCompressListener2(this,listener1) : listener1);*/
     }
 }

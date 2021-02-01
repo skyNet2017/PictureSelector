@@ -35,7 +35,7 @@ public class App extends MultiDexApplication implements IApp, CameraXConfig.Prov
         //VideoUtil2.call();
         //EXOPlayer内核，支持格式更多
         PlayerFactory.setPlayManager(SystemPlayerManager.class);
-        VideoCompressUtil.init(this,true,true);
+        VideoCompressUtil.init(this,true,false);
         //VideoCompressUtil.setCompressor(new FFmpegCompressImpl());
     }
 
