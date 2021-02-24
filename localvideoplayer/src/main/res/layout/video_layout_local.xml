@@ -69,8 +69,8 @@
 
         <ImageView
             android:id="@+id/fullscreen"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:paddingRight="16dp"
             android:scaleType="center"
             android:src="@drawable/video_enlarge" />
@@ -123,12 +123,13 @@
         android:layout_height="28dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:visibility="invisible" />
+        android:visibility="gone" />
 
     <moe.codeest.enviews.ENPlayView
         android:id="@+id/start"
         android:layout_width="40dp"
         android:layout_height="40dp"
+        android:background="@drawable/video_title_bg"
         android:layout_marginLeft="15dp"
         android:layout_alignParentBottom="true"
         android:layout_gravity="center_vertical" />
