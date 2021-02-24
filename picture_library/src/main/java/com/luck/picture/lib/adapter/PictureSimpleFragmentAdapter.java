@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
+import com.hss01248.media.localvideoplayer.VideoPlayUtil;
 import com.luck.picture.lib.R;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
@@ -160,7 +161,8 @@ public class PictureSimpleFragmentAdapter extends PagerAdapter {
             boolean isHasVideo = PictureMimeType.isHasVideo(mimeType);
             ivPlay.setVisibility(isHasVideo ? View.VISIBLE : View.GONE);
             ivPlay.setOnClickListener(v -> {
-                if (PictureSelectionConfig.customVideoPlayCallback != null) {
+                VideoPlayUtil.startPreview(container.getContext(),media.getRealPath(),false,true);
+                /*if (PictureSelectionConfig.customVideoPlayCallback != null) {
                     PictureSelectionConfig.customVideoPlayCallback.startPlayVideo(media);
                 } else {
                     Intent intent = new Intent();
@@ -169,7 +171,7 @@ public class PictureSimpleFragmentAdapter extends PagerAdapter {
                     bundle.putString(PictureConfig.EXTRA_VIDEO_PATH, path);
                     intent.putExtras(bundle);
                     JumpUtils.startPictureVideoPlayActivity(container.getContext(), bundle, PictureConfig.PREVIEW_VIDEO_CODE);
-                }
+                }*/
             });
             boolean eqLongImg = MediaUtils.isLongImg(media);
             imageView.setVisibility(eqLongImg && !isGif ? View.GONE : View.VISIBLE);

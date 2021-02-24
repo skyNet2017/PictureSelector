@@ -1,9 +1,8 @@
-package com.luck.picture.lib.video;
+package com.hss01248.media.localvideoplayer;
 
 import android.content.Context;
 import android.util.AttributeSet;
 
-import com.luck.picture.lib.R;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
 public class LocalVideoPlayer extends StandardGSYVideoPlayer {
@@ -22,5 +21,10 @@ public class LocalVideoPlayer extends StandardGSYVideoPlayer {
     @Override
     public int getLayoutId() {
         return R.layout.video_layout_local;
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
     }
 }

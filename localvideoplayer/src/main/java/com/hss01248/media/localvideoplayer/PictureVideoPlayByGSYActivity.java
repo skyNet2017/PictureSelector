@@ -1,57 +1,52 @@
-package com.luck.picture.lib.video;
+package com.hss01248.media.localvideoplayer;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.ImageView;
+import android.view.Window;
+import android.view.WindowManager;
 
-import com.luck.picture.lib.R;
-import com.luck.picture.lib.config.PictureConfig;
-import com.luck.picture.lib.config.PictureSelectionConfig;
-import com.luck.picture.lib.entity.LocalMedia;
-import com.luck.picture.lib.tools.VoiceUtils;
+
 import com.shuyu.gsyvideoplayer.GSYBaseActivityDetail;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.listener.GSYStateUiListener;
-import com.shuyu.gsyvideoplayer.listener.GSYVideoProgressListener;
+
 import com.shuyu.gsyvideoplayer.player.PlayerFactory;
 import com.shuyu.gsyvideoplayer.player.SystemPlayerManager;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
 import java.io.File;
 
-import javax.xml.transform.sax.TemplatesHandler;
+
 
 import static com.shuyu.gsyvideoplayer.video.base.GSYVideoView.CURRENT_STATE_AUTO_COMPLETE;
 
 public class PictureVideoPlayByGSYActivity extends GSYBaseActivityDetail<StandardGSYVideoPlayer> {
     StandardGSYVideoPlayer detailPlayer;
-    LocalMedia media;
     String videoPath;
+    int sortType;
+
+    public static final String PATH = "path";
+    public static final String SORT_TYPE = "sortType";
+    public static final String TAG_DISMISSPAGEWHENFINISHPLAY = "dismissPageWhenFinishPlay";
+
+    boolean dismissPageWhenFinishPlay;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         PlayerFactory.setPlayManager(SystemPlayerManager.class);
-        videoPath = getIntent().getStringExtra(PictureConfig.EXTRA_VIDEO_PATH);
-        boolean isExternalPreview = getIntent().getBooleanExtra
-                (PictureConfig.EXTRA_PREVIEW_VIDEO, false);
-        if (TextUtils.isEmpty(videoPath)) {
-            LocalMedia media = getIntent().getParcelableExtra(PictureConfig.EXTRA_MEDIA_KEY);
-            if (media == null || TextUtils.isEmpty(media.getRealPath())) {
-                finish();
-                return;
-            }
-            videoPath = media.getRealPath();
-        }
-        if (TextUtils.isEmpty(videoPath)) {
-            exit();
-            return;
-        }
 
-
+        videoPath = getIntent().getStringExtra(PATH);
+        dismissPageWhenFinishPlay = getIntent().getBooleanExtra(TAG_DISMISSPAGEWHENFINISHPLAY,false);
+        sortType = getIntent().getIntExtra(SORT_TYPE,0);
 
         setContentView(R.layout.activity_detail_player);
         detailPlayer = (StandardGSYVideoPlayer) findViewById(R.id.detail_player);
@@ -73,28 +68,42 @@ public class PictureVideoPlayByGSYActivity extends GSYBaseActivityDetail<Standar
 
     }
 
-    /**
-     * Close Activity
-     */
-    protected void exit() {
-        finish();
-        /*if (config.camera) {
-            overridePendingTransition(0, R.anim.picture_anim_fade_out);
-            if (getContext() instanceof PictureSelectorCameraEmptyActivity
-                    || getContext() instanceof PictureCustomCameraActivity) {
-                releaseResultListener();
-            }
-        } else {
-            overridePendingTransition(0,
-                    PictureSelectionConfig.windowAnimationStyle.activityExitAnimation);
-            if (getContext() instanceof PictureSelectorActivity) {
-                releaseResultListener();
-                if (config.openClickSound) {
-                    VoiceUtils.getInstance().releaseSoundPool();
-                }
-            }
-        }*/
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            //hideSystemUI();
+            //detailPlayer.startWindowFullscreen(this,false,false);
+        }
     }
+
+    private void hideSystemUI() {
+        // Enables regular immersive mode.
+        // For "lean back" mode, remove SYSTEM_UI_FLAG_IMMERSIVE.
+        // Or for "sticky immersive," replace it with SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_IMMERSIVE
+                        // Set the content to appear under the system bars so that the
+                        // content doesn't resize when the system bars hide and show.
+                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        // Hide the nav bar and status bar
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN);
+    }
+
+    // Shows the system bars by removing all the flags
+    // except for the ones that make the content appear under the system bars.
+    private void showSystemUI() {
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+    }
+
 
     @Override
     public StandardGSYVideoPlayer getGSYVideoPlayer() {
@@ -106,14 +115,18 @@ public class PictureVideoPlayByGSYActivity extends GSYBaseActivityDetail<Standar
         //内置封面可参考SampleCoverVideo
        // ImageView imageView = new ImageView(this);
         //loadCover(imageView, url);
+        String uri = videoPath;
+        if(videoPath.startsWith("/storage/")){
+            uri = "file:// "+uri;
+        }
         return new GSYVideoOptionBuilder()
                 //.setThumbImageView(imageView)
                 //.setUrl(url)
-                .setUrl("file:// "+videoPath)
+                .setUrl(uri)
                 .setCacheWithPlay(false)
-                .setVideoTitle(new File(videoPath).getName())
+                .setVideoTitle(getNameFromPath(videoPath))
         //是否根据视频尺寸，自动选择竖屏全屏或者横屏全屏
-                .setAutoFullWithSize(true)
+                .setAutoFullWithSize(false)
                 .setIsTouchWiget(true)
                // .setRotateViewAuto(false)
                 .setLockLand(false)
@@ -150,6 +163,13 @@ public class PictureVideoPlayByGSYActivity extends GSYBaseActivityDetail<Standar
                 })*/
                 //.setThumbPlay(true)
                 .setSeekRatio(1);
+    }
+
+    private String getNameFromPath(String videoPath) {
+        if(videoPath.contains("/")){
+            return videoPath.substring(videoPath.lastIndexOf("/")+1);
+        }
+        return videoPath;
     }
 
     @Override

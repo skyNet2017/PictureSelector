@@ -1,4 +1,4 @@
-package com.luck.picture.lib.video;
+package com.hss01248.videocompress.compare;
 
 import android.app.Activity;
 

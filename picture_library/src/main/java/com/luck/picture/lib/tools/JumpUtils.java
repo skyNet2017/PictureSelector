@@ -5,10 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.hss01248.media.localvideoplayer.PictureVideoPlayByGSYActivity;
+import com.hss01248.media.localvideoplayer.VideoPlayUtil;
 import com.luck.picture.lib.PicturePreviewActivity;
 import com.luck.picture.lib.PictureSelectorPreviewWeChatStyleActivity;
 import com.luck.picture.lib.config.PictureConfig;
-import com.luck.picture.lib.video.PictureVideoPlayByGSYActivity;
 
 /**
  * @author：luck
@@ -24,6 +25,8 @@ public class JumpUtils {
      */
     public static void startPictureVideoPlayActivity(Context context, Bundle bundle, int requestCode) {
         if (!DoubleUtils.isFastDoubleClick()) {
+
+
             Intent intent = new Intent();
             intent.setClass(context, PictureVideoPlayByGSYActivity.class);
             intent.putExtras(bundle);

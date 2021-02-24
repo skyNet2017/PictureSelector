@@ -1,8 +1,13 @@
-package com.luck.picture.lib.video;
+package com.hss01248.videocompress.compare;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.MediaMetadataRetriever;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.FileUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -12,14 +17,14 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.hss01248.videocompress.CompressHepler;
+import com.hss01248.videocompress.R;
+import com.hss01248.videocompress.VideoCompressUtil;
 import com.hss01248.videocompress.VideoInfo;
-import com.luck.picture.lib.R;
-import com.luck.picture.lib.config.PictureSelectionConfig;
-import com.luck.picture.lib.tools.JumpUtils;
-import com.yalantis.ucrop.util.FileUtils;
+
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 
 public class CompressCompareActivity extends AppCompatActivity {
 
@@ -52,14 +57,37 @@ public class CompressCompareActivity extends AppCompatActivity {
         tv_title = findViewById(R.id.tv_title);
         tv_title.setText(tv_title.getText()+"\n压缩耗时:"+(System.currentTimeMillis() - startTime)/1000+"s");
 
-        if (PictureSelectionConfig.imageEngine != null) {
-            PictureSelectionConfig.imageEngine.loadGridImage(this, originalFile, iv1);
-            PictureSelectionConfig.imageEngine.loadGridImage(this, compressedFile, iv2);
-        }
+        //显示缩略图
+        showThumail();
+
         info1 = VideoInfo.getInfo(originalFile);
         info2 = VideoInfo.getInfo(compressedFile);
         tv1.setText(info1.toString());
         tv2.setText(info2.toString());
+
+
+    }
+
+    private void showThumail() {
+        {
+            MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+            retriever.setDataSource(originalFile);
+            Bitmap embeddedPicture = retriever.getFrameAtTime();
+            if(embeddedPicture != null ){
+                    iv1.setImageBitmap(embeddedPicture);
+
+            }
+        }
+
+        {
+            MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+            retriever.setDataSource(compressedFile);
+            Bitmap embeddedPicture = retriever.getFrameAtTime();
+            if(embeddedPicture != null ){
+                iv2.setImageBitmap(embeddedPicture);
+
+            }
+        }
 
 
     }
@@ -69,7 +97,10 @@ public class CompressCompareActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    FileUtils.copyFile(new FileInputStream(compressedFile),originalFile);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        //todo
+                        FileUtils.copy(new FileInputStream(compressedFile),new FileOutputStream(originalFile));
+                    }
                     new File(compressedFile).delete();
                     CompressHepler.refreshMediaCenter(getApplication(),originalFile);
                     toast("覆盖成功");
@@ -120,11 +151,15 @@ public class CompressCompareActivity extends AppCompatActivity {
     }
 
     public void view1(View view) {
-        JumpUtils.previeVideo(this,originalFile);
+        if(VideoCompressUtil.iPreviewVideo != null){
+            VideoCompressUtil.iPreviewVideo.preview(this,originalFile);
+        }
 
     }
 
     public void view2(View view) {
-        JumpUtils.previeVideo(this,compressedFile);
+        if(VideoCompressUtil.iPreviewVideo != null){
+            VideoCompressUtil.iPreviewVideo.preview(this,compressedFile);
+        }
     }
 }

@@ -29,7 +29,7 @@
 
     </androidx.core.widget.NestedScrollView>
 
-    <com.luck.picture.lib.video.LocalVideoPlayer
+    <com.hss01248.media.localvideoplayer.LocalVideoPlayer
         android:id="@+id/detail_player"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

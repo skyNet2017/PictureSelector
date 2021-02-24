@@ -68,9 +68,8 @@
         <activity
             android:name="com.yalantis.ucrop.PictureMultiCuttingActivity"
             android:theme="@style/Base.Theme.NoActionBar" />
-        <activity android:name=".video.PictureVideoPlayByGSYActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"/>
-        <activity android:name=".video.CompressCompareActivity" />
+
+
 
     </application>
 

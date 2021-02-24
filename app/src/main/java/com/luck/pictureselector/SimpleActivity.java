@@ -3,6 +3,7 @@ package com.luck.pictureselector;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioGroup;
@@ -11,17 +12,18 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.hss01248.base.compressorimpl.FFmpegCompressImpl;
+import com.hss01248.media.metadata.MetaDataUtil;
 import com.hss01248.takephoto.api.TakePhotoListener;
 import com.hss01248.takephoto.api.TakePhotoUtil3;
 import com.hss01248.videocompress.CompressType;
 import com.hss01248.videocompress.VideoCompressUtil;
+import com.hss01248.videocompress.compare.DefaultDialogCompressListener2;
 import com.hss01248.videocompress.listener.ICompressListener;
 import com.hss01248.videocompress.mediacodec.MediaCodecCompressImpl;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.luck.picture.lib.listener.OnResultCallbackListener;
-import com.luck.picture.lib.video.DefaultDialogCompressListener2;
 
 
 import java.util.List;
@@ -98,6 +100,7 @@ public class SimpleActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void doComressBg(String realPath,String mode) {
+        Log.w("meta",MetaDataUtil.getAllInfo(realPath).toString());
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             PersistableBundle  bundle = new PersistableBundle();
             bundle.putString("realPath",realPath);
@@ -182,6 +185,7 @@ public class SimpleActivity extends AppCompatActivity implements View.OnClickLis
 
             }
         };
+        Log.w("meta",MetaDataUtil.getAllInfo(path).toString());
         doComressBg(path,CompressType.TYPE_UPLOAD_720P);
         //这个应该在上传时自己调用:
        /* VideoCompressUtil.doCompressAsync(path,null,

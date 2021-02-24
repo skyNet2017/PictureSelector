@@ -21,6 +21,12 @@ public class VideoCompressUtil {
    public static Context context;
    public static boolean showLog,showCompareAfterCompress;
 
+    public static void setiPreviewVideo(IPreviewVideo iPreviewVideo) {
+        VideoCompressUtil.iPreviewVideo = iPreviewVideo;
+    }
+
+    public static IPreviewVideo iPreviewVideo;
+
     public static void init(Context context,boolean showLog,boolean showCompareAfterCompress){
         VideoCompressUtil.context = context;
         VideoCompressUtil.showLog = showLog;

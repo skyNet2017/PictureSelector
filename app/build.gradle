@@ -53,9 +53,9 @@ dependencies {
 
     //画质较差,不能自定义码率
     implementation 'com.github.yellowcath:VideoProcessor:2.4.2'
+    implementation 'com.github.hss01248:metadata:1.0.1'
 
-
-
+    implementation "com.simple:spiderman:1.1.7"
     //完整版
     //api 'com.github.microshow:RxFFmpeg:4.9.0'
    // implementation project(path: ':ffmpegso')

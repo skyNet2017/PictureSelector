@@ -8,12 +8,12 @@ import android.os.Parcelable;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.hss01248.media.localvideoplayer.VideoPlayUtil;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.luck.picture.lib.style.PictureParameterStyle;
 import com.luck.picture.lib.tools.DoubleUtils;
-import com.luck.picture.lib.video.PictureVideoPlayByGSYActivity;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -197,10 +197,11 @@ public final class PictureSelector {
     public void externalPictureVideo(String path) {
         if (!DoubleUtils.isFastDoubleClick()) {
             if (getActivity() != null) {
-                Intent intent = new Intent(getActivity(), PictureVideoPlayByGSYActivity.class);
+                VideoPlayUtil.startPreview(getActivity(),path,false,true);
+                /*Intent intent = new Intent(getActivity(), PictureVideoPlayByGSYActivity.class);
                 intent.putExtra(PictureConfig.EXTRA_VIDEO_PATH, path);
                 intent.putExtra(PictureConfig.EXTRA_PREVIEW_VIDEO, true);
-                getActivity().startActivity(intent);
+                getActivity().startActivity(intent);*/
             } else {
                 throw new NullPointerException("Starting the PictureSelector Activity cannot be empty ");
             }

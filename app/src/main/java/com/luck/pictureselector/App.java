@@ -10,6 +10,8 @@ import androidx.multidex.MultiDexApplication;
 
 
 import com.hss01248.base.compressorimpl.FFmpegCompressImpl;
+import com.hss01248.media.localvideoplayer.VideoPlayUtil;
+import com.hss01248.videocompress.IPreviewVideo;
 import com.hss01248.videocompress.VideoCompressUtil;
 import com.luck.picture.lib.app.IApp;
 import com.luck.picture.lib.app.PictureAppMaster;
@@ -33,9 +35,15 @@ public class App extends MultiDexApplication implements IApp, CameraXConfig.Prov
         super.onCreate();
         PictureAppMaster.getInstance().setApp(this);
         //VideoUtil2.call();
-        //EXOPlayer内核，支持格式更多
-        PlayerFactory.setPlayManager(SystemPlayerManager.class);
+
+
         VideoCompressUtil.init(this,true,false);
+        VideoCompressUtil.setiPreviewVideo(new IPreviewVideo() {
+            @Override
+            public void preview(Context context, String path) {
+                VideoPlayUtil.startPreview(context,path,false,true);
+            }
+        });
         //VideoCompressUtil.setCompressor(new FFmpegCompressImpl());
     }
 

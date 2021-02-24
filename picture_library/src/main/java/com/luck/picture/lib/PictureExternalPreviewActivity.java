@@ -23,6 +23,7 @@ import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.hss01248.media.localvideoplayer.VideoPlayUtil;
 import com.luck.picture.lib.broadcast.BroadcastAction;
 import com.luck.picture.lib.broadcast.BroadcastManager;
 import com.luck.picture.lib.config.PictureConfig;
@@ -355,7 +356,8 @@ public class PictureExternalPreviewActivity extends PictureBaseActivity implemen
                         Bundle bundle = new Bundle();
                         bundle.putString(PictureConfig.EXTRA_VIDEO_PATH, path);
                         intent.putExtras(bundle);
-                        JumpUtils.startPictureVideoPlayActivity(container.getContext(), bundle, PictureConfig.PREVIEW_VIDEO_CODE);
+                        //JumpUtils.startPictureVideoPlayActivity(container.getContext(), bundle, PictureConfig.PREVIEW_VIDEO_CODE);
+                        VideoPlayUtil.startPreview(container.getContext(),path,false,true);
                     }
                 });
             }

@@ -26,7 +26,7 @@
             <ImageView
                 android:id="@+id/iv_1"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="200dp"/>
             <TextView
                 android:id="@+id/tv_1"
                 android:layout_width="match_parent"
@@ -41,7 +41,7 @@
             <ImageView
                 android:id="@+id/iv_2"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="200dp"/>
             <TextView
                 android:id="@+id/tv_2"
                 android:layout_width="match_parent"

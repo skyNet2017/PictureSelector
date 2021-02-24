@@ -30,6 +30,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
 
+import com.hss01248.media.localvideoplayer.VideoPlayUtil;
 import com.luck.picture.lib.adapter.PictureImageGridAdapter;
 import com.luck.picture.lib.animators.AlphaInAnimationAdapter;
 import com.luck.picture.lib.animators.AnimationType;
@@ -1551,12 +1552,13 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
                 result.add(media);
                 onResult(result);
             } else {
-                if (PictureSelectionConfig.customVideoPlayCallback != null) {
+                VideoPlayUtil.startPreview(container.getContext(),media.getRealPath(),false,true);
+                /*if (PictureSelectionConfig.customVideoPlayCallback != null) {
                     PictureSelectionConfig.customVideoPlayCallback.startPlayVideo(media);
                 } else {
                     bundle.putParcelable(PictureConfig.EXTRA_MEDIA_KEY, media);
                     JumpUtils.startPictureVideoPlayActivity(getContext(), bundle, PictureConfig.PREVIEW_VIDEO_CODE);
-                }
+                }*/
             }
         } else if (PictureMimeType.isHasAudio(mimeType)) {
             // audio
