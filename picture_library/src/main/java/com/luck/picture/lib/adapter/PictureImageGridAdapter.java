@@ -197,7 +197,7 @@ public class PictureImageGridAdapter extends RecyclerView.Adapter<RecyclerView.V
             }
             boolean isHasVideo = PictureMimeType.isHasVideo(mimeType);
             //显示文件大小,分辨率
-            showInfo(isHasVideo,image,contentHolder);
+            //showInfo(isHasVideo,image,contentHolder);
             if (isHasVideo || PictureMimeType.isHasAudio(mimeType)) {
                 contentHolder.tvDuration.setVisibility(View.VISIBLE);
                 contentHolder.tvDuration.setText(DateUtils.formatDurationTime(image.getDuration()));

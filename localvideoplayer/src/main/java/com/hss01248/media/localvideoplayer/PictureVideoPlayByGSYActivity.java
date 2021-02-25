@@ -1,16 +1,9 @@
 package com.hss01248.media.localvideoplayer;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.text.TextUtils;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 
 
 import com.shuyu.gsyvideoplayer.GSYBaseActivityDetail;
@@ -21,22 +14,37 @@ import com.shuyu.gsyvideoplayer.player.PlayerFactory;
 import com.shuyu.gsyvideoplayer.player.SystemPlayerManager;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
-import java.io.File;
 
-
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.shuyu.gsyvideoplayer.video.base.GSYVideoView.CURRENT_STATE_AUTO_COMPLETE;
 
 public class PictureVideoPlayByGSYActivity extends GSYBaseActivityDetail<StandardGSYVideoPlayer> {
-    StandardGSYVideoPlayer detailPlayer;
+    LocalVideoPlayer detailPlayer;
     String videoPath;
-    int sortType;
+    int position;
 
     public static final String PATH = "path";
-    public static final String SORT_TYPE = "sortType";
+    public static final String IS_VIEW_LIST = "isViewList";
+    public static final String POSITION = "position";
     public static final String TAG_DISMISSPAGEWHENFINISHPLAY = "dismissPageWhenFinishPlay";
 
     boolean dismissPageWhenFinishPlay;
+    boolean isViewList;
+
+    public static List<String> getVideos() {
+        return videos;
+    }
+
+    public static void setVideos(List<String> videos) {
+        PictureVideoPlayByGSYActivity.videos.clear();
+        PictureVideoPlayByGSYActivity.videos.addAll(videos);
+    }
+
+    static List<String> videos = new ArrayList<>();
+
+
 
 
     @Override
@@ -46,13 +54,16 @@ public class PictureVideoPlayByGSYActivity extends GSYBaseActivityDetail<Standar
 
         videoPath = getIntent().getStringExtra(PATH);
         dismissPageWhenFinishPlay = getIntent().getBooleanExtra(TAG_DISMISSPAGEWHENFINISHPLAY,false);
-        sortType = getIntent().getIntExtra(SORT_TYPE,0);
+        position = getIntent().getIntExtra(POSITION,0);
+        isViewList = getIntent().getBooleanExtra(IS_VIEW_LIST,false);
 
         setContentView(R.layout.activity_detail_player);
-        detailPlayer = (StandardGSYVideoPlayer) findViewById(R.id.detail_player);
+        detailPlayer = (LocalVideoPlayer) findViewById(R.id.detail_player);
+        detailPlayer.setActivity(this);
+        detailPlayer.setVideoList(isViewList);
         //增加title
-        detailPlayer.getTitleTextView().setVisibility(View.GONE);
-        detailPlayer.getBackButton().setVisibility(View.GONE);
+        //detailPlayer.getTitleTextView().setVisibility(View.GONE);
+        //detailPlayer.getBackButton().setVisibility(View.GONE);
 
         initVideoBuilderMode();
 
@@ -104,6 +115,40 @@ public class PictureVideoPlayByGSYActivity extends GSYBaseActivityDetail<Standar
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
     }
 
+    void onPlayNext(){
+
+        if(!isViewList){
+            return;
+        }
+        if(position >= videos.size()-1){
+            return;
+        }
+        position++;
+        videoPath = videos.get(position);
+
+        getGSYVideoOptionBuilder().
+                setVideoAllCallBack(this)
+                .build(getGSYVideoPlayer());
+        detailPlayer.startPlayLogic();
+    }
+
+    void onPlayPre(){
+
+        if(!isViewList){
+            return;
+        }
+        if(position <= 0){
+            return;
+        }
+        position--;
+        videoPath = videos.get(position);
+
+        getGSYVideoOptionBuilder().
+                setVideoAllCallBack(this)
+                .build(getGSYVideoPlayer());
+        detailPlayer.startPlayLogic();
+    }
+
 
     @Override
     public StandardGSYVideoPlayer getGSYVideoPlayer() {
@@ -124,6 +169,7 @@ public class PictureVideoPlayByGSYActivity extends GSYBaseActivityDetail<Standar
                 //.setUrl(url)
                 .setUrl(uri)
                 .setCacheWithPlay(false)
+                .setShowFullAnimation(false)
                 .setVideoTitle(getNameFromPath(videoPath))
         //是否根据视频尺寸，自动选择竖屏全屏或者横屏全屏
                 .setAutoFullWithSize(false)
@@ -133,7 +179,7 @@ public class PictureVideoPlayByGSYActivity extends GSYBaseActivityDetail<Standar
                 .setShowPauseCover(false)
                 .setStartAfterPrepared(true)
                 .setShowFullAnimation(false)
-                .setNeedLockFull(true)
+                .setNeedLockFull(false)
                 .setGSYStateUiListener(new GSYStateUiListener() {
                     @Override
                     public void onStateChanged(int state) {
@@ -141,7 +187,13 @@ public class PictureVideoPlayByGSYActivity extends GSYBaseActivityDetail<Standar
                             new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    finish();
+                                    if(!isViewList){
+                                        finish();
+                                    }else {
+                                        onPlayNext();
+                                    }
+
+
                                 }
                             },300);
                         }

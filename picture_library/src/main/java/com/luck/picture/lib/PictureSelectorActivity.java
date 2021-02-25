@@ -1552,7 +1552,17 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
                 result.add(media);
                 onResult(result);
             } else {
-                VideoPlayUtil.startPreview(container.getContext(),media.getRealPath(),false,true);
+                //VideoPlayUtil.startPreview(container.getContext(),media.getRealPath(),false,true);
+
+                //预览一堆
+                List<String> paths = new ArrayList<>();
+                for (LocalMedia data : previewData) {
+                    String path = data.getRealPath();
+                    paths.add(path);
+                }
+                VideoPlayUtil.startPreviewInList(container.getContext(),paths,position);
+
+
                 /*if (PictureSelectionConfig.customVideoPlayCallback != null) {
                     PictureSelectionConfig.customVideoPlayCallback.startPlayVideo(media);
                 } else {

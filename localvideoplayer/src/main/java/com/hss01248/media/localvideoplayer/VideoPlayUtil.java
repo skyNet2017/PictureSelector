@@ -6,6 +6,8 @@ import android.content.Intent;
 import com.shuyu.gsyvideoplayer.player.PlayerFactory;
 import com.shuyu.gsyvideoplayer.player.SystemPlayerManager;
 
+import java.util.List;
+
 public class VideoPlayUtil {
 
 
@@ -29,13 +31,14 @@ public class VideoPlayUtil {
         context.startActivity(intent);
     }
 
-    public static void startPreviewInList(Context context, String pathOrUri, int sortType){
+    public static void startPreviewInList(Context context, List<String> sources, int currentPosition){
         //EXOPlayer内核，支持格式更多
         PlayerFactory.setPlayManager(SystemPlayerManager.class);
-
+        PictureVideoPlayByGSYActivity.setVideos(sources);
         Intent intent = new Intent(context,PictureVideoPlayByGSYActivity.class);
-        intent.putExtra(PictureVideoPlayByGSYActivity.PATH,pathOrUri);
-        intent.putExtra(PictureVideoPlayByGSYActivity.SORT_TYPE,sortType);
+        intent.putExtra(PictureVideoPlayByGSYActivity.PATH,sources.get(currentPosition));
+        intent.putExtra(PictureVideoPlayByGSYActivity.POSITION,currentPosition);
+        intent.putExtra(PictureVideoPlayByGSYActivity.IS_VIEW_LIST,true);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
