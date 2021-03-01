@@ -19,7 +19,7 @@ import java.io.File;
 public class VideoCompressUtil {
 
    public static Context context;
-   public static boolean showLog,showCompareAfterCompress;
+   public static boolean showLog,showCompareAfterCompress,showGridInfo;
 
     public static void setiPreviewVideo(IPreviewVideo iPreviewVideo) {
         VideoCompressUtil.iPreviewVideo = iPreviewVideo;

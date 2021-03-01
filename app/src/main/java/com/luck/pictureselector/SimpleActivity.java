@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.hss01248.base.compressorimpl.FFmpegCompressImpl;
+import com.hss01248.media.metadata.ExifUtil;
 import com.hss01248.media.metadata.MetaDataUtil;
 import com.hss01248.takephoto.api.TakePhotoListener;
 import com.hss01248.takephoto.api.TakePhotoUtil3;
@@ -26,6 +27,9 @@ import com.luck.picture.lib.entity.LocalMedia;
 import com.luck.picture.lib.listener.OnResultCallbackListener;
 
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.List;
 
 public class SimpleActivity extends AppCompatActivity implements View.OnClickListener {
@@ -153,24 +157,39 @@ public class SimpleActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     public void picImage(View view) {
-        TakePhotoUtil3.pickImage(this, new TakePhotoListener() {
+        TakePhotoUtil3.openAlbum(this, new TakePhotoListener() {
             @Override
-            public void onSuccess(String path) {
-                Toast.makeText(SimpleActivity.this,path,Toast.LENGTH_LONG).show();
+            public void onSuccess(List<String> path) {
+                //后续自己上传前分别压缩
+                postHandler(path.get(0));
             }
         });
 
     }
 
     public void picVideo(View view) {
-        TakePhotoUtil3.pickVideo(this, new TakePhotoListener() {
+        TakePhotoUtil3.openCamera(this, new TakePhotoListener() {
             @Override
-            public void onSuccess(String path) {
-                Toast.makeText(SimpleActivity.this,path,Toast.LENGTH_LONG).show();
-                //示例:
-                compressVideo(path);
+            public void onSuccess(List<String> path) {
+                //单个压缩
+                postHandler(path.get(0));
             }
         });
+    }
+
+    private void postHandler(String path) {
+        Toast.makeText(SimpleActivity.this,path,Toast.LENGTH_LONG).show();
+        Log.i("path:","path:"+path);
+        //示例:
+        if(path.endsWith(".mp4")){
+            compressVideo(path);
+        }else {
+            try {
+                Log.i("exif",ExifUtil.readExif(new FileInputStream(new File(path))).toString().replace(",","\n"));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void compressVideo(String path) {

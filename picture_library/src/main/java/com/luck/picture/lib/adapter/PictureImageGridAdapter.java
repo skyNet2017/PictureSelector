@@ -329,7 +329,7 @@ public class PictureImageGridAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
 
     private void showInfo(boolean isHasVideo, LocalMedia image, ViewHolder contentHolder) {
-        if(VideoCompressUtil.showLog){
+        if(VideoCompressUtil.showGridInfo){
             contentHolder.tvInfo.setVisibility(View.VISIBLE);
             if(isHasVideo){
                 VideoInfo info = VideoInfo.getInfo(image.getRealPath());
