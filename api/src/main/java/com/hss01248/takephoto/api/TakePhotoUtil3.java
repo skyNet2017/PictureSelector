@@ -91,7 +91,7 @@ public class TakePhotoUtil3 {
 
     public static void openCamera(FragmentActivity activity, TakePhotoListener listener){
         PictureSelector.create(activity)
-                .openCamera(PictureMimeType.ofAll())
+                .openCamera(PictureMimeType.ofVideo())
                 //.openGallery(PictureMimeType.ofVideo())
                 //.loadImageEngine(GlideEngine.createGlideEngine())
                 .maxSelectNum(1)

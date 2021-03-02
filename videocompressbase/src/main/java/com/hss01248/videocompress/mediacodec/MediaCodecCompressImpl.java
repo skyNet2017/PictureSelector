@@ -1,6 +1,7 @@
 package com.hss01248.videocompress.mediacodec;
 
 import android.media.MediaMetadataRetriever;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -51,7 +52,16 @@ public class MediaCodecCompressImpl implements ICompressor {
 
                         }
                     };
-
+                    if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP){
+                        //兼容性处理,api21以下,不压缩.
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                listener.onFinish(inputPath);
+                            }
+                        });
+                        return;
+                    }
 
                     VideoProcessor.processor(VideoCompressUtil.context)
                             .input(inputPath)
