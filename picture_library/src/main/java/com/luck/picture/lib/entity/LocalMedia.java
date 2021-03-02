@@ -240,6 +240,9 @@ public class LocalMedia implements Parcelable {
     }
 
     public String getRealPath() {
+        if(TextUtils.isEmpty(realPath)){
+            realPath = path;
+        }
         return realPath;
     }
 
@@ -468,4 +471,36 @@ public class LocalMedia implements Parcelable {
             return new LocalMedia[size];
         }
     };
+
+    @Override
+    public String toString() {
+        return "LocalMedia{" +
+                "id=" + id +
+                ", path='" + path + '\'' +
+                ", realPath='" + realPath + '\'' +
+                ", originalPath='" + originalPath + '\'' +
+                ", compressPath='" + compressPath + '\'' +
+                ", cutPath='" + cutPath + '\'' +
+                ", androidQToPath='" + androidQToPath + '\'' +
+                ", duration=" + duration +
+                ", isChecked=" + isChecked +
+                ", isCut=" + isCut +
+                ", position=" + position +
+                ", num=" + num +
+                ", mimeType='" + mimeType + '\'' +
+                ", chooseModel=" + chooseModel +
+                ", compressed=" + compressed +
+                ", width=" + width +
+                ", height=" + height +
+                ", size=" + size +
+                ", isOriginal=" + isOriginal +
+                ", fileName='" + fileName + '\'' +
+                ", parentFolderName='" + parentFolderName + '\'' +
+                ", orientation=" + orientation +
+                ", loadLongImageStatus=" + loadLongImageStatus +
+                ", isLongImage=" + isLongImage +
+                ", bucketId=" + bucketId +
+                ", isMaxSelectEnabledMask=" + isMaxSelectEnabledMask +
+                '}';
+    }
 }

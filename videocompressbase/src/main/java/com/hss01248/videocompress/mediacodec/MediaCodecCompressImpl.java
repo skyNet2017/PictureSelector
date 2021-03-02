@@ -115,7 +115,7 @@ public class MediaCodecCompressImpl implements ICompressor {
              expect = (int) (0.0018*originHeight*originWidth +1059.6);
              //y = 0.0018x - 545.63
         }else if( CompressType.TYPE_UPLOAD_720P.equals(compressType) || CompressType.TYPE_UPLOAD_1080P.equals(compressType)){
-            expect = (int) ((int) (0.0018*originHeight*originWidth -545.63) *1.2);
+            expect = (int) ((int) (0.0018*originHeight*originWidth -145.63) *1.2);
         }
         return expect;
     }

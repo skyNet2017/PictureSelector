@@ -6,6 +6,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.widget.Toast;
 
+import com.hss01248.videocompress.VideoCompressUtil;
+import com.hss01248.videocompress.compare.CompressCompareActivity;
 import com.hss01248.videocompress.listener.ICompressListener;
 
 import java.io.File;
@@ -77,6 +79,9 @@ public class DefaultDialogCompressListener implements ICompressListener {
             public void run() {
                 if(dialog[0] != null){
                     dialog[0].dismiss();
+                }
+                if(VideoCompressUtil.showCompareAfterCompress){
+                    CompressCompareActivity.start(activity,inputPath,outputFilePath,start);
                 }
                 //showInfo(file,out,start,activity,handler);
             }

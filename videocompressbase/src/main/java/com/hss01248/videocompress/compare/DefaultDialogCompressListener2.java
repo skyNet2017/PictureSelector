@@ -2,6 +2,7 @@ package com.hss01248.videocompress.compare;
 
 import android.app.Activity;
 
+import com.hss01248.videocompress.VideoCompressUtil;
 import com.hss01248.videocompress.listener.DefaultDialogCompressListener;
 import com.hss01248.videocompress.listener.ICompressListener;
 
@@ -13,11 +14,14 @@ public class DefaultDialogCompressListener2 extends DefaultDialogCompressListene
     @Override
     public void onFinish(String outputFilePath) {
         super.onFinish(outputFilePath);
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                CompressCompareActivity.start(activity,inputPath,outputFilePath,start);
-            }
-        });
+        if(VideoCompressUtil.showCompareAfterCompress){
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    CompressCompareActivity.start(activity,inputPath,outputFilePath,start);
+                }
+            });
+        }
+
     }
 }
