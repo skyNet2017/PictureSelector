@@ -405,7 +405,7 @@ public class PictureSelectorUIStyle {
             uiStyle.picture_top_titleBarHeight = ScreenUtils.dip2px(appContext, 48);
             uiStyle.picture_top_titleRightDefaultText = appContext.getString(R.string.picture_cancel);
             uiStyle.picture_top_titleRightNormalText = appContext.getString(R.string.picture_cancel);
-            uiStyle.picture_bottom_barHeight = ScreenUtils.dip2px(appContext, 45);
+//            uiStyle.picture_bottom_barHeight = ScreenUtils.dip2px(appContext, 45);
             uiStyle.picture_bottom_previewDefaultText = appContext.getString(R.string.picture_preview);
             // 如果文本内容设置(%1$d/%2$d)，请开启true
             uiStyle.isCompleteReplaceNum = true;
@@ -442,8 +442,8 @@ public class PictureSelectorUIStyle {
         uiStyle.picture_top_titleRightTextColor = new int[]{Color.parseColor("#000000"), Color.parseColor("#000000")};
         uiStyle.picture_top_titleRightTextSize = 14;
         uiStyle.picture_top_titleTextSize = 18;
-        uiStyle.picture_top_titleArrowUpDrawable = R.drawable.picture_icon_orange_arrow_up;
-        uiStyle.picture_top_titleArrowDownDrawable = R.drawable.picture_icon_orange_arrow_down;
+        uiStyle.picture_top_titleArrowUpDrawable = R.drawable.icon_collapse;
+        uiStyle.picture_top_titleArrowDownDrawable = R.drawable.icon_expand;
         uiStyle.picture_top_titleTextColor = Color.parseColor("#000000");
         uiStyle.picture_top_titleBarBackgroundColor = Color.parseColor("#FFFFFF");
 
@@ -455,7 +455,7 @@ public class PictureSelectorUIStyle {
         uiStyle.picture_bottom_previewTextSize = 14;
         uiStyle.picture_bottom_previewTextColor = new int[]{Color.parseColor("#9b9b9b"), Color.parseColor("#FA632D")};
 
-        uiStyle.picture_bottom_completeTextColor = new int[]{Color.parseColor("#9b9b9b"), Color.parseColor("#FA632D")};
+        uiStyle.picture_bottom_completeTextColor = new int[]{Color.parseColor("#ffffff"), Color.parseColor("#ffffff")};
         uiStyle.picture_bottom_barBackgroundColor = Color.parseColor("#FAFAFA");
 
 
@@ -479,7 +479,7 @@ public class PictureSelectorUIStyle {
             uiStyle.picture_top_titleBarHeight = ScreenUtils.dip2px(appContext, 48);
             uiStyle.picture_top_titleRightDefaultText = appContext.getString(R.string.picture_cancel);
             uiStyle.picture_top_titleRightNormalText = appContext.getString(R.string.picture_cancel);
-            uiStyle.picture_bottom_barHeight = ScreenUtils.dip2px(appContext, 45);
+//            uiStyle.picture_bottom_barHeight = ScreenUtils.dip2px(appContext, 45);
             uiStyle.picture_bottom_previewDefaultText = appContext.getString(R.string.picture_preview);
             // 如果文本内容设置(%1$d/%2$d)，请开启true
             uiStyle.isCompleteReplaceNum = true;
@@ -557,7 +557,7 @@ public class PictureSelectorUIStyle {
             uiStyle.picture_top_titleBarHeight = ScreenUtils.dip2px(appContext, 48);
             uiStyle.picture_top_titleRightDefaultText = appContext.getString(R.string.picture_cancel);
             uiStyle.picture_top_titleRightNormalText = appContext.getString(R.string.picture_cancel);
-            uiStyle.picture_bottom_barHeight = ScreenUtils.dip2px(appContext, 45);
+//            uiStyle.picture_bottom_barHeight = ScreenUtils.dip2px(appContext, 45);
             uiStyle.picture_bottom_previewDefaultText = appContext.getString(R.string.picture_preview);
             // 如果文本内容设置(%1$d/%2$d)，请开启true
             uiStyle.isCompleteReplaceNum = true;
@@ -637,7 +637,7 @@ public class PictureSelectorUIStyle {
             uiStyle.picture_top_titleBarHeight = ScreenUtils.dip2px(appContext, 48);
             uiStyle.picture_top_titleRightDefaultText = appContext.getString(R.string.picture_send);
             uiStyle.picture_top_titleRightNormalText = appContext.getString(R.string.picture_cancel);
-            uiStyle.picture_bottom_barHeight = ScreenUtils.dip2px(appContext, 45);
+//            uiStyle.picture_bottom_barHeight = ScreenUtils.dip2px(appContext, 45);
             uiStyle.picture_bottom_previewDefaultText = appContext.getString(R.string.picture_preview);
             // 如果文本内容设置(%1$d/%2$d)，请开启true
             uiStyle.isCompleteReplaceNum = true;

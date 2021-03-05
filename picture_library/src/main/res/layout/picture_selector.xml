@@ -10,8 +10,6 @@
 
     <include layout="@layout/picture_title_bar" />
 
-    <include layout="@layout/picture_bottom_bar" />
-
     <com.luck.picture.lib.widget.RecyclerPreloadView
         android:id="@+id/picture_recycler"
         android:layout_width="match_parent"
@@ -21,6 +19,14 @@
         android:layout_marginLeft="2dp"
         android:layout_marginRight="2dp"
         android:overScrollMode="never" />
+
+    <include
+        android:id="@+id/select_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        layout="@layout/picture_bottom_bar" />
+
 
     <TextView
         android:id="@+id/tv_empty"

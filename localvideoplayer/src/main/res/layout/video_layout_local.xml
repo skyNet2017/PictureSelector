@@ -40,8 +40,25 @@
             android:id="@+id/current"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
+            android:layout_marginLeft="6dp"
             android:text="00:00"
+            android:textSize="11sp"
+            android:textColor="#ffffff" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="/"
+            android:textSize="11sp"
+            android:textColor="#ffffff" />
+
+        <TextView
+            android:id="@+id/total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="6dp"
+            android:text="00:00"
+            android:textSize="11sp"
             android:textColor="#ffffff" />
 
         <SeekBar
@@ -59,21 +76,13 @@
             android:progressDrawable="@drawable/video_seek_progress"
             android:thumb="@drawable/video_seek_thumb" />
 
-        <TextView
-            android:id="@+id/total"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="16dp"
-            android:text="00:00"
-            android:textColor="#ffffff" />
-
         <ImageView
             android:id="@+id/fullscreen"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:paddingRight="16dp"
+            android:padding="10dp"
             android:scaleType="center"
-            android:src="@drawable/video_enlarge" />
+            android:src="@drawable/icon_video_orientation" />
     </LinearLayout>
 
     <ProgressBar
@@ -125,10 +134,11 @@
         android:layout_centerVertical="true"
         android:visibility="gone" />
 
-    <moe.codeest.enviews.ENPlayView
+    <ImageView
         android:id="@+id/start"
         android:layout_width="40dp"
         android:layout_height="40dp"
+        android:padding="10dp"
         android:background="@drawable/video_title_bg"
         android:layout_marginLeft="15dp"
         android:layout_alignParentBottom="true"

@@ -180,7 +180,8 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
         if (config.isAutomaticTitleRecyclerTop) {
             mTitleBar.setOnClickListener(this);
         }
-        mTvPicturePreview.setVisibility(config.chooseMode != PictureMimeType.ofAudio() && config.enablePreview ? View.VISIBLE : View.GONE);
+//        mTvPicturePreview.setVisibility(config.chooseMode != PictureMimeType.ofAudio() && config.enablePreview ? View.VISIBLE : View.GONE);
+        mTvPicturePreview.setVisibility(View.GONE);
         mBottomLayout.setVisibility(config.selectionMode == PictureConfig.SINGLE
                 && config.isSingleDirectReturn ? View.GONE : View.VISIBLE);
         mIvPictureLeftBack.setOnClickListener(this);

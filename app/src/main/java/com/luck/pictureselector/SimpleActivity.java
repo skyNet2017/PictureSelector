@@ -157,7 +157,7 @@ public class SimpleActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     public void picImage(View view) {
-        TakePhotoUtil3.openAlbum(this,9, new TakePhotoListener() {
+        TakePhotoUtil3.openAlbum(this,5, new TakePhotoListener() {
             @Override
             public void onSuccess(List<String> path) {
                 //后续自己上传前分别压缩

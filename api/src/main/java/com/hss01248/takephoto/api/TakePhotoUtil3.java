@@ -21,6 +21,7 @@ import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.engine.PictureSelectorEngine;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.luck.picture.lib.listener.OnResultCallbackListener;
+import com.luck.picture.lib.style.PictureSelectorUIStyle;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,9 +59,13 @@ public class TakePhotoUtil3 {
                 .openGallery(PictureMimeType.ofAll())
                 //.loadImageEngine(GlideEngine.createGlideEngine())
                 .maxSelectNum(maxSelectNum)
+                .maxVideoSelectNum(maxSelectNum)
+                .queryMaxFileSize(50)
                 .videoMaxSecond(15)
                 .imageSpanCount(3)
                 .isCamera(false)
+                .isMaxSelectEnabledMask(true)
+                .setPictureUIStyle(PictureSelectorUIStyle.ofSelectTotalStyle())
                 //.compressSavePath(activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath())
                 .forResult(new OnResultCallbackListener<LocalMedia>() {
                     @Override
