@@ -65,6 +65,7 @@ public class TakePhotoUtil3 {
                 .imageSpanCount(3)
                 .isCamera(false)
                 .isMaxSelectEnabledMask(true)
+                .isWithVideoImage(true)
                 .setPictureUIStyle(PictureSelectorUIStyle.ofSelectTotalStyle())
                 //.compressSavePath(activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath())
                 .forResult(new OnResultCallbackListener<LocalMedia>() {
