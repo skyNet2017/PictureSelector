@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.hss01248.base.compressorimpl.FFmpegCompressImpl;
+import com.hss01248.media.localvideoplayer.VideoPlayUtil;
 import com.hss01248.media.metadata.ExifUtil;
 import com.hss01248.media.metadata.MetaDataUtil;
 import com.hss01248.takephoto.api.TakePhotoListener;
@@ -210,5 +211,11 @@ public class SimpleActivity extends AppCompatActivity implements View.OnClickLis
        /* VideoCompressUtil.doCompressAsync(path,null,
                 CompressType.TYPE_UPLOAD_720P,
                 VideoCompressUtil.showCompareAfterCompress ? new DefaultDialogCompressListener2(this,listener1) : listener1);*/
+    }
+
+    public void playVideo(View view) {
+        String url = "https://test-bimg.akulaku.net/biz/live-chat/user/e0ac2ff895d046c2a167f9f21589687d7606.mp4";
+
+        VideoPlayUtil.startPreview(this, url, false, true);
     }
 }

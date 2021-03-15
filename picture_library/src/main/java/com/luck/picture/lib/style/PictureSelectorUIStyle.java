@@ -501,25 +501,28 @@ public class PictureSelectorUIStyle {
     public static PictureSelectorUIStyle ofSelectNumberStyle() {
         PictureSelectorUIStyle uiStyle = new PictureSelectorUIStyle();
 
-        uiStyle.picture_statusBarBackgroundColor = Color.parseColor("#7D7DFF");
+//        uiStyle.picture_statusBarBackgroundColor = Color.parseColor("#FFFFFF");
+        uiStyle.picture_statusBarChangeTextColor = true;
 
         uiStyle.picture_container_backgroundColor = Color.parseColor("#FFFFFF");
 
         uiStyle.picture_switchSelectNumberStyle = true;
 
-        uiStyle.picture_navBarColor = Color.parseColor("#7D7DFF");
+        uiStyle.picture_navBarColor = Color.parseColor("#FFFFFF");
 
         uiStyle.picture_check_style = R.drawable.picture_checkbox_num_selector;
 
-        uiStyle.picture_top_leftBack = R.drawable.picture_icon_back;
+        uiStyle.picture_top_leftBack = R.drawable.picture_icon_back_arrow;
+//        uiStyle.picture_top_leftBack = R.drawable.icon_back_arrow;
+        uiStyle.picture_top_titleRightTextColor = new int[]{Color.parseColor("#000000"), Color.parseColor("#000000")};
 
         uiStyle.picture_top_titleRightTextColor = new int[]{Color.parseColor("#FFFFFF"), Color.parseColor("#FFFFFF")};
         uiStyle.picture_top_titleRightTextSize = 14;
         uiStyle.picture_top_titleTextSize = 18;
-        uiStyle.picture_top_titleArrowUpDrawable = R.drawable.picture_icon_arrow_up;
-        uiStyle.picture_top_titleArrowDownDrawable = R.drawable.picture_icon_arrow_down;
-        uiStyle.picture_top_titleTextColor = Color.parseColor("#FFFFFF");
-        uiStyle.picture_top_titleBarBackgroundColor = Color.parseColor("#7D7DFF");
+        uiStyle.picture_top_titleArrowUpDrawable = R.drawable.icon_collapse;
+        uiStyle.picture_top_titleArrowDownDrawable = R.drawable.icon_expand;
+        uiStyle.picture_top_titleTextColor = Color.parseColor("#333333");
+        uiStyle.picture_top_titleBarBackgroundColor = Color.parseColor("#FFFFFF");
 
         uiStyle.picture_album_textSize = 16;
         uiStyle.picture_album_backgroundStyle = R.drawable.picture_item_select_bg;
@@ -527,17 +530,17 @@ public class PictureSelectorUIStyle {
         uiStyle.picture_album_checkDotStyle = R.drawable.picture_num_oval_blue;
 
         uiStyle.picture_bottom_previewTextSize = 14;
-        uiStyle.picture_bottom_previewTextColor = new int[]{Color.parseColor("#9b9b9b"), Color.parseColor("#7D7DFF")};
+        uiStyle.picture_bottom_previewTextColor = new int[]{Color.parseColor("#9b9b9b"), Color.parseColor("#FFFFFF")};
 
         uiStyle.picture_bottom_completeRedDotTextSize = 12;
         uiStyle.picture_bottom_completeTextSize = 14;
         uiStyle.picture_bottom_completeRedDotTextColor = Color.parseColor("#FFFFFF");
         uiStyle.picture_bottom_completeRedDotBackground = R.drawable.picture_num_oval_blue;
-        uiStyle.picture_bottom_completeTextColor = new int[]{Color.parseColor("#9b9b9b"), Color.parseColor("#7D7DFF")};
+        uiStyle.picture_bottom_completeTextColor = new int[]{Color.parseColor("#ffffff"), Color.parseColor("#FFFFFF")};
         uiStyle.picture_bottom_barBackgroundColor = Color.parseColor("#FFFFFF");
 
 
-        uiStyle.picture_adapter_item_camera_backgroundColor = Color.parseColor("#999999");
+        uiStyle.picture_adapter_item_camera_backgroundColor = Color.parseColor("#f3f3f3");
         uiStyle.picture_adapter_item_camera_textColor = Color.parseColor("#FFFFFF");
         uiStyle.picture_adapter_item_camera_textSize = 14;
         uiStyle.picture_adapter_item_camera_textTopDrawable = R.drawable.picture_icon_camera;
@@ -549,7 +552,7 @@ public class PictureSelectorUIStyle {
 
         uiStyle.picture_bottom_originalPictureTextSize = 14;
         uiStyle.picture_bottom_originalPictureCheckStyle = R.drawable.picture_original_blue_checkbox;
-        uiStyle.picture_bottom_originalPictureTextColor = Color.parseColor("#7D7DFF");
+        uiStyle.picture_bottom_originalPictureTextColor = Color.parseColor("#FFFFFF");
 
         IApp app = PictureAppMaster.getInstance().getApp();
         Context appContext = app.getAppContext();
