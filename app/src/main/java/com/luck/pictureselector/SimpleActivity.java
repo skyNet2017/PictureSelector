@@ -159,7 +159,7 @@ public class SimpleActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     public void picImage(View view) {
-        TakePhotoUtil3.openAlbum(this,5, LanguageConfig.INDONESIA, new TakePhotoListener() {
+        TakePhotoUtil3.openAlbum(this,5, new TakePhotoListener() {
             @Override
             public void onSuccess(List<String> path) {
                 //后续自己上传前分别压缩
@@ -170,7 +170,7 @@ public class SimpleActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     public void picVideo(View view) {
-        TakePhotoUtil3.openCamera(this, LanguageConfig.INDONESIA, new TakePhotoListener() {
+        TakePhotoUtil3.openCamera(this, new TakePhotoListener() {
             @Override
             public void onSuccess(List<String> path) {
                 //单个压缩

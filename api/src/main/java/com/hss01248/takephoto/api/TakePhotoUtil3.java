@@ -51,7 +51,7 @@ public class TakePhotoUtil3 {
         });
     }
 
-    public static void openAlbum(FragmentActivity activity,int maxSelectNum, int languageId,TakePhotoListener listener){
+    public static void openAlbum(FragmentActivity activity,int maxSelectNum, TakePhotoListener listener){
         PictureSelector.create(activity)
                 .openGallery(PictureMimeType.ofAll())
                 //.loadImageEngine(GlideEngine.createGlideEngine())
@@ -63,7 +63,6 @@ public class TakePhotoUtil3 {
                 .isCamera(false)
                 .isMaxSelectEnabledMask(true)
                 .isWithVideoImage(true)
-                .setLanguage(languageId)
                 .setPictureUIStyle(PictureSelectorUIStyle.ofSelectNumberStyle())
 //                .setPictureUIStyle(PictureSelectorUIStyle.ofSelectTotalStyle())
                 //.compressSavePath(activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath())
@@ -94,7 +93,7 @@ public class TakePhotoUtil3 {
                 });
     }
 
-    public static void openCamera(FragmentActivity activity, int languageId, TakePhotoListener listener){
+    public static void openCamera(FragmentActivity activity, TakePhotoListener listener){
         PictureSelector.create(activity)
                 .openCamera(PictureMimeType.ofAll())
                 //.openGallery(PictureMimeType.ofVideo())
@@ -108,7 +107,6 @@ public class TakePhotoUtil3 {
                 .videoMaxSecond(15)
                 .recordVideoSecond(15)
                 .recordVideoMinSecond(1)
-                .setLanguage(languageId)
                 .forResult(new OnResultCallbackListener<LocalMedia>() {
                     @Override
                     public void onResult(List<LocalMedia> result) {

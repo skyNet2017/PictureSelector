@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void album(View view) {
-        TakePhotoUtil3.openAlbum(this,5, LanguageConfig.INDONESIA,new TakePhotoListener() {
+        TakePhotoUtil3.openAlbum(this,5,new TakePhotoListener() {
             @Override
             public void onSuccess(List<String> paths) {
                 String list = Arrays.toString(paths.toArray()).replace(",","\n");
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void camera(View view) {
-        TakePhotoUtil3.openCamera(this, LanguageConfig.INDONESIA, new TakePhotoListener() {
+        TakePhotoUtil3.openCamera(this, new TakePhotoListener() {
             @Override
             public void onSuccess(List<String> paths) {
                 String path = paths.get(0);
