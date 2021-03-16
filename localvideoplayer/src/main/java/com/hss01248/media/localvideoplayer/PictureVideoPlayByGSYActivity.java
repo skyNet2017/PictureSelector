@@ -1,29 +1,18 @@
 package com.hss01248.media.localvideoplayer;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.text.TextUtils;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-
+import android.widget.TextView;
 
 import com.shuyu.gsyvideoplayer.GSYBaseActivityDetail;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.listener.GSYStateUiListener;
-
 import com.shuyu.gsyvideoplayer.player.PlayerFactory;
 import com.shuyu.gsyvideoplayer.player.SystemPlayerManager;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
-
-import java.io.File;
-
-
 
 import static com.shuyu.gsyvideoplayer.video.base.GSYVideoView.CURRENT_STATE_AUTO_COMPLETE;
 
@@ -52,10 +41,15 @@ public class PictureVideoPlayByGSYActivity extends GSYBaseActivityDetail<Standar
         detailPlayer = (StandardGSYVideoPlayer) findViewById(R.id.detail_player);
         //增加title
         detailPlayer.getTitleTextView().setVisibility(View.GONE);
-        detailPlayer.getBackButton().setVisibility(View.GONE);
-
+//        detailPlayer.getBackButton().setVisibility(View.GONE);
         initVideoBuilderMode();
 
+        TextView tvCurrent = detailPlayer.findViewById(R.id.current);
+        TextView tvDivider = detailPlayer.findViewById(R.id.divider);
+        TextView tvTotal = detailPlayer.findViewById(R.id.total);
+        tvCurrent.setTypeface(Typeface.createFromAsset(getAssets(),"roboto_medium.ttf"));
+        tvDivider.setTypeface(Typeface.createFromAsset(getAssets(),"roboto_medium.ttf"));
+        tvTotal.setTypeface(Typeface.createFromAsset(getAssets(),"roboto_medium.ttf"));
 
         try {
             //detailPlayer.getGSYVideoManager().start();
@@ -65,6 +59,13 @@ public class PictureVideoPlayByGSYActivity extends GSYBaseActivityDetail<Standar
         } catch (Throwable e) {
             e.printStackTrace();
         }
+
+        detailPlayer.getBackButton().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
 
     }
 
@@ -124,20 +125,27 @@ public class PictureVideoPlayByGSYActivity extends GSYBaseActivityDetail<Standar
                 //.setUrl(url)
                 .setUrl(uri)
                 .setCacheWithPlay(false)
-                .setVideoTitle(getNameFromPath(videoPath))
+//                .setVideoTitle(getNameFromPath(videoPath))
         //是否根据视频尺寸，自动选择竖屏全屏或者横屏全屏
                 .setAutoFullWithSize(false)
                 .setIsTouchWiget(true)
-               // .setRotateViewAuto(false)
+                .setRotateViewAuto(false)
+                .setHideKey(true)
                 .setLockLand(false)
                 .setShowPauseCover(false)
                 .setStartAfterPrepared(true)
                 .setShowFullAnimation(false)
                 .setNeedLockFull(true)
+                .setCacheWithPlay(true)
                 .setGSYStateUiListener(new GSYStateUiListener() {
                     @Override
                     public void onStateChanged(int state) {
                         if(state == CURRENT_STATE_AUTO_COMPLETE){
+                            if (!dismissPageWhenFinishPlay) {
+//                                detailPlayer.getCurrentPlayer().seekTo(1);
+                                detailPlayer.onPrepared();
+                                return;
+                            }
                             new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
@@ -179,6 +187,11 @@ public class PictureVideoPlayByGSYActivity extends GSYBaseActivityDetail<Standar
 
     @Override
     public boolean getDetailOrientationRotateAuto() {
-        return true;
+        return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

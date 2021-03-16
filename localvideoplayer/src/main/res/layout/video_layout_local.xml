@@ -28,24 +28,33 @@
     <LinearLayout
         android:id="@+id/layout_bottom"
         android:layout_width="match_parent"
-        android:layout_height="24dp"
+        android:layout_height="28dp"
         android:layout_alignParentBottom="true"
-        android:background="#99000000"
-        android:layout_toRightOf="@id/start"
+        android:background="@drawable/play_control_bg"
         android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:visibility="invisible">
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/start"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:padding="6dp"
+            android:layout_marginLeft="10dp"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/icon_video_play"/>
 
         <TextView
             android:id="@+id/current"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="6dp"
+            android:layout_marginLeft="2dp"
             android:text="00:00"
             android:textSize="11sp"
             android:textColor="#ffffff" />
 
         <TextView
+            android:id="@+id/divider"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="/"
@@ -56,7 +65,6 @@
             android:id="@+id/total"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="5dp"
             android:text="00:00"
             android:textSize="11sp"
             android:textColor="#ffffff" />
@@ -69,24 +77,28 @@
             android:layout_weight="1.0"
             android:background="@null"
             android:max="100"
-            android:maxHeight="4dp"
-            android:minHeight="4dp"
+            android:maxHeight="3dp"
+            android:minHeight="3dp"
             android:paddingBottom="8dp"
             android:paddingTop="8dp"
+            android:paddingStart="8dp"
+            android:paddingEnd="2dp"
+            android:paddingRight="2dp"
+            android:paddingLeft="8dp"
             android:progressDrawable="@drawable/video_seek_progress"
             android:thumb="@drawable/video_seek_thumb" />
 
         <ImageView
             android:id="@+id/iv_voice"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
             android:padding="6dp"
             android:src="@drawable/icon_video_silent" />
 
         <ImageView
             android:id="@+id/fullscreen"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
             android:layout_marginRight="10dp"
             android:padding="6dp"
             android:src="@drawable/icon_video_zoom_out" />
@@ -120,9 +132,9 @@
             android:id="@+id/back"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:paddingLeft="10dp"
+            android:padding="8dp"
             android:scaleType="centerInside"
-            android:src="@drawable/video_back" />
+            android:src="@drawable/icon_back_white" />
 
         <TextView
             android:id="@+id/title"
@@ -130,27 +142,27 @@
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
             android:textColor="@android:color/white"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:visibility="gone" />
     </LinearLayout>
 
-    <moe.codeest.enviews.ENDownloadView
+<!--    <moe.codeest.enviews.ENDownloadView-->
+<!--        android:id="@+id/loading"-->
+<!--        android:layout_width="28dp"-->
+<!--        android:layout_height="28dp"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:layout_centerVertical="true"-->
+<!--        android:visibility="gone" />-->
+
+    <ProgressBar
         android:id="@+id/loading"
         android:layout_width="28dp"
         android:layout_height="28dp"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:visibility="gone" />
-
-    <ImageView
-        android:id="@+id/start"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:padding="6dp"
-        android:background="@drawable/video_title_bg"
-        android:layout_marginLeft="16dp"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="center_vertical" />
-
+        android:layout_centerInParent="true"
+        android:indeterminateDrawable="@drawable/video_loading"
+        android:indeterminateDuration="500"
+        android:indeterminate="true"
+        android:indeterminateOnly="true"/>
 
     <ImageView
         android:id="@+id/small_close"

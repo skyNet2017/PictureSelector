@@ -39,7 +39,7 @@ public class LocalVideoPlayer extends StandardGSYVideoPlayer {
                 if (mAudioManager == null) {
                     return;
                 }
-                if (!isSilent && mStreamVolume != 0) {
+                if (!isSilent) {
                     mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC,0, 0);
                     isSilent = true;
                     mIvVoice.setImageResource(R.drawable.icon_video_voice);
@@ -61,6 +61,18 @@ public class LocalVideoPlayer extends StandardGSYVideoPlayer {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+
+        //离开页面后 回复声音
+        if (mAudioManager != null && mIvVoice != null) {
+            mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC,mStreamVolume, 0);
+            isSilent = false;
+            mIvVoice.setImageResource(R.drawable.icon_video_silent);
+        }
     }
 
     @Override

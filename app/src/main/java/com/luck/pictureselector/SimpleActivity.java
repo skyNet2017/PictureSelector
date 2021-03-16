@@ -214,8 +214,9 @@ public class SimpleActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     public void playVideo(View view) {
-        String url = "https://test-bimg.akulaku.net/biz/live-chat/user/e0ac2ff895d046c2a167f9f21589687d7606.mp4";
+//        String url = "https://test-bimg.akulaku.net/biz/live-chat/user/e0ac2ff895d046c2a167f9f21589687d7606.mp4";
+        String url = "https://test-bimg.akulaku.net/biz/live-chat/user/ea1bf820cab54fa586c82a98153be95c5379.mp4";
 
-        VideoPlayUtil.startPreview(this, url, false, true);
+        VideoPlayUtil.startPreview(this, url, false, false);
     }
 }
