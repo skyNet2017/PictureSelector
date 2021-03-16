@@ -36,7 +36,7 @@ public class LocaleTransform {
                 return new Locale("es", "ES");
             case LanguageConfig.INDONESIA:
                 //印尼
-                return new Locale("in", "ID");
+                return new Locale("in");
             default:
                 // 简体中文
                 return Locale.ENGLISH;
