@@ -53,6 +53,7 @@ import com.luck.picture.lib.model.LocalMediaLoader;
 import com.luck.picture.lib.model.LocalMediaPageLoader;
 import com.luck.picture.lib.observable.ImagesObservable;
 import com.luck.picture.lib.permissions.PermissionChecker;
+import com.luck.picture.lib.style.PictureSelectorUIStyle;
 import com.luck.picture.lib.style.PictureWindowAnimationStyle;
 import com.luck.picture.lib.thread.PictureThreadUtils;
 import com.luck.picture.lib.tools.AttrsUtils;
@@ -320,6 +321,9 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
     @Override
     public void initPictureSelectorStyle() {
         if (PictureSelectionConfig.uiStyle != null) {
+
+            initStrings();
+
             if (PictureSelectionConfig.uiStyle.picture_top_titleArrowDownDrawable != 0) {
                 Drawable drawable = ContextCompat.getDrawable(this, PictureSelectionConfig.uiStyle.picture_top_titleArrowDownDrawable);
                 mIvArrow.setImageDrawable(drawable);
@@ -569,6 +573,22 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
         }
         mTitleBar.setBackgroundColor(colorPrimary);
         mAdapter.bindSelectData(selectionMedias);
+    }
+
+    private void initStrings() {
+        PictureSelectorUIStyle uiStyle = PictureSelectionConfig.uiStyle;
+        uiStyle.picture_top_titleBarHeight = ScreenUtils.dip2px(this, 48);
+        uiStyle.picture_top_titleRightDefaultText = this.getString(R.string.picture_cancel);
+        uiStyle.picture_top_titleRightNormalText = this.getString(R.string.picture_cancel);
+//            uiStyle.picture_bottom_barHeight = ScreenUtils.dip2px(appContext, 45);
+        uiStyle.picture_bottom_previewDefaultText = this.getString(R.string.picture_preview);
+        // 如果文本内容设置(%1$d/%2$d)，请开启true
+        uiStyle.isCompleteReplaceNum = true;
+        uiStyle.picture_bottom_previewNormalText = this.getString(R.string.picture_preview_num);
+        uiStyle.picture_bottom_originalPictureText = this.getString(R.string.picture_original_image);
+        uiStyle.picture_bottom_completeDefaultText = this.getString(R.string.picture_please_select);
+        uiStyle.picture_bottom_completeNormalText = this.getString(R.string.picture_send_num);
+        uiStyle.picture_adapter_item_camera_text = this.getString(R.string.picture_take_picture);
     }
 
     @Override
@@ -1553,7 +1573,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
                 result.add(media);
                 onResult(result);
             } else {
-                VideoPlayUtil.startPreview(container.getContext(),media.getRealPath(),false,true);
+                VideoPlayUtil.startPreview(container.getContext(),media.getRealPath(),false,false);
                 /*if (PictureSelectionConfig.customVideoPlayCallback != null) {
                     PictureSelectionConfig.customVideoPlayCallback.startPlayVideo(media);
                 } else {

@@ -34,9 +34,12 @@ public class LocaleTransform {
             case LanguageConfig.SPANISH:
                 // 西班牙语
                 return new Locale("es", "ES");
+            case LanguageConfig.INDONESIA:
+                //印尼
+                return new Locale("in", "ID");
             default:
                 // 简体中文
-                return Locale.CHINESE;
+                return Locale.ENGLISH;
         }
     }
 }

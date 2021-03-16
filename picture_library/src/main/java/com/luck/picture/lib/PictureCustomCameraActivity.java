@@ -89,6 +89,7 @@ public class PictureCustomCameraActivity extends PictureSelectorCameraEmptyActiv
     private void createCameraView() {
         if (mCameraView == null) {
             mCameraView = new CustomCameraView(getContext());
+            mCameraView.setFitsSystemWindows(true);
             setContentView(mCameraView);
             initView();
         }

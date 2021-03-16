@@ -508,12 +508,14 @@ public class PictureSelectorUIStyle {
 
         uiStyle.picture_switchSelectNumberStyle = true;
 
+        uiStyle.picture_switchSelectTotalStyle = true;
+
         uiStyle.picture_navBarColor = Color.parseColor("#FFFFFF");
 
         uiStyle.picture_check_style = R.drawable.picture_checkbox_num_selector;
 
-        uiStyle.picture_top_leftBack = R.drawable.picture_icon_back_arrow;
-//        uiStyle.picture_top_leftBack = R.drawable.icon_back_arrow;
+//        uiStyle.picture_top_leftBack = R.drawable.picture_icon_back_arrow;
+        uiStyle.picture_top_leftBack = R.drawable.icon_back_arrow;
         uiStyle.picture_top_titleRightTextColor = new int[]{Color.parseColor("#000000"), Color.parseColor("#000000")};
 
         uiStyle.picture_top_titleRightTextColor = new int[]{Color.parseColor("#FFFFFF"), Color.parseColor("#FFFFFF")};
@@ -567,7 +569,7 @@ public class PictureSelectorUIStyle {
             uiStyle.picture_bottom_previewNormalText = appContext.getString(R.string.picture_preview_num);
             uiStyle.picture_bottom_originalPictureText = appContext.getString(R.string.picture_original_image);
             uiStyle.picture_bottom_completeDefaultText = appContext.getString(R.string.picture_please_select);
-            uiStyle.picture_bottom_completeNormalText = appContext.getString(R.string.picture_completed);
+            uiStyle.picture_bottom_completeNormalText = appContext.getString(R.string.picture_send_num);
             uiStyle.picture_adapter_item_camera_text = appContext.getString(R.string.picture_take_picture);
         }
 

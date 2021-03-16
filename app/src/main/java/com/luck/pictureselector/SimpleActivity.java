@@ -25,6 +25,7 @@ import com.hss01248.videocompress.mediacodec.MediaCodecCompressImpl;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
+import com.luck.picture.lib.language.LanguageConfig;
 import com.luck.picture.lib.listener.OnResultCallbackListener;
 
 
@@ -158,7 +159,7 @@ public class SimpleActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     public void picImage(View view) {
-        TakePhotoUtil3.openAlbum(this,5, new TakePhotoListener() {
+        TakePhotoUtil3.openAlbum(this,5, LanguageConfig.INDONESIA, new TakePhotoListener() {
             @Override
             public void onSuccess(List<String> path) {
                 //后续自己上传前分别压缩
@@ -169,7 +170,7 @@ public class SimpleActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     public void picVideo(View view) {
-        TakePhotoUtil3.openCamera(this, new TakePhotoListener() {
+        TakePhotoUtil3.openCamera(this, LanguageConfig.INDONESIA, new TakePhotoListener() {
             @Override
             public void onSuccess(List<String> path) {
                 //单个压缩
