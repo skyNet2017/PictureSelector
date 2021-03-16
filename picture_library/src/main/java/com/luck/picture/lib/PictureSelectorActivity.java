@@ -322,7 +322,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
     public void initPictureSelectorStyle() {
         if (PictureSelectionConfig.uiStyle != null) {
 
-            initStrings();
+//            initStrings();
 
             if (PictureSelectionConfig.uiStyle.picture_top_titleArrowDownDrawable != 0) {
                 Drawable drawable = ContextCompat.getDrawable(this, PictureSelectionConfig.uiStyle.picture_top_titleArrowDownDrawable);
