@@ -499,9 +499,9 @@ public class CustomCameraView extends RelativeLayout {
                 mCameraView.stopRecording();
             }
             if (mVideoFile != null && mVideoFile.exists()) {
-                mVideoFile.delete();
+//                mVideoFile.delete();
                 if (SdkVersionUtils.checkedAndroid_Q() && PictureMimeType.isContent(mConfig.cameraPath)) {
-                    getContext().getContentResolver().delete(Uri.parse(mConfig.cameraPath), null, null);
+//                    getContext().getContentResolver().delete(Uri.parse(mConfig.cameraPath), null, null);
                 } else {
                     new PictureMediaScannerConnection(getContext(), mVideoFile.getAbsolutePath());
                 }
@@ -509,9 +509,9 @@ public class CustomCameraView extends RelativeLayout {
         } else {
             mImagePreview.setVisibility(INVISIBLE);
             if (mPhotoFile != null && mPhotoFile.exists()) {
-                mPhotoFile.delete();
+//                mPhotoFile.delete();
                 if (SdkVersionUtils.checkedAndroid_Q() && PictureMimeType.isContent(mConfig.cameraPath)) {
-                    getContext().getContentResolver().delete(Uri.parse(mConfig.cameraPath), null, null);
+//                    getContext().getContentResolver().delete(Uri.parse(mConfig.cameraPath), null, null);
                 } else {
                     new PictureMediaScannerConnection(getContext(), mPhotoFile.getAbsolutePath());
                 }
