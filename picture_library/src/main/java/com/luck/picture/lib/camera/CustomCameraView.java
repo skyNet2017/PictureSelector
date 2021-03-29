@@ -115,7 +115,7 @@ public class CustomCameraView extends RelativeLayout {
         mTextureView = view.findViewById(R.id.video_play_preview);
         mImagePreview = view.findViewById(R.id.image_preview);
         mSwitchCamera = view.findViewById(R.id.image_switch);
-        mSwitchCamera.setImageResource(R.drawable.picture_ic_camera);
+        mSwitchCamera.setImageResource(R.drawable.switch_camera);
         mFlashLamp = view.findViewById(R.id.image_flash);
         setFlashRes();
         mFlashLamp.setOnClickListener(v -> {
@@ -472,11 +472,11 @@ public class CustomCameraView extends RelativeLayout {
                 mCameraView.setFlash(ImageCapture.FLASH_MODE_AUTO);
                 break;
             case TYPE_FLASH_ON:
-                mFlashLamp.setImageResource(R.drawable.picture_ic_flash_on);
+                mFlashLamp.setImageResource(R.drawable.flash_light_open);
                 mCameraView.setFlash(ImageCapture.FLASH_MODE_ON);
                 break;
             case TYPE_FLASH_OFF:
-                mFlashLamp.setImageResource(R.drawable.picture_ic_flash_off);
+                mFlashLamp.setImageResource(R.drawable.flash_light_close);
                 mCameraView.setFlash(ImageCapture.FLASH_MODE_OFF);
                 break;
         }

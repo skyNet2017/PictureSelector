@@ -51,7 +51,8 @@
     <string name="picture_select">Pilih</string>
     <string name="picture_data_exception">Kendala pengambilan data album…</string>
     <string name="picture_recording_time_is_short">Waktu rekaman terlalu pendek</string>
-    <string name="picture_photo_camera">Klik satu kali untuk ambil gambar,\n tekan lama untuk rekam video</string>
+<!--    <string name="picture_photo_camera">Klik satu kali untuk ambil gambar,\n tekan lama untuk rekam video</string>-->
+    <string name="picture_photo_camera">Klik satu kali untuk ambil gambar</string>
     <string name="picture_photo_pictures">Klik satu kali untuk ambil gambar</string>
     <string name="picture_photo_recording">Tekan lama untuk rekam video</string>
     <string name="picture_choose_max_seconds">Hanya dapat pilih video dengan ukuran maks. %1$ds </string>
