@@ -468,7 +468,7 @@ public class CustomCameraView extends RelativeLayout {
     private void setFlashRes() {
         switch (type_flash) {
             case TYPE_FLASH_AUTO:
-                mFlashLamp.setImageResource(R.drawable.picture_ic_flash_auto);
+                mFlashLamp.setImageResource(R.drawable.flash_light_auto);
                 mCameraView.setFlash(ImageCapture.FLASH_MODE_AUTO);
                 break;
             case TYPE_FLASH_ON:
