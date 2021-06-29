@@ -2,6 +2,7 @@ package com.luck.picture.lib;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -30,6 +31,7 @@ import com.luck.picture.lib.listener.OnQueryDataResultListener;
 import com.luck.picture.lib.model.LocalMediaPageLoader;
 import com.luck.picture.lib.observable.ImagesObservable;
 import com.luck.picture.lib.tools.AttrsUtils;
+import com.luck.picture.lib.tools.FontUtil;
 import com.luck.picture.lib.tools.MediaUtils;
 import com.luck.picture.lib.tools.ScreenUtils;
 import com.luck.picture.lib.tools.StringUtils;
@@ -56,6 +58,7 @@ public class PicturePreviewActivity extends PictureBaseActivity implements
     private static final String TAG = PicturePreviewActivity.class.getSimpleName();
     protected ViewGroup mTitleBar;
     protected ImageView pictureLeftBack;
+    private RelativeLayout rlAlbum;
     protected TextView mTvPictureRight, tvMediaNum, tvTitle, mTvPictureOk;
     protected ImageView mIvArrow;
     protected PreviewViewPager viewPager;
@@ -132,6 +135,7 @@ public class PicturePreviewActivity extends PictureBaseActivity implements
         mTvPictureOk.setOnClickListener(this);
         tvMediaNum.setOnClickListener(this);
         tvTitle = findViewById(R.id.picture_title);
+        rlAlbum = findViewById(R.id.rlAlbum);
         mPicturePreview.setVisibility(View.GONE);
         mIvArrow.setVisibility(View.GONE);
         mTvPictureRight.setVisibility(View.GONE);
@@ -362,6 +366,10 @@ public class PicturePreviewActivity extends PictureBaseActivity implements
     @Override
     public void initPictureSelectorStyle() {
         if (PictureSelectionConfig.uiStyle != null) {
+
+            FontUtil.setNotosansuiBold(tvTitle, this);
+            FontUtil.setNotosansuiMedium(mTvPictureOk, this);
+
             if (PictureSelectionConfig.uiStyle.picture_top_titleTextColor != 0) {
                 tvTitle.setTextColor(PictureSelectionConfig.uiStyle.picture_top_titleTextColor);
             }
