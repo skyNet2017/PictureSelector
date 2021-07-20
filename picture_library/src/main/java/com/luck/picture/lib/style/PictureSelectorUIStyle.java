@@ -561,7 +561,7 @@ public class PictureSelectorUIStyle {
         IApp app = PictureAppMaster.getInstance().getApp();
         Context appContext = app.getAppContext();
         if (appContext != null) {
-            uiStyle.picture_top_titleBarHeight = ScreenUtils.dip2px(appContext, 48);
+            uiStyle.picture_top_titleBarHeight = ScreenUtils.dip2px(appContext, 56);
             uiStyle.picture_top_titleRightDefaultText = appContext.getString(R.string.picture_cancel);
             uiStyle.picture_top_titleRightNormalText = appContext.getString(R.string.picture_cancel);
 //            uiStyle.picture_bottom_barHeight = ScreenUtils.dip2px(appContext, 45);
