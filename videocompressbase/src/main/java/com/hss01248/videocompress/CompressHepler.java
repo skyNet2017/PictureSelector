@@ -76,6 +76,12 @@ public class CompressHepler {
      * @param originWidth
      * @param originHeight
      * @return kbps
+     *
+     *  国内阿里和b站的都抠抠搜搜,推荐使用youtube的码率表:
+     * 24帧/30帧:
+     * 1080p 10 Mbps
+     * 720p	 6.5 Mbps
+     * https://wangwei1237.github.io/2021/05/28/Recommended-video-bitrates-for-different-resolutions/
      */
     private static int getExpectedBitRate(int originWidth, int originHeight, @CompressType.Type String compressType) {
         int expect = 1500;
