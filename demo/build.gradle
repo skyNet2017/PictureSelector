@@ -39,7 +39,7 @@ dependencies {
 
     implementation project(':api')
 
-    implementation "com.simple:spiderman:1.1.7"
+   // implementation "com.simple:spiderman:1.1.7"
 }
 
 configurations {
