@@ -12,7 +12,8 @@ import io.microshow.rxffmpeg.RxFFmpegInvoke;
 
 public class FFmpegCompressImpl implements ICompressor {
     @Override
-    public void compress(VideoInfo.RealCompressInfo info ,String inputPath, String outPath, @CompressType.Type String type, ICompressListener listener) {
+    public void compress(boolean async,VideoInfo.RealCompressInfo info ,String inputPath, String outPath,
+                         @CompressType.Type String type, ICompressListener listener) {
         CompressorConfig compressType = new Config720pUpload();
         if(CompressType.TYPE_LOCAL_STORE.equals(type)){
             compressType = new ConfigLocalStore();
@@ -22,35 +23,71 @@ public class FFmpegCompressImpl implements ICompressor {
             compressType = new BilibiliUpload();
         }
 
-        RxFFmpegInvoke.getInstance().runCommandAsync(compressType.buildCompressParams(inputPath, outPath,info), new RxFFmpegInvoke.IFFmpegListener() {
-            @Override
-            public void onFinish() {
-                if(listener != null){
-                    listener.onFinish(outPath);
-                }
-            }
+        if(async){
+            RxFFmpegInvoke.getInstance()
+                    .runCommandAsync(compressType.buildCompressParams(inputPath, outPath,info),
+                            new RxFFmpegInvoke.IFFmpegListener() {
+                                @Override
+                                public void onFinish() {
+                                    if(listener != null){
+                                        listener.onFinish(outPath);
+                                    }
+                                }
 
-            @Override
-            public void onProgress(int progress, long progressTime) {
-                if(listener != null){
-                    listener.onProgress(progress,progressTime/1000);
-                }
-            }
+                                @Override
+                                public void onProgress(int progress, long progressTime) {
+                                    if(listener != null){
+                                        listener.onProgress(progress,progressTime/1000);
+                                    }
+                                }
 
-            @Override
-            public void onCancel() {
-                if(listener != null){
-                    listener.onCancel();
-                }
-            }
+                                @Override
+                                public void onCancel() {
+                                    if(listener != null){
+                                        listener.onCancel();
+                                    }
+                                }
 
-            @Override
-            public void onError(String message) {
-                if(listener != null){
-                    listener.onError(message);
+                                @Override
+                                public void onError(String message) {
+                                    if(listener != null){
+                                        listener.onError(message);
+                                    }
+                                }
+                            });
+        }else {
+            RxFFmpegInvoke.getInstance().runCommand(compressType.buildCompressParams(inputPath, outPath,info),
+                    new RxFFmpegInvoke.IFFmpegListener() {
+                @Override
+                public void onFinish() {
+                    if(listener != null){
+                        listener.onFinish(outPath);
+                    }
                 }
-            }
-        });
+
+                @Override
+                public void onProgress(int progress, long progressTime) {
+                    if(listener != null){
+                        listener.onProgress(progress,progressTime/1000);
+                    }
+                }
+
+                @Override
+                public void onCancel() {
+                    if(listener != null){
+                        listener.onCancel();
+                    }
+                }
+
+                @Override
+                public void onError(String message) {
+                    if(listener != null){
+                        listener.onError(message);
+                    }
+                }
+            });
+        }
+
     }
 
 

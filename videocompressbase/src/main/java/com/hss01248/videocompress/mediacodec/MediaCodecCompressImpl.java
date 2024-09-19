@@ -6,7 +6,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
-import com.hss01248.videocompress.CompressHepler;
+
 import com.hss01248.videocompress.CompressType;
 import com.hss01248.videocompress.VideoCompressUtil;
 import com.hss01248.videocompress.VideoInfo;
@@ -29,9 +29,10 @@ public class MediaCodecCompressImpl implements ICompressor {
      */
     @SuppressWarnings("AlibabaAvoidManuallyCreateThread")
     @Override
-    public void compress(VideoInfo.RealCompressInfo info ,String inputPath, String outPath, @CompressType.Type String compressType,
+    public void compress(boolean async,VideoInfo.RealCompressInfo info ,String inputPath, String outPath, @CompressType.Type String compressType,
                          ICompressListener listener) {
-        new Thread(new Runnable() {
+
+        Runnable runnable = new Runnable() {
             @Override
             public void run() {
                 try {
@@ -67,8 +68,8 @@ public class MediaCodecCompressImpl implements ICompressor {
                             .input(inputPath)
                             .output(outPath)
                             .outWidth(info.outWidth)
-                          .outHeight(info.outHeight)
-                          .bitrate(info.outBitRate)
+                            .outHeight(info.outHeight)
+                            .bitrate(info.outBitRate)
                             .progressListener(new VideoProgressListener() {
                                 @Override
                                 public void onProgress(float progress) {
@@ -105,7 +106,12 @@ public class MediaCodecCompressImpl implements ICompressor {
                     listener.onError(e.getClass().getName()+": "+e.getMessage());
                 }
             }
-        }).start();
+        };
+        if(async){
+            new Thread(runnable).start();
+        }else {
+            runnable.run();
+        }
     }
 
     /**

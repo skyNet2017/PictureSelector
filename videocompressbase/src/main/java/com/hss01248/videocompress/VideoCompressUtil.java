@@ -38,9 +38,13 @@ public class VideoCompressUtil {
 
    static ICompressor compressor  = new MediaCodecCompressImpl();
 
+    public static void doCompressAsync( String inputPath, @Nullable String outDir,
+                                        @CompressType.Type String compressType, ICompressListener listener){
+        doCompress(true,inputPath,outDir,compressType,listener);
+    }
 
-
-    public static void doCompressAsync(String inputPath, @Nullable String outDir, @CompressType.Type String compressType, ICompressListener listener){
+    public static void doCompress(boolean async,String inputPath, @Nullable String outDir,
+                                  @CompressType.Type String compressType, ICompressListener listener){
 
         File input = new File(inputPath);
         File dir = input.getParentFile();
@@ -69,12 +73,12 @@ public class VideoCompressUtil {
 
         VideoInfo.RealCompressInfo info = CompressHepler.getRealTargetWHBitrate(inputPath,compressType);
         if(!info.needCompress){
-            Log.w("compress","无需压缩: 实际比特率和分辨率小于期望比特率");
+            Log.i("compress","无需压缩: 实际比特率和分辨率小于期望比特率");
             //无需压缩
             listener.onFinish(inputPath);
             return;
         }
-        compressor.compress(info,inputPath,outPath,compressType,listener);
+        compressor.compress(async,info,inputPath,outPath,compressType,listener);
 
     }
 }
