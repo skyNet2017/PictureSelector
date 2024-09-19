@@ -115,7 +115,7 @@ public class CustomCameraView extends RelativeLayout {
         mTextureView = view.findViewById(R.id.video_play_preview);
         mImagePreview = view.findViewById(R.id.image_preview);
         mSwitchCamera = view.findViewById(R.id.image_switch);
-        mSwitchCamera.setImageResource(R.drawable.picture_ic_camera);
+        mSwitchCamera.setImageResource(R.drawable.switch_camera);
         mFlashLamp = view.findViewById(R.id.image_flash);
         setFlashRes();
         mFlashLamp.setOnClickListener(v -> {
@@ -468,15 +468,15 @@ public class CustomCameraView extends RelativeLayout {
     private void setFlashRes() {
         switch (type_flash) {
             case TYPE_FLASH_AUTO:
-                mFlashLamp.setImageResource(R.drawable.picture_ic_flash_auto);
+                mFlashLamp.setImageResource(R.drawable.flash_light_auto);
                 mCameraView.setFlash(ImageCapture.FLASH_MODE_AUTO);
                 break;
             case TYPE_FLASH_ON:
-                mFlashLamp.setImageResource(R.drawable.picture_ic_flash_on);
+                mFlashLamp.setImageResource(R.drawable.flash_light_open);
                 mCameraView.setFlash(ImageCapture.FLASH_MODE_ON);
                 break;
             case TYPE_FLASH_OFF:
-                mFlashLamp.setImageResource(R.drawable.picture_ic_flash_off);
+                mFlashLamp.setImageResource(R.drawable.flash_light_close);
                 mCameraView.setFlash(ImageCapture.FLASH_MODE_OFF);
                 break;
         }
@@ -499,9 +499,9 @@ public class CustomCameraView extends RelativeLayout {
                 mCameraView.stopRecording();
             }
             if (mVideoFile != null && mVideoFile.exists()) {
-                mVideoFile.delete();
+//                mVideoFile.delete();
                 if (SdkVersionUtils.checkedAndroid_Q() && PictureMimeType.isContent(mConfig.cameraPath)) {
-                    getContext().getContentResolver().delete(Uri.parse(mConfig.cameraPath), null, null);
+//                    getContext().getContentResolver().delete(Uri.parse(mConfig.cameraPath), null, null);
                 } else {
                     new PictureMediaScannerConnection(getContext(), mVideoFile.getAbsolutePath());
                 }
@@ -509,9 +509,9 @@ public class CustomCameraView extends RelativeLayout {
         } else {
             mImagePreview.setVisibility(INVISIBLE);
             if (mPhotoFile != null && mPhotoFile.exists()) {
-                mPhotoFile.delete();
+//                mPhotoFile.delete();
                 if (SdkVersionUtils.checkedAndroid_Q() && PictureMimeType.isContent(mConfig.cameraPath)) {
-                    getContext().getContentResolver().delete(Uri.parse(mConfig.cameraPath), null, null);
+//                    getContext().getContentResolver().delete(Uri.parse(mConfig.cameraPath), null, null);
                 } else {
                     new PictureMediaScannerConnection(getContext(), mPhotoFile.getAbsolutePath());
                 }

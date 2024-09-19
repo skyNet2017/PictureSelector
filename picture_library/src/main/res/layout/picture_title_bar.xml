@@ -20,12 +20,11 @@
 
     <ImageView
         android:id="@+id/pictureLeftBack"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginLeft="12dp"
         android:layout_centerVertical="true"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:src="@drawable/picture_icon_back" />
+        android:src="@drawable/icon_back_arrow" />
 
     <RelativeLayout
         android:id="@+id/rlAlbum"
@@ -52,6 +51,7 @@
             android:id="@+id/ivArrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
             android:layout_centerVertical="true"
             android:layout_toEndOf="@id/picture_title"
             android:scaleType="centerInside"

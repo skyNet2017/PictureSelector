@@ -47,7 +47,7 @@ public class VideoCompressUtil {
                                   @CompressType.Type String compressType, ICompressListener listener){
 
         File input = new File(inputPath);
-        File dir = input.getParentFile();
+        File dir = new File(VideoCompressUtil.context.getExternalCacheDir(),"videoCompress");
 
         if(!TextUtils.isEmpty(outDir)){
             dir = new File(outDir);

@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.hss01248.base.compressorimpl.FFmpegCompressImpl;
+import com.hss01248.media.localvideoplayer.VideoPlayUtil;
 import com.hss01248.media.metadata.ExifUtil;
 import com.hss01248.media.metadata.MetaDataUtil;
 import com.hss01248.takephoto.api.TakePhotoListener;
@@ -24,6 +25,7 @@ import com.hss01248.videocompress.mediacodec.MediaCodecCompressImpl;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
+import com.luck.picture.lib.language.LanguageConfig;
 import com.luck.picture.lib.listener.OnResultCallbackListener;
 
 
@@ -157,7 +159,7 @@ public class SimpleActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     public void picImage(View view) {
-        TakePhotoUtil3.openAlbum(this,9, new TakePhotoListener() {
+        TakePhotoUtil3.openAlbum(this,5, new TakePhotoListener() {
             @Override
             public void onSuccess(List<String> path) {
                 //后续自己上传前分别压缩
@@ -210,5 +212,12 @@ public class SimpleActivity extends AppCompatActivity implements View.OnClickLis
        /* VideoCompressUtil.doCompressAsync(path,null,
                 CompressType.TYPE_UPLOAD_720P,
                 VideoCompressUtil.showCompareAfterCompress ? new DefaultDialogCompressListener2(this,listener1) : listener1);*/
+    }
+
+    public void playVideo(View view) {
+
+        String url = "https://test-bimg.xx.net/biz/live-chat/user/ea1bf820cab54fa586c82a98153be95c5379.mp4";
+
+        VideoPlayUtil.startPreview(this, url, false, false);
     }
 }

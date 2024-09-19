@@ -31,7 +31,7 @@
         android:layout_marginTop="10dp"
         android:padding="15dp"
         android:scaleType="centerInside"
-        android:src="@drawable/picture_ic_camera" />
+        android:src="@drawable/switch_camera" />
 
     <ImageView
         android:id="@+id/image_flash"
@@ -41,7 +41,7 @@
         android:layout_toLeftOf="@id/image_switch"
         android:padding="15dp"
         android:scaleType="centerInside"
-        android:src="@drawable/picture_ic_flash_on" />
+        android:src="@drawable/flash_light_open" />
 
 
     <com.luck.picture.lib.camera.view.CaptureLayout

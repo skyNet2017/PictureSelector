@@ -3,17 +3,14 @@ package com.hss01248.takephoto.api;
 
 import android.app.Application;
 import android.content.Context;
-import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.fragment.app.FragmentActivity;
 
 import com.hss01248.media.localvideoplayer.VideoPlayUtil;
-import com.hss01248.videocompress.CompressType;
 import com.hss01248.videocompress.IPreviewVideo;
 import com.hss01248.videocompress.VideoCompressUtil;
-import com.hss01248.videocompress.listener.ICompressListener;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.app.IApp;
 import com.luck.picture.lib.app.PictureAppMaster;
@@ -21,6 +18,7 @@ import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.engine.PictureSelectorEngine;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.luck.picture.lib.listener.OnResultCallbackListener;
+import com.luck.picture.lib.style.PictureSelectorUIStyle;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,9 +56,15 @@ public class TakePhotoUtil3 {
                 .openGallery(PictureMimeType.ofAll())
                 //.loadImageEngine(GlideEngine.createGlideEngine())
                 .maxSelectNum(maxSelectNum)
+                .maxVideoSelectNum(maxSelectNum)
+                .queryMaxFileSize(50)
                 .videoMaxSecond(15)
                 .imageSpanCount(3)
                 .isCamera(false)
+                .isMaxSelectEnabledMask(true)
+                .isWithVideoImage(true)
+                .setPictureUIStyle(PictureSelectorUIStyle.ofSelectNumberStyle())
+//                .setPictureUIStyle(PictureSelectorUIStyle.ofSelectTotalStyle())
                 //.compressSavePath(activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath())
                 .forResult(new OnResultCallbackListener<LocalMedia>() {
                     @Override

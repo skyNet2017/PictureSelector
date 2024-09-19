@@ -68,3 +68,7 @@ dependencies {
 //是否需要ExoPlayer模式
     //implementation 'com.shuyu:GSYVideoPlayer-exo2:8.0.0'
 }
+configurations {
+   // all*.exclude group: 'com.github.simplepeng.SpiderMan'
+    //com.github.simplepeng.SpiderMan:spiderman
+}

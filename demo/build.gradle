@@ -3,13 +3,13 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 33
     buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "com.hss01248.takephoto.demo"
-        minSdkVersion 16
-        targetSdkVersion 30
+        minSdkVersion 21
+        targetSdkVersion 33
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
@@ -39,7 +39,7 @@ dependencies {
 
     implementation project(':api')
 
-   // implementation "com.simple:spiderman:1.1.7"
+    //implementation "com.simple:spiderman:1.1.7"
 }
 
 configurations {

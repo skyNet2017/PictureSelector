@@ -53,6 +53,7 @@ import com.luck.picture.lib.model.LocalMediaLoader;
 import com.luck.picture.lib.model.LocalMediaPageLoader;
 import com.luck.picture.lib.observable.ImagesObservable;
 import com.luck.picture.lib.permissions.PermissionChecker;
+import com.luck.picture.lib.style.PictureSelectorUIStyle;
 import com.luck.picture.lib.style.PictureWindowAnimationStyle;
 import com.luck.picture.lib.thread.PictureThreadUtils;
 import com.luck.picture.lib.tools.AttrsUtils;
@@ -180,7 +181,8 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
         if (config.isAutomaticTitleRecyclerTop) {
             mTitleBar.setOnClickListener(this);
         }
-        mTvPicturePreview.setVisibility(config.chooseMode != PictureMimeType.ofAudio() && config.enablePreview ? View.VISIBLE : View.GONE);
+//        mTvPicturePreview.setVisibility(config.chooseMode != PictureMimeType.ofAudio() && config.enablePreview ? View.VISIBLE : View.GONE);
+        mTvPicturePreview.setVisibility(View.GONE);
         mBottomLayout.setVisibility(config.selectionMode == PictureConfig.SINGLE
                 && config.isSingleDirectReturn ? View.GONE : View.VISIBLE);
         mIvPictureLeftBack.setOnClickListener(this);
@@ -319,6 +321,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
     @Override
     public void initPictureSelectorStyle() {
         if (PictureSelectionConfig.uiStyle != null) {
+
             if (PictureSelectionConfig.uiStyle.picture_top_titleArrowDownDrawable != 0) {
                 Drawable drawable = ContextCompat.getDrawable(this, PictureSelectionConfig.uiStyle.picture_top_titleArrowDownDrawable);
                 mIvArrow.setImageDrawable(drawable);
@@ -1552,7 +1555,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
                 result.add(media);
                 onResult(result);
             } else {
-                VideoPlayUtil.startPreview(container.getContext(),media.getRealPath(),false,true);
+                VideoPlayUtil.startPreview(container.getContext(),media.getRealPath(),false,false);
                 /*if (PictureSelectionConfig.customVideoPlayCallback != null) {
                     PictureSelectionConfig.customVideoPlayCallback.startPlayVideo(media);
                 } else {

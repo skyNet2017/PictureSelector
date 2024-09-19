@@ -148,8 +148,8 @@ public class FolderPopWindow extends PopupWindow {
             AnimUtils.rotateArrow(ivArrowView, true);
             rootViewBg.animate()
                     .alpha(1)
-                    .setDuration(250)
-                    .setStartDelay(250).start();
+                    .setDuration(50)
+                    .setStartDelay(50).start();
         } catch (Exception e) {
             e.printStackTrace();
         }

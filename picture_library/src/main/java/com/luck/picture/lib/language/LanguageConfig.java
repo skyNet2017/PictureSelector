@@ -47,4 +47,9 @@ public class LanguageConfig {
      * 西班牙语
      */
     public static final int SPANISH = 8;
+
+    /**
+     * 印尼
+     */
+    public static final int INDONESIA = 9;
 }
