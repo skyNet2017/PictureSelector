@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
                     if(!hasCompress){
                         if(path.endsWith(".mp4")|| path.endsWith(".MP4")){
                             hasCompress = true;
-                            VideoCompressUtil.doCompressAsync(path, "", CompressType.TYPE_UPLOAD_1080P, new DefaultDialogCompressListener(MainActivity.this,
+                            VideoCompressUtil.doCompressAsync(path, "", CompressType.TYPE_HDR_2K, new DefaultDialogCompressListener(MainActivity.this,
                                     new ICompressListener() {
                                         @Override
                                         public void onFinish(String outputFilePath) {
