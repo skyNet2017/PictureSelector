@@ -32,7 +32,7 @@ public class CompressHepler {
     /**
      *
      * @param inputPath
-     * @param targetResolution 目标最短边,比如720p,1080p ...
+     *
      * @return
      */
     public static VideoInfo.RealCompressInfo getRealTargetWHBitrate(String inputPath,  @CompressType.Type String compressType){
@@ -57,10 +57,18 @@ public class CompressHepler {
             targetResolution = 720;
         }else if(CompressType.TYPE_UPLOAD_1080P.equals(compressType)){
             targetResolution = 1080;
-        }else if(CompressType.TYPE_BILIBILI.equals(compressType)){
+        }else if(CompressType.TYPE_SDR_360P.equals(compressType)){
+            targetResolution = 360;
+        }else if(CompressType.TYPE_SDR_480P.equals(compressType)){
+            targetResolution = 480;
+        }else if(CompressType.TYPE_HDR_720P.equals(compressType)){
+            targetResolution = 720;
+        }else if(CompressType.TYPE_HDR_1080P.equals(compressType)){
             targetResolution = 1080;
-        }else if(CompressType.TYPE_LOCAL_STORE.equals(compressType)){
-            targetResolution = Math.min(originWidth,originHeight);
+        }else if(CompressType.TYPE_HDR_2K.equals(compressType)){
+            targetResolution = 1440;
+        }else if(CompressType.TYPE_HDR_4K.equals(compressType)){
+            targetResolution = 2160;
         }
 
 
@@ -83,21 +91,33 @@ public class CompressHepler {
      * 720p	 6.5 Mbps
      * https://wangwei1237.github.io/2021/05/28/Recommended-video-bitrates-for-different-resolutions/
      */
-    private static int getExpectedBitRate(int originWidth, int originHeight, @CompressType.Type String compressType) {
+    public static int getExpectedBitRate(int originWidth, int originHeight, @CompressType.Type String compressType) {
         int expect = 1500;
         //本地收藏保存: y = 0.0018x + 1059.6
-        if(CompressType.TYPE_LOCAL_STORE.equals(compressType) || CompressType.TYPE_BILIBILI.equals(compressType)){
+        /*if(CompressType.TYPE_LOCAL_STORE.equals(compressType) || CompressType.TYPE_BILIBILI.equals(compressType)){
             expect = (int) (0.0018*originHeight*originWidth +1059.6);
             //y = 0.0018x - 545.63
         }else if( CompressType.TYPE_UPLOAD_720P.equals(compressType) || CompressType.TYPE_UPLOAD_1080P.equals(compressType)){
             expect = (int) ((int) (0.0018*originHeight*originWidth -545.63) *3);
-        }
-        /*if(CompressType.TYPE_UPLOAD_1080P.equals(compressType)){
-            //8000kbps
-            expect = 8000*1024;
-        }else if(CompressType.TYPE_UPLOAD_720P.equals(compressType)){
-            expect = 5000*1024;
         }*/
+        if(CompressType.TYPE_UPLOAD_1080P.equals(compressType)){
+            //8000kbps
+            expect = 8*1024*1024;
+        }else if(CompressType.TYPE_UPLOAD_720P.equals(compressType)){
+            expect = 5*1024*1024;
+        }else  if(compressType.equals(CompressType.TYPE_SDR_360P)){
+            expect = 1024*1024;
+        }else  if(compressType.equals(CompressType.TYPE_SDR_480P)){
+            expect = (int) (2.5*1024*1024);
+        }else  if(compressType.equals(CompressType.TYPE_HDR_720P)){
+            expect = (int) (6.5*1024*1024);
+        }else  if(compressType.equals(CompressType.TYPE_HDR_1080P)){
+            expect = 10*1024*1024;
+        }else  if(compressType.equals(CompressType.TYPE_HDR_2K)){
+            expect = 20*1024*1024;
+        }else  if(compressType.equals(CompressType.TYPE_HDR_4K)){
+            expect = 50*1024*1024;
+        }
         return expect;
     }
 
@@ -118,14 +138,14 @@ public class CompressHepler {
                 float ratio = inputHeight*1.0f/inputWidth;
                 int targetHeight = targetResolution*inputHeight/inputWidth;
                 //todo
-                int expetedRatesInkps = getExpectedBitRate(targetResolution,targetHeight,compressType)*1024;
+                int expetedRatesInkps = getExpectedBitRate(targetResolution,targetHeight,compressType);
                 int bitRates = getBitRate(expetedRatesInkps,originalBitrate,ratio);
-                Log.w("dd","bitrates cal to compress:"+bitRates/1024);
+                Log.w("dd","bitrates cal to compress:"+bitRates/1024/1024+"Mbps");
                 info.outWidth = targetResolution;
                         info.outHeight = targetHeight;
                         info.outBitRate = bitRates;
             }else {
-                int expetedRatesInkps = getExpectedBitRate(inputWidth,inputHeight,compressType)*1024;
+                int expetedRatesInkps = getExpectedBitRate(inputWidth,inputHeight,compressType);
                 if(originalBitrate > expetedRatesInkps){
                     info.outWidth = inputWidth;
                     info.outHeight = inputHeight;
@@ -140,15 +160,15 @@ public class CompressHepler {
             if(inputHeight >= targetResolution){
                 float ratio = inputWidth*1.0f/inputHeight;
                 int targetW = targetResolution*inputWidth/inputHeight;
-                int expetedRatesInkps = getExpectedBitRate(targetResolution,targetW,compressType)*1024;
+                int expetedRatesInkps = getExpectedBitRate(targetResolution,targetW,compressType);
                 int bitRates = getBitRate(expetedRatesInkps,originalBitrate,ratio);
-                Log.w("dd","bitrates cal to compress:"+bitRates/1024);
+                Log.w("dd","bitrates cal to compress:"+bitRates/1024/1024+"Mbps");
                 info.outWidth = targetW;
                 info.outHeight = targetResolution;
                 info.outBitRate = bitRates;
             }else {
                 //不需要压缩分辨率,就看看要不要减少码率
-                int expetedRatesInkps = getExpectedBitRate(inputWidth,inputHeight,compressType)*1024;
+                int expetedRatesInkps = getExpectedBitRate(inputWidth,inputHeight,compressType);
                 if(originalBitrate > expetedRatesInkps){
                     info.outWidth = inputWidth;
                     info.outHeight = inputHeight;
@@ -164,13 +184,7 @@ public class CompressHepler {
     }
 
     private static int getBitRate(int expetedRatesInkps, int originalBitrate, float ratio) {
-        if(originalBitrate/ratio > expetedRatesInkps){
-            return expetedRatesInkps;
-        }else if(expetedRatesInkps > originalBitrate){
-            return originalBitrate;
-        }else {
-            return (int) (originalBitrate/ratio);
-        }
+        return Math.min(expetedRatesInkps,originalBitrate);
     }
 
 

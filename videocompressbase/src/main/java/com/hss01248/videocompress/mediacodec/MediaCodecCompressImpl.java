@@ -70,6 +70,7 @@ public class MediaCodecCompressImpl implements ICompressor {
                             .outWidth(info.outWidth)
                             .outHeight(info.outHeight)
                             .bitrate(info.outBitRate)
+                            .frameRate(30)
                             .progressListener(new VideoProgressListener() {
                                 @Override
                                 public void onProgress(float progress) {
@@ -114,110 +115,9 @@ public class MediaCodecCompressImpl implements ICompressor {
         }
     }
 
-    /**
-     * 码率/分辨率 比例,线性拟合
-     *  720p上传的 拟合数据源: 阿里云点播码率表  https://help.aliyun.com/document_detail/86068.html  y = 0.0018x - 545.63
-     *
-     *  本地收藏保存: y = 0.0018x + 1059.6
-     * @param inputPath
-     * @param originWidth
-     * @param originHeight
-     * @return kbps
-     */
-    private int getExpectedBitRate(String inputPath, int originWidth, int originHeight, @CompressType.Type String compressType) {
-        int expect = 1500;
-        //本地收藏保存: y = 0.0018x + 1059.6
-        if(CompressType.TYPE_LOCAL_STORE.equals(compressType) || CompressType.TYPE_BILIBILI.equals(compressType)){
-             expect = (int) (0.0018*originHeight*originWidth +1059.6);
-             //y = 0.0018x - 545.63
-        }else if( CompressType.TYPE_UPLOAD_720P.equals(compressType) || CompressType.TYPE_UPLOAD_1080P.equals(compressType)){
-            expect = (int) ((int) (0.0018*originHeight*originWidth -145.63) *1.2);
-        }
-        return expect;
-    }
 
-    private boolean processByType(VideoProcessor.Processor process,int outWidth, int outHeight, int bitrate, String inputPath, String compressType) {
-        if(CompressType.TYPE_UPLOAD_720P.equals(compressType)){
-          return   compressToUpload(720,process,outWidth,outHeight,bitrate,inputPath,compressType);
-        }else if(CompressType.TYPE_UPLOAD_1080P.equals(compressType)){
-          return   compressToUpload(1080,process,outWidth,outHeight,bitrate,inputPath,compressType);
-        }else if(CompressType.TYPE_BILIBILI.equals(compressType)){
-          return   compressToUpload(1080,process,outWidth,outHeight,bitrate,inputPath,compressType);
-        }else if(CompressType.TYPE_LOCAL_STORE.equals(compressType)){
-           return compressToUpload(Math.min(outHeight,outWidth),process,outWidth,outHeight,bitrate,inputPath,compressType);
-        }
-        return   compressToUpload(720,process,outWidth,outHeight,bitrate,inputPath,compressType);
-    }
 
-    /**
-     *
-     * @param targetResolution
-     * @param process
-     * @param inputWidth
-     * @param inputHeight
-     * @param originalBitrate
-     * @param inputPath
-     * @param compressType
-     * @return 返回是否需要压缩
-     */
-    private boolean compressToUpload(int targetResolution,  VideoProcessor.Processor process,
-                                  int inputWidth, int inputHeight, int originalBitrate, String inputPath, String compressType) {
 
-        if(inputWidth < inputHeight){
-            if(inputWidth >= targetResolution){
-                float ratio = inputHeight*1.0f/inputWidth;
-                int targetHeight = targetResolution*inputHeight/inputWidth;
-                //todo
-                int expetedRatesInkps = getExpectedBitRate(inputPath,targetResolution,targetHeight,compressType)*1024;
-                int bitRates = getBitRate(expetedRatesInkps,originalBitrate,ratio);
-                Log.w("dd","bitrates cal to compress:"+bitRates/1024);
-                process.outWidth(targetResolution)
-                        .outHeight(targetHeight)
-                .bitrate(bitRates);
-            }else {
-                int expetedRatesInkps = getExpectedBitRate(inputPath,inputWidth,inputHeight,compressType)*1024;
-                if(originalBitrate > expetedRatesInkps){
-                    process.outWidth(inputWidth)
-                            .outHeight(inputHeight)
-                            .bitrate(originalBitrate);
-                }else {
-                    //不需要压缩
-                    return false;
-                }
-            }
-        }else {
-            if(inputHeight >= targetResolution){
-                float ratio = inputWidth*1.0f/inputHeight;
-                int targetW = targetResolution*inputWidth/inputHeight;
-                int expetedRatesInkps = getExpectedBitRate(inputPath,targetResolution,targetW,compressType)*1024;
-                int bitRates = getBitRate(expetedRatesInkps,originalBitrate,ratio);
-                Log.w("dd","bitrates cal to compress:"+bitRates/1024);
-                process.outHeight(targetResolution)
-                        .outWidth(targetResolution*inputWidth/inputHeight)
-                        .bitrate(bitRates);
-            }else {
-                //不需要压缩分辨率,就看看要不要减少码率
-                int expetedRatesInkps = getExpectedBitRate(inputPath,inputWidth,inputHeight,compressType)*1024;
-                if(originalBitrate > expetedRatesInkps){
-                    process.outWidth(inputWidth)
-                            .outHeight(inputHeight)
-                            .bitrate(originalBitrate);
-                }else {
-                    //不需要压缩
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
 
-    private int getBitRate(int expetedRatesInkps, int originalBitrate, float ratio) {
-        if(originalBitrate/ratio > expetedRatesInkps){
-            return expetedRatesInkps;
-        }else if(expetedRatesInkps > originalBitrate){
-            return originalBitrate;
-        }else {
-            return (int) (originalBitrate/ratio);
-        }
-    }
+
 }
