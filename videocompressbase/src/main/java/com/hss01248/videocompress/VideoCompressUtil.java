@@ -12,8 +12,7 @@ import com.hss01248.videocompress.listener.PostProcessorListener;
 import com.hss01248.videocompress.mediacodec.MediaCodecCompressImpl;
 
 import java.io.File;
-
-
+import java.io.IOException;
 
 
 public class VideoCompressUtil {
@@ -52,6 +51,7 @@ public class VideoCompressUtil {
         if(!TextUtils.isEmpty(outDir)){
             dir = new File(outDir);
         }
+        dir.mkdirs();
 
         String fileName = input.getName();
         if(fileName.contains(".")){
@@ -59,6 +59,14 @@ public class VideoCompressUtil {
            fileName = fileName.substring(0,idx)+"-"+compressType+fileName.substring(idx);
         }
         File out = new File(dir,fileName);
+        if(out.exists()){
+            out.delete();
+        }
+        try {
+            out.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         String outPath = out.getAbsolutePath();
         //装饰器模式:

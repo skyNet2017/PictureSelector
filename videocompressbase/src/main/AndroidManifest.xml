@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.hss01248.videocompress">
     <application>
-        <activity android:name=".compare.CompressCompareActivity" />
+        <activity android:name=".compare.CompressCompareActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
     </application>
 
 </manifest>

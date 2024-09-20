@@ -90,8 +90,14 @@ public class CompressHepler {
             expect = (int) (0.0018*originHeight*originWidth +1059.6);
             //y = 0.0018x - 545.63
         }else if( CompressType.TYPE_UPLOAD_720P.equals(compressType) || CompressType.TYPE_UPLOAD_1080P.equals(compressType)){
-            expect = (int) ((int) (0.0018*originHeight*originWidth -545.63) *1.2);
+            expect = (int) ((int) (0.0018*originHeight*originWidth -545.63) *3);
         }
+        /*if(CompressType.TYPE_UPLOAD_1080P.equals(compressType)){
+            //8000kbps
+            expect = 8000*1024;
+        }else if(CompressType.TYPE_UPLOAD_720P.equals(compressType)){
+            expect = 5000*1024;
+        }*/
         return expect;
     }
 

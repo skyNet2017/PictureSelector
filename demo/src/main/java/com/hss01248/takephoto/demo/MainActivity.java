@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
                     if(!hasCompress){
                         if(path.endsWith(".mp4")|| path.endsWith(".MP4")){
                             hasCompress = true;
-                            VideoCompressUtil.doCompressAsync(path, "", CompressType.TYPE_UPLOAD_720P, new DefaultDialogCompressListener(MainActivity.this,
+                            VideoCompressUtil.doCompressAsync(path, "", CompressType.TYPE_UPLOAD_1080P, new DefaultDialogCompressListener(MainActivity.this,
                                     new ICompressListener() {
                                         @Override
                                         public void onFinish(String outputFilePath) {
@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
                 String path = paths.get(0);
                 Log.w("image","path:"+path);
                 if(path.endsWith(".mp4")|| path.endsWith(".MP4")){
-                    VideoCompressUtil.doCompressAsync(path, "", CompressType.TYPE_UPLOAD_720P, new DefaultDialogCompressListener(MainActivity.this,
+                    VideoCompressUtil.doCompressAsync(path, "", CompressType.TYPE_UPLOAD_1080P, new DefaultDialogCompressListener(MainActivity.this,
                             new ICompressListener() {
                                 @Override
                                 public void onFinish(String outputFilePath) {
