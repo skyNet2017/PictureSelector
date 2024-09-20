@@ -15,9 +15,12 @@ public interface CompressType {
     String TYPE_HDR_2K = "hdr-2k";
     String TYPE_HDR_4K = "hdr-4k";
 
+    String TYPE_FOR_STORE = "for-store";
 
 
-    @StringDef({TYPE_UPLOAD_720P, TYPE_UPLOAD_1080P,TYPE_SDR_480P,TYPE_SDR_360P,TYPE_HDR_720P,TYPE_HDR_1080P,TYPE_HDR_2K,TYPE_HDR_4K})
+
+    @StringDef({TYPE_UPLOAD_720P, TYPE_UPLOAD_1080P,TYPE_SDR_480P,
+            TYPE_SDR_360P,TYPE_HDR_720P,TYPE_HDR_1080P,TYPE_HDR_2K,TYPE_HDR_4K,TYPE_FOR_STORE})
     public @interface Type {
 
     }
