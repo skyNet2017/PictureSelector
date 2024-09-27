@@ -1,15 +1,11 @@
 package com.hss01248.videocompress;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
@@ -53,9 +49,9 @@ public class CompressHepler {
         }
 
         int targetResolution = 720;
-        if(CompressType.TYPE_UPLOAD_720P.equals(compressType)){
+        if(CompressType.TYPE_SDR_720P.equals(compressType)){
             targetResolution = 720;
-        }else if(CompressType.TYPE_UPLOAD_1080P.equals(compressType)){
+        }else if(CompressType.TYPE_SDR_1080P.equals(compressType)){
             targetResolution = 1080;
         }else if(CompressType.TYPE_SDR_360P.equals(compressType)){
             targetResolution = 360;
@@ -92,33 +88,7 @@ public class CompressHepler {
      * https://wangwei1237.github.io/2021/05/28/Recommended-video-bitrates-for-different-resolutions/
      */
     public static int getExpectedBitRate(int originWidth, int originHeight, @CompressType.Type String compressType) {
-        int expect = 1500;
-        //本地收藏保存: y = 0.0018x + 1059.6
-        /*if(CompressType.TYPE_LOCAL_STORE.equals(compressType) || CompressType.TYPE_BILIBILI.equals(compressType)){
-            expect = (int) (0.0018*originHeight*originWidth +1059.6);
-            //y = 0.0018x - 545.63
-        }else if( CompressType.TYPE_UPLOAD_720P.equals(compressType) || CompressType.TYPE_UPLOAD_1080P.equals(compressType)){
-            expect = (int) ((int) (0.0018*originHeight*originWidth -545.63) *3);
-        }*/
-        if(CompressType.TYPE_UPLOAD_1080P.equals(compressType)){
-            //8000kbps
-            expect = 8*1024*1024;
-        }else if(CompressType.TYPE_UPLOAD_720P.equals(compressType)){
-            expect = 5*1024*1024;
-        }else  if(compressType.equals(CompressType.TYPE_SDR_360P)){
-            expect = 1024*1024;
-        }else  if(compressType.equals(CompressType.TYPE_SDR_480P)){
-            expect = (int) (2.5*1024*1024);
-        }else  if(compressType.equals(CompressType.TYPE_HDR_720P)){
-            expect = (int) (6.5*1024*1024);
-        }else  if(compressType.equals(CompressType.TYPE_HDR_1080P)){
-            expect = 10*1024*1024;
-        }else  if(compressType.equals(CompressType.TYPE_HDR_2K)){
-            expect = 20*1024*1024;
-        }else  if(compressType.equals(CompressType.TYPE_HDR_4K)){
-            expect = 50*1024*1024;
-        }
-        return expect;
+        return VideoCompressUtil.getGlobalBitRateConfig().getExpectedBitRate(compressType);
     }
 
     /**

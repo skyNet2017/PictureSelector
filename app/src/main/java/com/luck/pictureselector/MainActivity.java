@@ -629,7 +629,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 if(media.getRealPath().endsWith(".mp4")){
                     VideoCompressUtil.doCompressAsync(media.getRealPath(), "",
-                            true ? CompressType.TYPE_UPLOAD_720P : CompressType.TYPE_LOCAL_STORE, new ICompressListener() {
+                            true ? CompressType.TYPE_SDR_720P : CompressType.TYPE_HDR_2K, new ICompressListener() {
                                 @Override
                                 public void onFinish(String outputFilePath) {
 

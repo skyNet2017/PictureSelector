@@ -17,7 +17,7 @@ public class FFmpegCompressImpl implements ICompressor {
         CompressorConfig compressType = new Config720pUpload();
         if(CompressType.TYPE_LOCAL_STORE.equals(type)){
             compressType = new ConfigLocalStore();
-        }else if(CompressType.TYPE_UPLOAD_1080P.equals(type)){
+        }else if(CompressType.TYPE_SDR_1080P.equals(type)){
             compressType = new Config1080Upload();
         }else if(CompressType.TYPE_BILIBILI.equals(type)){
             compressType = new BilibiliUpload();

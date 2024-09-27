@@ -6,6 +6,10 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.hss01248.videocompress.bitrate.BilibiliBitrateConfig;
+import com.hss01248.videocompress.bitrate.LowThanBiliBitrateConfig;
+import com.hss01248.videocompress.bitrate.YoutubeBitrateConfig;
+import com.hss01248.videocompress.bitrate.IBitrateConfig;
 import com.hss01248.videocompress.listener.CompressLogListener;
 import com.hss01248.videocompress.listener.ICompressListener;
 import com.hss01248.videocompress.listener.PostProcessorListener;
@@ -19,6 +23,16 @@ public class VideoCompressUtil {
 
    public static Context context;
    public static boolean showLog,showCompareAfterCompress,showGridInfo;
+
+    public static void setGlobalBitRateConfig(IBitrateConfig globalBitRateConfig) {
+        VideoCompressUtil.globalBitRateConfig = globalBitRateConfig;
+    }
+
+    public static IBitrateConfig getGlobalBitRateConfig() {
+        return globalBitRateConfig;
+    }
+
+    static  IBitrateConfig globalBitRateConfig = new LowThanBiliBitrateConfig();
 
     public static void setiPreviewVideo(IPreviewVideo iPreviewVideo) {
         VideoCompressUtil.iPreviewVideo = iPreviewVideo;
@@ -38,7 +52,8 @@ public class VideoCompressUtil {
    static ICompressor compressor  = new MediaCodecCompressImpl();
 
     public static void doCompressAsync( String inputPath, @Nullable String outDir,
-                                        @CompressType.Type String compressType, ICompressListener listener){
+                                        @CompressType.Type String compressType,
+                                        ICompressListener listener){
         doCompress(true,inputPath,outDir,compressType,listener);
     }
 

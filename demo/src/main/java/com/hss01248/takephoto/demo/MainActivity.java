@@ -11,10 +11,12 @@ import com.bumptech.glide.Glide;
 import com.hss01248.takephoto.api.TakePhotoListener;
 import com.hss01248.takephoto.api.TakePhotoUtil3;
 import com.hss01248.videocompress.CompressType;
+import com.hss01248.videocompress.MyCommonCallback5;
+import com.hss01248.videocompress.VideoCaptureBySysUtil;
 import com.hss01248.videocompress.VideoCompressUtil;
+import com.hss01248.videocompress.bitrate.LowThanBiliBitrateConfig;
 import com.hss01248.videocompress.listener.DefaultDialogCompressListener;
 import com.hss01248.videocompress.listener.ICompressListener;
-import com.luck.picture.lib.language.LanguageConfig;
 
 import java.util.Arrays;
 import java.util.List;
@@ -79,7 +81,9 @@ public class MainActivity extends AppCompatActivity {
                 String path = paths.get(0);
                 Log.w("image","path:"+path);
                 if(path.endsWith(".mp4")|| path.endsWith(".MP4")){
-                    VideoCompressUtil.doCompressAsync(path, "", CompressType.TYPE_UPLOAD_720P, new DefaultDialogCompressListener(MainActivity.this,
+                    VideoCompressUtil.doCompressAsync(path, "",
+                            CompressType.TYPE_SDR_720P,
+                            new DefaultDialogCompressListener(MainActivity.this,
                             new ICompressListener() {
                                 @Override
                                 public void onFinish(String outputFilePath) {
@@ -105,6 +109,33 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFail(String path, String msg) {
                 Log.e("error","msg:"+msg);
+            }
+        });
+    }
+
+    public void cameraSys(View view) {
+
+        VideoCompressUtil.setGlobalBitRateConfig(new LowThanBiliBitrateConfig());
+        VideoCaptureBySysUtil.startVideoCapture(false, 80, 0,
+                new MyCommonCallback5<String>() {
+            @Override
+            public void onSuccess(String s) {
+                VideoCompressUtil.doCompressAsync(s, "",
+                        CompressType.TYPE_SDR_1080P,
+                        new DefaultDialogCompressListener(MainActivity.this,
+                                new ICompressListener() {
+                                    @Override
+                                    public void onFinish(String outputFilePath) {
+                                        Log.w("image","doCompressAsync outputFilePath:"+outputFilePath);
+
+                                    }
+
+                                    @Override
+                                    public void onError(String message) {
+                                        Log.e("error","msg:"+message);
+
+                                    }
+                                }));
             }
         });
     }

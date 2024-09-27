@@ -25,6 +25,15 @@
         android:text="拍照/拍视频"
         tools:layout_editor_absoluteX="97dp"
         tools:layout_editor_absoluteY="199dp" />
+
+    <Button
+        android:onClick="cameraSys"
+        android:id="@+id/button3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="系统intent-拍照/拍视频"
+        tools:layout_editor_absoluteX="97dp"
+        tools:layout_editor_absoluteY="199dp" />
     <ImageView
         android:layout_width="match_parent"
         android:id="@+id/iv"

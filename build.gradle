@@ -16,6 +16,7 @@ buildscript {
         google()
         mavenLocal()
         mavenCentral()
+        maven { url 'https://nexus.hss01248.tech/repository/maven-releases/' }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:4.0.2'
@@ -39,6 +40,7 @@ allprojects {
         maven {
             url 'https://maven.aliyun.com/repository/jcenter'
         }
+        maven { url 'https://nexus.hss01248.tech/repository/maven-releases/' }
     }
 }
 

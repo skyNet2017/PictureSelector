@@ -25,7 +25,6 @@ import com.hss01248.videocompress.mediacodec.MediaCodecCompressImpl;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
-import com.luck.picture.lib.language.LanguageConfig;
 import com.luck.picture.lib.listener.OnResultCallbackListener;
 
 
@@ -144,15 +143,15 @@ public class SimpleActivity extends AppCompatActivity implements View.OnClickLis
       }
 
       int modeId = rgMode.getCheckedRadioButtonId();
-      String mode = CompressType.TYPE_UPLOAD_720P;
+      String mode = CompressType.TYPE_SDR_720P;
       if(modeId == R.id.upload720p){
-          mode = CompressType.TYPE_UPLOAD_720P;
+          mode = CompressType.TYPE_SDR_720P;
       }else if(modeId == R.id.upload1080p){
-          mode = CompressType.TYPE_UPLOAD_720P;
+          mode = CompressType.TYPE_SDR_720P;
       }else if(modeId == R.id.localstore){
-          mode = CompressType.TYPE_LOCAL_STORE;
+          //mode = CompressType.TYPE_LOCAL_STORE;
       }else if(modeId == R.id.bilibili){
-          mode = CompressType.TYPE_BILIBILI;
+         // mode = CompressType.TYPE_BILIBILI;
       }
       doSelectAndCompress(mode);
 
@@ -207,7 +206,7 @@ public class SimpleActivity extends AppCompatActivity implements View.OnClickLis
             }
         };
         Log.w("meta",MetaDataUtil.getAllInfo(path).toString());
-        doComressBg(path,CompressType.TYPE_UPLOAD_720P);
+        doComressBg(path,CompressType.TYPE_SDR_720P);
         //这个应该在上传时自己调用:
        /* VideoCompressUtil.doCompressAsync(path,null,
                 CompressType.TYPE_UPLOAD_720P,
