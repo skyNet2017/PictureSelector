@@ -35,7 +35,7 @@ public class DefaultDialogCompressListener implements ICompressListener {
             public void run() {
                 dialog[0] = new ProgressDialog(activity);
                 dialog[0].setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                dialog[0].setTitle("压缩中: "+new File(inputPath).getName());
+                dialog[0].setTitle("compressing: "+new File(inputPath).getName());
                 dialog[0].setMax(100);
                 dialog[0].setCancelable(false);
                 dialog[0].setCanceledOnTouchOutside(false);

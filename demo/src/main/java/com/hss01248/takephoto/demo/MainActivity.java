@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.bumptech.glide.Glide;
 import com.hss01248.takephoto.api.TakePhotoListener;
 import com.hss01248.takephoto.api.TakePhotoUtil3;
@@ -122,11 +123,11 @@ public class MainActivity extends AppCompatActivity {
             public void onSuccess(String s) {
                 VideoCompressUtil.doCompressAsync(s, "",
                         CompressType.TYPE_SDR_1080P,
-                        new DefaultDialogCompressListener(MainActivity.this,
                                 new ICompressListener() {
                                     @Override
                                     public void onFinish(String outputFilePath) {
                                         Log.w("image","doCompressAsync outputFilePath:"+outputFilePath);
+                                        ToastUtils.showLong("compress success: \n"+outputFilePath);
 
                                     }
 
@@ -135,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
                                         Log.e("error","msg:"+message);
 
                                     }
-                                }));
+                                });
             }
         });
     }

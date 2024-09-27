@@ -6,13 +6,13 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.Utils;
-import com.hss01248.videocompress.bitrate.BilibiliBitrateConfig;
 import com.hss01248.videocompress.bitrate.LowThanBiliBitrateConfig;
-import com.hss01248.videocompress.bitrate.YoutubeBitrateConfig;
 import com.hss01248.videocompress.bitrate.IBitrateConfig;
-import com.hss01248.videocompress.listener.CompressLogListener;
+
+import com.hss01248.videocompress.listener.DefaultDialogCompressListener;
 import com.hss01248.videocompress.listener.ICompressListener;
 import com.hss01248.videocompress.listener.PostProcessorListener;
 import com.hss01248.videocompress.mediacodec.MediaCodecCompressImpl;
@@ -24,8 +24,8 @@ import java.io.IOException;
 public class VideoCompressUtil {
 
    public static Context context = Utils.getApp();
-   public static boolean showLog = AppUtils.isAppDebug();
-    public static boolean showCompareAfterCompress = false;
+   public static boolean showCompressProgressDialog = true;
+    public static boolean showCompareAfterCompress = AppUtils.isAppDebug();
     public static boolean showGridInfo = false;
 
     public static void setGlobalBitRateConfig(IBitrateConfig globalBitRateConfig) {
@@ -44,9 +44,10 @@ public class VideoCompressUtil {
 
     public static IPreviewVideo iPreviewVideo;
 
-    public static void init(Context context,boolean showLog,boolean showCompareAfterCompress){
+    public static void init(Context context,boolean showCompressProgressDialog,
+                            boolean showCompareAfterCompress){
         VideoCompressUtil.context = context;
-        VideoCompressUtil.showLog = showLog;
+        VideoCompressUtil.showCompressProgressDialog = showCompressProgressDialog;
         VideoCompressUtil.showCompareAfterCompress = showCompareAfterCompress;
     }
     public static void setCompressor(ICompressor compressor) {
@@ -90,8 +91,8 @@ public class VideoCompressUtil {
         String outPath = out.getAbsolutePath();
         //装饰器模式:
         listener = new PostProcessorListener(listener);
-        if(VideoCompressUtil.showLog){
-            listener = new CompressLogListener(listener);
+        if(VideoCompressUtil.showCompressProgressDialog){
+            listener = new DefaultDialogCompressListener(ActivityUtils.getTopActivity(),listener);
         }
 
         if(listener != null){

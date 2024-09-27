@@ -29,8 +29,8 @@ import java.util.List;
  */
 public class TakePhotoUtil3 {
 
-    public static void init(Application context, boolean showLog, boolean showCompareAfterCompress){
-        VideoCompressUtil.init(context,showLog,showCompareAfterCompress);
+    public static void init(Application context, boolean showCompressProgressDialog, boolean showCompareAfterCompress){
+        VideoCompressUtil.init(context,showCompressProgressDialog,showCompareAfterCompress);
         PictureAppMaster.getInstance().setApp(new IApp() {
             @Override
             public Context getAppContext() {
