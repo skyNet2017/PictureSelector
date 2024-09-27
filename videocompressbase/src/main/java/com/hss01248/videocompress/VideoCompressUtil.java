@@ -6,6 +6,8 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.blankj.utilcode.util.AppUtils;
+import com.blankj.utilcode.util.Utils;
 import com.hss01248.videocompress.bitrate.BilibiliBitrateConfig;
 import com.hss01248.videocompress.bitrate.LowThanBiliBitrateConfig;
 import com.hss01248.videocompress.bitrate.YoutubeBitrateConfig;
@@ -21,8 +23,10 @@ import java.io.IOException;
 
 public class VideoCompressUtil {
 
-   public static Context context;
-   public static boolean showLog,showCompareAfterCompress,showGridInfo;
+   public static Context context = Utils.getApp();
+   public static boolean showLog = AppUtils.isAppDebug();
+    public static boolean showCompareAfterCompress = false;
+    public static boolean showGridInfo = false;
 
     public static void setGlobalBitRateConfig(IBitrateConfig globalBitRateConfig) {
         VideoCompressUtil.globalBitRateConfig = globalBitRateConfig;
