@@ -19,6 +19,16 @@
 
 文件大小>0, 视频长宽和时长均获取不到,为0.
 
+更大原因不是mediacodec兼容,而是回调不准确,判断结束的条件不准确:
+
+![image-20241023104135784](https://cdn.jsdelivr.net/gh/shuiniuhss/myimages@main/imagemac3/image-20241023104135784.png)
+
+通过日志可以看到,progress=1.0只是压缩进度,压缩完成后,还在写mp4文件头,音频等信息
+
+![image-20241023104252097](https://cdn.jsdelivr.net/gh/shuiniuhss/myimages@main/imagemac3/image-20241023104252097.png)
+
+
+
 ## 于是兼容策略如下:
 
 默认使用mediacodec压缩,压缩后校验其压缩后视频长宽和时长,

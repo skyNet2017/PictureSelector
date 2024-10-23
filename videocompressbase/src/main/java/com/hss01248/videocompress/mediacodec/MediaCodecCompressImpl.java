@@ -48,6 +48,7 @@ public class MediaCodecCompressImpl implements ICompressor {
                     @Override
                     public void run() {
                         try {
+                            LogUtils.d("----------> 1.5s after onFinished() called, check and call real onfinished() ");
                             File file = new File(outputFilePath);
                             if(!file.exists() || file.length() ==0){
                                 listener0.onError("compress failed: file length is 0");
@@ -102,28 +103,10 @@ public class MediaCodecCompressImpl implements ICompressor {
                     //VideoInfo info = VideoInfo.getInfo(inputPath);
                     long start = System.currentTimeMillis();
 
-                    final boolean[] finished = {false};
-                    final boolean[] posted = {false};
-                    Handler handler = new Handler(Looper.getMainLooper());
-                    Runnable finish = new Runnable() {
-                        @Override
-                        public void run() {
-                            if(finished[0]){
-                                return;
-                            }
-                            finished[0] = true;
-                            listener.onFinish(outPath);
 
-                        }
-                    };
                     if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP){
                         //兼容性处理,api21以下,不压缩.
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                listener.onFinish(inputPath);
-                            }
-                        });
+                        listener.onFinish(inputPath);
                         return;
                     }
 
@@ -137,36 +120,15 @@ public class MediaCodecCompressImpl implements ICompressor {
                             .progressListener(new VideoProgressListener() {
                                 @Override
                                 public void onProgress(float progress) {
-                                    if(AppUtils.isAppDebug()){
-                                        Log.d("progress","P:"+progress);
-                                    }
-
                                     listener.onProgress((int) (progress*100),System.currentTimeMillis() - start);
-                                    int percent = (int) (progress *100);
-                                    if(percent == 98){
-                                        if(posted[0]){
-                                            return;
-                                        }
-                                        handler.postDelayed(finish,8000);
-                                        posted[0] = true;
-                                    }else if(progress == 1.0f){
-                                        finished[0] = true;
-                                        handler.removeCallbacks(finish);
-                                        listener.onFinish(outPath);
+                                    if(progress == 1.0f){
+                                        LogUtils.d("----------> progress == 1.0f callback ");
                                     }
                                 }
                             })
                             .process();
-                   /* VideoProcessor.Processor process =   VideoProcessor.processor(VideoCompressUtil.context)
-                            .input(inputPath) // .input(inputVideoUri)
-                            .output(outPath);
-                            //.startTimeMs(startTimeMs)//用于剪辑视频
-                            //.endTimeMs(endTimeMs)    //用于剪辑视频
-                            // .speed(speed)            //改变视频速率，用于快慢放
-                            // .changeAudioSpeed(changeAudioSpeed) //改变视频速率时，音频是否同步变化
-                            //.iFrameInterval(iFrameInterval)  //关键帧距，为0时可输出全关键帧视频（部分机器上需为-1）
-                    */
-
+                    LogUtils.d("----------> after process() call");
+                    listener.onFinish(outPath);
                 } catch (Throwable e) {
                     e.printStackTrace();
                     listener.onError(e.getClass().getName()+": "+e.getMessage());
