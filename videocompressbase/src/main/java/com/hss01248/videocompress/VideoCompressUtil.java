@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 
 import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.AppUtils;
+import com.blankj.utilcode.util.SPStaticUtils;
 import com.blankj.utilcode.util.Utils;
 import com.hss01248.videocompress.bitrate.LowThanBiliBitrateConfig;
 import com.hss01248.videocompress.bitrate.IBitrateConfig;
@@ -24,7 +25,7 @@ import java.io.IOException;
 public class VideoCompressUtil {
 
    public static Context context = Utils.getApp();
-   public static boolean showCompressProgressDialog = true;
+   public static boolean showCompressProgressDialog = false;
     public static boolean showCompareAfterCompress = AppUtils.isAppDebug();
     public static boolean showGridInfo = false;
 
@@ -106,7 +107,15 @@ public class VideoCompressUtil {
             listener.onFinish(inputPath);
             return;
         }
+        if(compressor instanceof MediaCodecCompressImpl){
+            if("not_compact".equals(SPStaticUtils.getString("video_compress_mediacodec_compact"))){
+                MediaCodecCompressImpl.setToUserFFmpeg();
+            }
+        }
         compressor.compress(async,info,inputPath,outPath,compressType,listener);
 
     }
+
+
+
 }

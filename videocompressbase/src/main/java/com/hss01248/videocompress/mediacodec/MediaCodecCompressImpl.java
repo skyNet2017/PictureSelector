@@ -7,6 +7,10 @@ import android.os.Looper;
 import android.util.Log;
 
 
+import com.blankj.utilcode.util.AppUtils;
+import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.SPStaticUtils;
+import com.blankj.utilcode.util.ThreadUtils;
 import com.hss01248.videocompress.CompressType;
 import com.hss01248.videocompress.VideoCompressUtil;
 import com.hss01248.videocompress.VideoInfo;
@@ -14,6 +18,9 @@ import com.hss01248.videocompress.listener.ICompressListener;
 import com.hss01248.videocompress.ICompressor;
 import com.hw.videoprocessor.VideoProcessor;
 import com.hw.videoprocessor.util.VideoProgressListener;
+
+import java.io.File;
+import java.io.IOException;
 
 public class MediaCodecCompressImpl implements ICompressor {
     /**
@@ -30,7 +37,63 @@ public class MediaCodecCompressImpl implements ICompressor {
     @SuppressWarnings("AlibabaAvoidManuallyCreateThread")
     @Override
     public void compress(boolean async,VideoInfo.RealCompressInfo info ,String inputPath, String outPath, @CompressType.Type String compressType,
-                         ICompressListener listener) {
+                         ICompressListener listener0) {
+
+        ICompressListener  listener = new ICompressListener() {
+            @Override
+            public void onFinish(String outputFilePath) {
+                //检查压缩后的文件是否有效,如果无效,则采用ffmpeg的压缩方式;
+                // 比较大的可能是文件头最后写,还没有写完,所以延迟1.5s
+                ThreadUtils.getMainHandler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            File file = new File(outputFilePath);
+                            if(!file.exists() || file.length() ==0){
+                                listener0.onError("compress failed: file length is 0");
+                                return;
+                            }
+                            MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+                            retriever.setDataSource(outputFilePath);
+                            String originWidth = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH);
+                            String originHeight = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT);
+                            // int rotationValue = Integer.parseInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION));
+                            // int oriBitrate = Integer.parseInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE));
+                            String durationMs = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+                            retriever.release();
+                            if(originWidth == null && originHeight ==null && durationMs ==null){
+                                //不兼容硬件压缩,需要使用ffmepg压缩方式:
+                                SPStaticUtils.put("video_compress_mediacodec_compact","not_compact");
+                                setToUserFFmpeg();
+                                listener0.onError("compress failed: not compact with media codec compressor, please retry");
+                            }else {
+                                listener0.onFinish(outputFilePath);
+                            }
+                        } catch (Exception e) {
+                            LogUtils.e(e);
+                            listener0.onError(e.getClass().getSimpleName()+" : "+e.getMessage());
+                        }
+                    }
+                },1500);
+            }
+
+            @Override
+            public void onError(String message) {
+                listener0.onError(message);
+            }
+
+            @Override
+            public void onProgress(int progress, long progressTime) {
+                ICompressListener.super.onProgress(progress, progressTime);
+                listener0.onProgress(progress, progressTime);
+            }
+
+            @Override
+            public void onCancel() {
+                listener0.onCancel();
+
+            }
+        };
 
         Runnable runnable = new Runnable() {
             @Override
@@ -70,11 +133,14 @@ public class MediaCodecCompressImpl implements ICompressor {
                             .outWidth(info.outWidth)
                             .outHeight(info.outHeight)
                             .bitrate(info.outBitRate)
-                            .frameRate(30)
+                            .frameRate(24)
                             .progressListener(new VideoProgressListener() {
                                 @Override
                                 public void onProgress(float progress) {
-                                    //Log.d("progress","P:"+progress);
+                                    if(AppUtils.isAppDebug()){
+                                        Log.d("progress","P:"+progress);
+                                    }
+
                                     listener.onProgress((int) (progress*100),System.currentTimeMillis() - start);
                                     int percent = (int) (progress *100);
                                     if(percent == 98){
@@ -88,7 +154,6 @@ public class MediaCodecCompressImpl implements ICompressor {
                                         handler.removeCallbacks(finish);
                                         listener.onFinish(outPath);
                                     }
-
                                 }
                             })
                             .process();
@@ -115,9 +180,16 @@ public class MediaCodecCompressImpl implements ICompressor {
         }
     }
 
-
-
-
+   public static void setToUserFFmpeg() {
+        String className = "com.hss01248.base.compressorimpl.FFmpegCompressImpl";
+       try {
+           Class clazz = Class.forName(className);
+           Object instance = clazz.newInstance();
+           VideoCompressUtil.setCompressor((ICompressor) instance);
+       } catch (Exception e) {
+           LogUtils.e(e);
+       }
+    }
 
 
 }

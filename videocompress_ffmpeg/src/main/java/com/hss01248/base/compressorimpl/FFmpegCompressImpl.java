@@ -2,6 +2,10 @@ package com.hss01248.base.compressorimpl;
 
 import android.media.MediaMetadataRetriever;
 
+import androidx.annotation.Keep;
+
+import com.blankj.utilcode.util.AppUtils;
+import com.blankj.utilcode.util.LogUtils;
 import com.hss01248.videocompress.CompressType;
 import com.hss01248.videocompress.CompressorConfig;
 import com.hss01248.videocompress.listener.ICompressListener;
@@ -10,6 +14,7 @@ import com.hss01248.videocompress.VideoInfo;
 
 import io.microshow.rxffmpeg.RxFFmpegInvoke;
 
+@Keep
 public class FFmpegCompressImpl implements ICompressor {
     @Override
     public void compress(boolean async,VideoInfo.RealCompressInfo info ,String inputPath, String outPath,
@@ -21,11 +26,15 @@ public class FFmpegCompressImpl implements ICompressor {
             compressType = new Config1080Upload();
         }else if(CompressType.TYPE_HDR_1080P.equals(type)){
             compressType = new BilibiliUpload();
+        }else {
+            compressType = new Config1080Upload();
         }
-
+        RxFFmpegInvoke.getInstance().setDebug(AppUtils.isAppDebug());
+        String[] cmds = compressType.buildCompressParams(inputPath, outPath,info);
+        LogUtils.dTag("ffmepg",async,cmds);
         if(async){
             RxFFmpegInvoke.getInstance()
-                    .runCommandAsync(compressType.buildCompressParams(inputPath, outPath,info),
+                    .runCommandAsync(cmds,
                             new RxFFmpegInvoke.IFFmpegListener() {
                                 @Override
                                 public void onFinish() {
@@ -56,7 +65,7 @@ public class FFmpegCompressImpl implements ICompressor {
                                 }
                             });
         }else {
-            RxFFmpegInvoke.getInstance().runCommand(compressType.buildCompressParams(inputPath, outPath,info),
+            RxFFmpegInvoke.getInstance().runCommand(cmds,
                     new RxFFmpegInvoke.IFFmpegListener() {
                 @Override
                 public void onFinish() {

@@ -24,7 +24,7 @@ public class VideoInfo {
     public int width;
     public int rotation;
     public long fileLength;
-    public int duration;
+    public float duration;
     public int bitRates;
     public int quality;
     public Map<String,String> info;
@@ -41,7 +41,7 @@ public class VideoInfo {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             info.rotation = toInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION));//视频的方向角度
         }
-        info.duration = toInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)) / 1000;//视频的长度 s
+        info.duration = toInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)) / 1000.0f;//视频的长度 s
         info.bitRates = toInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE)) / 1024; //kbps 按字节计算. 不按比特
         if (info.bitRates <= 0 && info.duration > 0) {
             info.bitRates = (int) (file.length() * 8 / info.duration) / 1024 ;
@@ -60,9 +60,10 @@ public class VideoInfo {
                         "x" + height +
                         "\nrotation=" + rotation +
                         "\nfileLength=" + size(fileLength) +
-                        "\nduration=" + duration +
-                        "s\nbitRates=" + bitRates +
-                        "kbps\nfile=" +name +
+                        "\nduration=" + String.format("%.2f",duration) + "s" +
+                        "\nbitRates=" + bitRates + "kbps" +
+                        "\nbitRates(B)=" + String.format("%.2f",bitRates/1024.0/8) + "MB/s" +
+                        "\nfile=" +name +
                         "\npath=" + path;
     }
 
@@ -147,7 +148,7 @@ public class VideoInfo {
                 .append(byteRate)
                 .append("\n")
                 .append("len:")
-                .append(duration)  .append("s") ;
+                .append(String.format("%.2f",duration))  .append("s") ;
         return stringBuilder.toString();
     }
 

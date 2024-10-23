@@ -12,6 +12,6 @@ public class LowThanBiliBitrateConfig extends BilibiliBitrateConfig{
 
     @Override
     public int getExpectedBitRate(String compressType) {
-        return Math.round(super.getExpectedBitRate(compressType)*0.7f);
+        return Math.round(super.getExpectedBitRate(compressType)*0.8f);
     }
 }

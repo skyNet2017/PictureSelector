@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void cameraSys(View view) {
 
-        VideoCompressUtil.setGlobalBitRateConfig(new LowThanBiliBitrateConfig());
+
         VideoCaptureBySysUtil.startVideoCapture(false, 80, 0,
                 new MyCommonCallback5<String>() {
             @Override

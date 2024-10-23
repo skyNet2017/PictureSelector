@@ -40,7 +40,7 @@ dependencies {
    // api"com.github.hss01248.utilcodeEnhance:media:1.7.0"
 
     implementation project(':api')
-
+    implementation project(':videocompress_ffmpeg')
     //implementation "com.simple:spiderman:1.1.7"
 }
 

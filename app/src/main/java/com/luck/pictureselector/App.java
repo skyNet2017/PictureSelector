@@ -36,6 +36,7 @@ public class App extends MultiDexApplication implements IApp, CameraXConfig.Prov
         PictureAppMaster.getInstance().setApp(this);
         //VideoUtil2.call();
 
+        VideoCompressUtil.setCompressor(new FFmpegCompressImpl());
 
         VideoCompressUtil.init(this,true,false);
         VideoCompressUtil.setiPreviewVideo(new IPreviewVideo() {
