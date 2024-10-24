@@ -26,6 +26,7 @@ public class VideoInfo {
     public long fileLength;
     public float duration;
     public int bitRates;
+    public int framePs;
     public int quality;
     public Map<String,String> info;
 
@@ -46,6 +47,9 @@ public class VideoInfo {
         if (info.bitRates <= 0 && info.duration > 0) {
             info.bitRates = (int) (file.length() * 8 / info.duration) / 1024 ;
         }
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+            info.framePs = toInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_FRAME_COUNT));
+        }
         info.name = file.getName();
         info.fileLength = file.length();
 
@@ -63,6 +67,7 @@ public class VideoInfo {
                         "\nduration=" + String.format("%.2f",duration) + "s" +
                         "\nbitRates=" + bitRates + "kbps" +
                         "\nbitRates(B)=" + String.format("%.2f",bitRates/1024.0/8) + "MB/s" +
+                        "\nfps=" +framePs +
                         "\nfile=" +name +
                         "\npath=" + path;
     }

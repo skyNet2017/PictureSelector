@@ -12,6 +12,8 @@ import android.webkit.MimeTypeMap;
 
 import androidx.annotation.NonNull;
 
+import com.blankj.utilcode.util.LogUtils;
+
 import java.io.File;
 import java.io.FileInputStream;
 
@@ -139,10 +141,11 @@ public class CompressHepler {
             }else {
                 //不需要压缩分辨率,就看看要不要减少码率
                 int expetedRatesInkps = getExpectedBitRate(inputWidth,inputHeight,compressType);
+                LogUtils.d("不需要压缩分辨率,就看看要不要减少码率: 原先码率:"+info.inputBitRate+", 期望码率:"+expetedRatesInkps);
                 if(originalBitrate > expetedRatesInkps){
                     info.outWidth = inputWidth;
                     info.outHeight = inputHeight;
-                    info.outBitRate = originalBitrate;
+                    info.outBitRate = expetedRatesInkps;
                 }else {
                     //不需要压缩
                     info.needCompress = false;
