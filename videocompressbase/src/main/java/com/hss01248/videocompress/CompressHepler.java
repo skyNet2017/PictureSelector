@@ -6,6 +6,7 @@ import android.media.MediaMetadataRetriever;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
@@ -33,45 +34,71 @@ public class CompressHepler {
      *
      * @return
      */
-    public static VideoInfo.RealCompressInfo getRealTargetWHBitrate(String inputPath,  @CompressType.Type String compressType){
-        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-        retriever.setDataSource(inputPath);
-        int originWidth = Integer.parseInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH));
-        int originHeight = Integer.parseInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT));
-        int bitrate = Integer.parseInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE));
+    public static VideoInfo.RealCompressInfo getRealTargetWHBitrate(String inputPath,  @CompressType.Type String compressType) throws Throwable{
+
+        try {
+
+            MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+            retriever.setDataSource(inputPath);
+            int originWidth = parseInt2(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH),"VIDEO_WIDTH");
+            int originHeight = parseInt2(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT),"VIDEO_HEIGHT");
+            int bitrate = parseInt2(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE),"KEY_BITRATE");
+
+            //originWidth = 0;
+            // originHeight =0;
+            // bitrate =0;
+
+            VideoInfo.RealCompressInfo info = new VideoInfo.RealCompressInfo();
+            info.inputPath = inputPath;
+            info.inputBitRate = bitrate;
+            info.inputWidth = originWidth;
+            info.inputHeight = originHeight;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                info.inputFrameCount = parseInt2(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_FRAME_COUNT),"FRAME_COUNT");
+            }
+
+            int targetResolution = 720;
+            if(CompressType.TYPE_SDR_720P.equals(compressType)){
+                targetResolution = 720;
+            }else if(CompressType.TYPE_SDR_1080P.equals(compressType)){
+                targetResolution = 1080;
+            }else if(CompressType.TYPE_SDR_360P.equals(compressType)){
+                targetResolution = 360;
+            }else if(CompressType.TYPE_SDR_480P.equals(compressType)){
+                targetResolution = 480;
+            }else if(CompressType.TYPE_HDR_720P.equals(compressType)){
+                targetResolution = 720;
+            }else if(CompressType.TYPE_HDR_1080P.equals(compressType)){
+                targetResolution = 1080;
+            }else if(CompressType.TYPE_HDR_2K.equals(compressType)){
+                targetResolution = 1440;
+            }else if(CompressType.TYPE_HDR_4K.equals(compressType)){
+                targetResolution = 2160;
+            }
 
 
-        VideoInfo.RealCompressInfo info = new VideoInfo.RealCompressInfo();
-        info.inputPath = inputPath;
-        info.inputBitRate = bitrate;
-        info.inputWidth = originWidth;
-        info.inputHeight = originHeight;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
-            info.inputFrameCount = Integer.parseInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_FRAME_COUNT));
+            calCompressConfig(info,targetResolution,originWidth,originHeight,bitrate,compressType);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                retriever.close();
+            }
+            return info;
+        } catch (Throwable e) {
+            throw e;
         }
 
-        int targetResolution = 720;
-        if(CompressType.TYPE_SDR_720P.equals(compressType)){
-            targetResolution = 720;
-        }else if(CompressType.TYPE_SDR_1080P.equals(compressType)){
-            targetResolution = 1080;
-        }else if(CompressType.TYPE_SDR_360P.equals(compressType)){
-            targetResolution = 360;
-        }else if(CompressType.TYPE_SDR_480P.equals(compressType)){
-            targetResolution = 480;
-        }else if(CompressType.TYPE_HDR_720P.equals(compressType)){
-            targetResolution = 720;
-        }else if(CompressType.TYPE_HDR_1080P.equals(compressType)){
-            targetResolution = 1080;
-        }else if(CompressType.TYPE_HDR_2K.equals(compressType)){
-            targetResolution = 1440;
-        }else if(CompressType.TYPE_HDR_4K.equals(compressType)){
-            targetResolution = 2160;
+    }
+
+    private static int parseInt2(String s,String desc) {
+        if(TextUtils.isEmpty(s)){
+            LogUtils.w("value is empty",desc);
+            return 0;
         }
-
-
-        calCompressConfig(info,targetResolution,originWidth,originHeight,bitrate,compressType);
-        return info;
+        try {
+            return Integer.parseInt(s);
+        }catch (Throwable throwable){
+            LogUtils.w(s,throwable);
+        }
+        return 0;
     }
 
     /**

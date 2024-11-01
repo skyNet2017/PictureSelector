@@ -100,7 +100,15 @@ public class VideoCompressUtil {
             listener.onStart(inputPath,outPath);
         }
 
-        VideoInfo.RealCompressInfo info = CompressHepler.getRealTargetWHBitrate(inputPath,compressType);
+        VideoInfo.RealCompressInfo info = null;
+        try {
+            info = CompressHepler.getRealTargetWHBitrate(inputPath,compressType);
+        } catch (Throwable e) {
+            Log.i("compress","发生异常,不再压缩",e);
+            //无需压缩
+            listener.onFinish(inputPath);
+            return;
+        }
         if(!info.needCompress){
             Log.i("compress","无需压缩: 实际比特率和分辨率小于期望比特率");
             //无需压缩
