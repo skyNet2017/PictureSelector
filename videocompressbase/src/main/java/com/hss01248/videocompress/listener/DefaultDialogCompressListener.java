@@ -6,6 +6,9 @@ import android.os.Handler;
 import android.os.Looper;
 import android.widget.Toast;
 
+import com.blankj.utilcode.util.ActivityUtils;
+import com.blankj.utilcode.util.ToastUtils;
+import com.blankj.utilcode.util.TouchUtils;
 import com.hss01248.videocompress.VideoCompressUtil;
 import com.hss01248.videocompress.compare.CompressCompareActivity;
 import com.hss01248.videocompress.listener.ICompressListener;
@@ -33,6 +36,12 @@ public class DefaultDialogCompressListener implements ICompressListener {
         handler.post(new Runnable() {
             @Override
             public void run() {
+                if(activity.isDestroyed() || activity.isFinishing()){
+                    activity = ActivityUtils.getTopActivity();
+                }
+                if(activity.isDestroyed() || activity.isFinishing()){
+                    activity = ActivityUtils.getTopActivity();
+                }
                 dialog[0] = new ProgressDialog(activity);
                 dialog[0].setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
                 dialog[0].setTitle("compressing: "+new File(inputPath).getName());
@@ -66,7 +75,7 @@ public class DefaultDialogCompressListener implements ICompressListener {
                 if(dialog[0] != null){
                     dialog[0].dismiss();
                 }
-                Toast.makeText(activity,message,Toast.LENGTH_LONG).show();
+                ToastUtils.showShort(message);
             }
         });
     }
