@@ -7,8 +7,10 @@ import android.os.Looper;
 import android.widget.Toast;
 
 import com.blankj.utilcode.util.ActivityUtils;
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.blankj.utilcode.util.TouchUtils;
+import com.hss01248.videocompress.R;
 import com.hss01248.videocompress.VideoCompressUtil;
 import com.hss01248.videocompress.compare.CompressCompareActivity;
 import com.hss01248.videocompress.listener.ICompressListener;
@@ -36,19 +38,24 @@ public class DefaultDialogCompressListener implements ICompressListener {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                if(activity.isDestroyed() || activity.isFinishing()){
-                    activity = ActivityUtils.getTopActivity();
+                try{
+                    if(activity.isDestroyed() || activity.isFinishing()){
+                        activity = ActivityUtils.getTopActivity();
+                    }
+                    if(activity.isDestroyed() || activity.isFinishing()){
+                        activity = ActivityUtils.getTopActivity();
+                    }
+                    dialog[0] = new ProgressDialog(activity);
+                    dialog[0].setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                    dialog[0].setTitle(activity.getString(R.string.vc_compressing)+": "+new File(inputPath).getName());
+                    dialog[0].setMax(100);
+                    dialog[0].setCancelable(false);
+                    dialog[0].setCanceledOnTouchOutside(false);
+                    dialog[0].show();
+                }catch (Throwable throwable){
+                    LogUtils.w(throwable);
                 }
-                if(activity.isDestroyed() || activity.isFinishing()){
-                    activity = ActivityUtils.getTopActivity();
-                }
-                dialog[0] = new ProgressDialog(activity);
-                dialog[0].setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                dialog[0].setTitle("compressing: "+new File(inputPath).getName());
-                dialog[0].setMax(100);
-                dialog[0].setCancelable(false);
-                dialog[0].setCanceledOnTouchOutside(false);
-                dialog[0].show();
+
             }
         });
     }
@@ -59,8 +66,12 @@ public class DefaultDialogCompressListener implements ICompressListener {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                if(dialog[0] != null){
-                    dialog[0].setProgress(progress);
+                try{
+                    if(dialog[0] != null && dialog[0].isShowing()){
+                        dialog[0].setProgress(progress);
+                    }
+                }catch (Throwable throwable){
+                    LogUtils.w(throwable);
                 }
             }
         });
@@ -72,10 +83,14 @@ public class DefaultDialogCompressListener implements ICompressListener {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                if(dialog[0] != null){
-                    dialog[0].dismiss();
+                try{
+                    if(dialog[0] != null && dialog[0].isShowing()){
+                        dialog[0].dismiss();
+                    }
+                    ToastUtils.showShort(message);
+                }catch (Throwable throwable){
+                    LogUtils.w(throwable);
                 }
-                ToastUtils.showShort(message);
             }
         });
     }
@@ -86,8 +101,12 @@ public class DefaultDialogCompressListener implements ICompressListener {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                if(dialog[0] != null){
-                    dialog[0].dismiss();
+                try{
+                    if(dialog[0] != null && dialog[0].isShowing()){
+                        dialog[0].dismiss();
+                    }
+                }catch (Throwable throwable){
+                    LogUtils.w(throwable);
                 }
                 if(VideoCompressUtil.showCompareAfterCompress){
                     CompressCompareActivity.start(activity,inputPath,outputFilePath,start);
