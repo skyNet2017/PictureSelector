@@ -111,7 +111,7 @@ public class MediaCodecCompressImpl implements ICompressor {
                         return;
                     }
 
-                    VideoProcessor.processor(Utils.getApp())
+                    VideoProcessor.Processor processor = VideoProcessor.processor(Utils.getApp())
                             .input(inputPath)
                             .output(outPath)
                             .outWidth(info.outWidth)
@@ -121,17 +121,17 @@ public class MediaCodecCompressImpl implements ICompressor {
                             .progressListener(new VideoProgressListener() {
                                 @Override
                                 public void onProgress(float progress) {
-                                    listener.onProgress((int) (progress*100),System.currentTimeMillis() - start);
-                                    if(progress == 1.0f){
+                                    listener.onProgress((int) (progress * 100), System.currentTimeMillis() - start);
+                                    if (progress == 1.0f) {
                                         LogUtils.d("----------> progress == 1.0f callback ");
                                     }
                                 }
-                            })
-                            .process();
+                            });
+                    processor.process();
                     LogUtils.d("----------> after process() call");
                     listener.onFinish(outPath);
                 } catch (Throwable e) {
-                    e.printStackTrace();
+                    LogUtils.w(e,inputPath);
                     listener.onError(e.getClass().getName()+": "+e.getMessage());
                 }
             }
