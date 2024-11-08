@@ -24,7 +24,7 @@ import java.io.IOException;
 
 public class VideoCompressUtil {
 
-   public static Context context = Utils.getApp();
+   public static Context context ;
    public static boolean showCompressProgressDialog = false;
     public static boolean showCompareAfterCompress = AppUtils.isAppDebug();
     public static boolean showGridInfo = false;
@@ -47,7 +47,7 @@ public class VideoCompressUtil {
 
     public static void init(Context context,boolean showCompressProgressDialog,
                             boolean showCompareAfterCompress){
-        VideoCompressUtil.context = context;
+        VideoCompressUtil.context = Utils.getApp();
         VideoCompressUtil.showCompressProgressDialog = showCompressProgressDialog;
         VideoCompressUtil.showCompareAfterCompress = showCompareAfterCompress;
     }
@@ -67,7 +67,7 @@ public class VideoCompressUtil {
                                   @CompressType.Type String compressType, ICompressListener listener){
 
         File input = new File(inputPath);
-        File dir = new File(VideoCompressUtil.context.getExternalCacheDir(),"videoCompress");
+        File dir = new File(Utils.getApp().getExternalCacheDir(),"videoCompress");
 
         if(!TextUtils.isEmpty(outDir)){
             dir = new File(outDir);

@@ -11,6 +11,7 @@ import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.SPStaticUtils;
 import com.blankj.utilcode.util.ThreadUtils;
+import com.blankj.utilcode.util.Utils;
 import com.hss01248.videocompress.CompressType;
 import com.hss01248.videocompress.VideoCompressUtil;
 import com.hss01248.videocompress.VideoInfo;
@@ -110,7 +111,7 @@ public class MediaCodecCompressImpl implements ICompressor {
                         return;
                     }
 
-                    VideoProcessor.processor(VideoCompressUtil.context)
+                    VideoProcessor.processor(Utils.getApp())
                             .input(inputPath)
                             .output(outPath)
                             .outWidth(info.outWidth)
