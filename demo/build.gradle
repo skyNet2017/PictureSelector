@@ -75,6 +75,7 @@ configurations {
 
     all*.exclude group: 'org.jetbrains.kotlin' , module: 'kotlin-stdlib-jdk8'
     all*.exclude group: 'org.jetbrains.kotlin' , module: 'kotlin-stdlib-jdk7'
+    all*.exclude group: 'org.jetbrains.kotlin' , module: 'kotlin-stdlib-jdk7'
     //org.jetbrains.kotlin:kotlin-stdlib
     //org.jetbrains.kotlin:kotlin-stdlib-jdk8
     //org.jetbrains.kotlin:kotlin-stdlib-jdk7
