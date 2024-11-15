@@ -22,6 +22,8 @@ import com.hw.videoprocessor.util.VideoProgressListener;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MediaCodecCompressImpl implements ICompressor {
     /**
@@ -69,10 +71,11 @@ public class MediaCodecCompressImpl implements ICompressor {
                                 setToUserFFmpeg();
                                 listener0.onError("compress failed: not compact with media codec compressor, please retry");
                             }else {
+                                infoMap.put(outputFilePath,info);
                                 listener0.onFinish(outputFilePath);
                             }
                         } catch (Exception e) {
-                            LogUtils.e(e);
+                            LogUtils.e(outputFilePath,e);
                             listener0.onError(e.getClass().getSimpleName()+" : "+e.getMessage());
                         }
                     }
@@ -142,6 +145,8 @@ public class MediaCodecCompressImpl implements ICompressor {
             runnable.run();
         }
     }
+
+    public static Map<String,VideoInfo.RealCompressInfo> infoMap = new HashMap<>();
 
    public static void setToUserFFmpeg() {
         String className = "com.hss01248.base.compressorimpl.FFmpegCompressImpl";

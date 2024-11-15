@@ -57,25 +57,7 @@ public class CompressHepler {
                 info.inputFrameCount = parseInt2(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_FRAME_COUNT),"FRAME_COUNT");
             }
 
-            int targetResolution = 720;
-            if(CompressType.TYPE_SDR_720P.equals(compressType)){
-                targetResolution = 720;
-            }else if(CompressType.TYPE_SDR_1080P.equals(compressType)){
-                targetResolution = 1080;
-            }else if(CompressType.TYPE_SDR_360P.equals(compressType)){
-                targetResolution = 360;
-            }else if(CompressType.TYPE_SDR_480P.equals(compressType)){
-                targetResolution = 480;
-            }else if(CompressType.TYPE_HDR_720P.equals(compressType)){
-                targetResolution = 720;
-            }else if(CompressType.TYPE_HDR_1080P.equals(compressType)){
-                targetResolution = 1080;
-            }else if(CompressType.TYPE_HDR_2K.equals(compressType)){
-                targetResolution = 1440;
-            }else if(CompressType.TYPE_HDR_4K.equals(compressType)){
-                targetResolution = 2160;
-            }
-
+            int targetResolution = CompressType.typeToResolution(compressType);
 
             calCompressConfig(info,targetResolution,originWidth,originHeight,bitrate,compressType);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -85,7 +67,6 @@ public class CompressHepler {
         } catch (Throwable e) {
             throw e;
         }
-
     }
 
     private static int parseInt2(String s,String desc) {
@@ -131,55 +112,44 @@ public class CompressHepler {
      */
     private static boolean calCompressConfig(VideoInfo.RealCompressInfo info, int targetResolution,
                                       int inputWidth, int inputHeight, int originalBitrate, String compressType) {
+        int sourceResolution = Math.min(inputWidth,inputHeight);
+        if(sourceResolution <= targetResolution){
 
-        if(inputWidth < inputHeight){
-            if(inputWidth >= targetResolution){
-                float ratio = inputHeight*1.0f/inputWidth;
-                int targetHeight = targetResolution*inputHeight/inputWidth;
-                //todo
-                int expetedRatesInkps = getExpectedBitRate(targetResolution,targetHeight,compressType);
-                int bitRates = getBitRate(expetedRatesInkps,originalBitrate,ratio);
-                Log.w("dd","bitrates cal to compress:"+bitRates/1024/1024+"Mbps");
-                info.outWidth = targetResolution;
-                        info.outHeight = targetHeight;
-                        info.outBitRate = bitRates;
+            compressType = CompressType.resolutionToType(sourceResolution);
+            int expetedRatesInkps = VideoCompressUtil.getGlobalBitRateConfig().getExpectedBitRate(compressType);
+            LogUtils.d("不需要压缩尺寸,只需要压缩码率,比较码率:",originalBitrate/8,expetedRatesInkps/8);
+            if(originalBitrate <= expetedRatesInkps){
+                LogUtils.d("原始码率和尺寸均小于目标码率尺寸,无需压缩");
+                info.desc = "原始码率和尺寸均小于目标码率尺寸,无需压缩";
+                info.needCompress = false;
+                return false;
             }else {
-                int expetedRatesInkps = getExpectedBitRate(inputWidth,inputHeight,compressType);
-                if(originalBitrate > expetedRatesInkps){
-                    info.outWidth = inputWidth;
-                    info.outHeight = inputHeight;
-                    info.outBitRate = expetedRatesInkps;
-                }else {
-                    //不需要压缩
-                    info.needCompress = false;
-                    return false;
-                }
+                LogUtils.d("尺寸不需要压缩,但需要压缩码率");
+                info.desc = "尺寸不需要压缩,但需要压缩码率";
+                info.outWidth = inputWidth;
+                info.outHeight = inputHeight;
+                info.outBitRate = expetedRatesInkps;
             }
         }else {
-            if(inputHeight >= targetResolution){
-                float ratio = inputWidth*1.0f/inputHeight;
-                int targetW = targetResolution*inputWidth/inputHeight;
-                int expetedRatesInkps = getExpectedBitRate(targetResolution,targetW,compressType);
-                int bitRates = getBitRate(expetedRatesInkps,originalBitrate,ratio);
-                Log.w("dd","bitrates cal to compress:"+bitRates/1024/1024+"Mbps");
+            LogUtils.d("需要压缩尺寸+码率: 尺寸从大往小压,码率也是从大往小",sourceResolution+"p -> "+targetResolution+"p");
+            int expetedRatesInkps = VideoCompressUtil.getGlobalBitRateConfig().getExpectedBitRate(compressType);
+            info.desc = "需要压缩尺寸+码率: 尺寸从大往小压,码率也是从大往小";
+            if(originalBitrate < expetedRatesInkps){
+                info.desc = "原始尺寸更大,但码率却更小,那么使用原始码率";
+                LogUtils.i("原始尺寸更大,但码率却更小,那么使用原始码率,",originalBitrate,expetedRatesInkps);
+            }
+            info.outBitRate = Math.min(originalBitrate,expetedRatesInkps);
+            if(inputWidth < inputHeight){
+                int targetHeight = Math.round(targetResolution*inputHeight*1.0f/inputWidth);
+                info.outWidth = targetResolution;
+                info.outHeight = targetHeight;
+            }else {
+                int targetW = Math.round(targetResolution*inputWidth*1.0f/inputHeight);
                 info.outWidth = targetW;
                 info.outHeight = targetResolution;
-                info.outBitRate = bitRates;
-            }else {
-                //不需要压缩分辨率,就看看要不要减少码率
-                int expetedRatesInkps = getExpectedBitRate(inputWidth,inputHeight,compressType);
-                LogUtils.d("不需要压缩分辨率,就看看要不要减少码率: 原先码率:"+info.inputBitRate+", 期望码率:"+expetedRatesInkps);
-                if(originalBitrate > expetedRatesInkps){
-                    info.outWidth = inputWidth;
-                    info.outHeight = inputHeight;
-                    info.outBitRate = expetedRatesInkps;
-                }else {
-                    //不需要压缩
-                    info.needCompress = false;
-                    return false;
-                }
             }
         }
+        info.needCompress = true;
         return true;
     }
 

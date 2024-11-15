@@ -63,6 +63,7 @@ public class CompressCompareActivity extends AppCompatActivity {
 
         info1 = VideoInfo.getInfo(originalFile);
         info2 = VideoInfo.getInfo(compressedFile);
+
         tv1.setText(info1.toString());
         tv2.setText(info2.toString());
 

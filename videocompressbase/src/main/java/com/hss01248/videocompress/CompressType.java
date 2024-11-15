@@ -24,4 +24,44 @@ public interface CompressType {
     public @interface Type {
 
     }
+
+    static int typeToResolution(String compressType){
+        int targetResolution = 720;
+        if(CompressType.TYPE_SDR_720P.equals(compressType)){
+            targetResolution = 720;
+        }else if(CompressType.TYPE_SDR_1080P.equals(compressType)){
+            targetResolution = 1080;
+        }else if(CompressType.TYPE_SDR_360P.equals(compressType)){
+            targetResolution = 360;
+        }else if(CompressType.TYPE_SDR_480P.equals(compressType)){
+            targetResolution = 480;
+        }else if(CompressType.TYPE_HDR_720P.equals(compressType)){
+            targetResolution = 720;
+        }else if(CompressType.TYPE_HDR_1080P.equals(compressType)){
+            targetResolution = 1080;
+        }else if(CompressType.TYPE_HDR_2K.equals(compressType)){
+            targetResolution = 1440;
+        }else if(CompressType.TYPE_HDR_4K.equals(compressType)){
+            targetResolution = 2160;
+        }else if(CompressType.TYPE_FOR_STORE.equals(compressType)){
+            targetResolution = 2160;
+        }
+        return targetResolution;
+    }
+
+    static String resolutionToType(int resolution ){
+        if(resolution < 480){
+            return CompressType.TYPE_SDR_360P;
+        }else if(resolution < 720){
+            return CompressType.TYPE_SDR_480P;
+        }else if(resolution < 1080){
+            return CompressType.TYPE_SDR_720P;
+        }else if(resolution < 1440){
+            return CompressType.TYPE_SDR_1080P;
+        }else if(resolution < 2560){
+            return CompressType.TYPE_HDR_2K;
+        }else {
+            return CompressType.TYPE_HDR_4K;
+        }
+    }
 }

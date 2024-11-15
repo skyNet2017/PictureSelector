@@ -112,6 +112,7 @@ public class VideoCompressUtil {
         if(!info.needCompress){
             Log.i("compress","无需压缩: 实际比特率和分辨率小于期望比特率");
             //无需压缩
+            MediaCodecCompressImpl.infoMap.put(inputPath,info);
             listener.onFinish(inputPath);
             return;
         }

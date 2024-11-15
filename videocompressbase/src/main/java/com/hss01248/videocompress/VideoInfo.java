@@ -9,6 +9,7 @@ import androidx.annotation.Keep;
 
 
 import com.blankj.utilcode.util.LogUtils;
+import com.hss01248.videocompress.mediacodec.MediaCodecCompressImpl;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -29,6 +30,7 @@ public class VideoInfo {
     public int bitRates;
     public int framePs;
     public String errMsg;
+    public String desc;
     public int quality;
     public Map<String,String> info;
 
@@ -60,6 +62,10 @@ public class VideoInfo {
 
         info.name = file.getName();
         info.fileLength = file.length();
+        if(MediaCodecCompressImpl.infoMap.get(path) !=null){
+            info.desc = MediaCodecCompressImpl.infoMap.get(path).desc;
+        }
+
 
       // info.info =  getAllInfo(path);
         return info;
@@ -78,6 +84,7 @@ public class VideoInfo {
                         "\nfps=" +framePs +
                         "\nfile=" +name +
                         "\npath=" + path+
+                        "\n\ndesc=" + desc+
         "\nerrMsg=" + errMsg;
     }
 
@@ -210,6 +217,7 @@ public class VideoInfo {
         public int outBitRate;
         public int outFrameCount;
         public int outRsf;
+        public String desc;
 
         public boolean needCompress = true;
 
