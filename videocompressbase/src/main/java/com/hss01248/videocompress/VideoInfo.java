@@ -8,6 +8,7 @@ import android.util.Log;
 import androidx.annotation.Keep;
 
 
+import com.blankj.utilcode.util.LogUtils;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -27,6 +28,7 @@ public class VideoInfo {
     public float duration;
     public int bitRates;
     public int framePs;
+    public String errMsg;
     public int quality;
     public Map<String,String> info;
 
@@ -35,21 +37,27 @@ public class VideoInfo {
         VideoInfo info = new VideoInfo();
         info.path = path;
         File file = new File(path);
-        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-        retriever.setDataSource(path);
-        info.width = toInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH)); //宽
-        info.height = toInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)); //高
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            info.rotation = toInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION));//视频的方向角度
+        try{
+            MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+            retriever.setDataSource(path);
+            info.width = toInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH)); //宽
+            info.height = toInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)); //高
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                info.rotation = toInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION));//视频的方向角度
+            }
+            info.duration = toInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)) / 1000.0f;//视频的长度 s
+            info.bitRates = toInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE)) / 1024; //kbps 按字节计算. 不按比特
+            if (info.bitRates <= 0 && info.duration > 0) {
+                info.bitRates = (int) (file.length() * 8 / info.duration) / 1024 ;
+            }
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+                info.framePs = toInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_FRAME_COUNT));
+            }
+        }catch (Throwable throwable){
+            LogUtils.w(throwable);
+            info.errMsg = throwable.getMessage();
         }
-        info.duration = toInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)) / 1000.0f;//视频的长度 s
-        info.bitRates = toInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE)) / 1024; //kbps 按字节计算. 不按比特
-        if (info.bitRates <= 0 && info.duration > 0) {
-            info.bitRates = (int) (file.length() * 8 / info.duration) / 1024 ;
-        }
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
-            info.framePs = toInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_FRAME_COUNT));
-        }
+
         info.name = file.getName();
         info.fileLength = file.length();
 
@@ -69,7 +77,8 @@ public class VideoInfo {
                         "\nbitRates(B)=" + String.format("%.2f",bitRates/1024.0/8) + "MB/s" +
                         "\nfps=" +framePs +
                         "\nfile=" +name +
-                        "\npath=" + path;
+                        "\npath=" + path+
+        "\nerrMsg=" + errMsg;
     }
 
     public String showAllInfo(){

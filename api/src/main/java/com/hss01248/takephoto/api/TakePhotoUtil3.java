@@ -53,12 +53,12 @@ public class TakePhotoUtil3 {
 
     public static void openAlbum(FragmentActivity activity,int maxSelectNum, TakePhotoListener listener){
         PictureSelector.create(activity)
-                .openGallery(PictureMimeType.ofAll())
+                .openGallery(PictureMimeType.ofVideo())
                 //.loadImageEngine(GlideEngine.createGlideEngine())
                 .maxSelectNum(maxSelectNum)
                 .maxVideoSelectNum(maxSelectNum)
-                .queryMaxFileSize(50)
-                .videoMaxSecond(15)
+                .queryMaxFileSize(5000)
+                .videoMaxSecond(15000)
                 .imageSpanCount(3)
                 .isCamera(false)
                 .isMaxSelectEnabledMask(true)

@@ -147,11 +147,11 @@ public class SimpleActivity extends AppCompatActivity implements View.OnClickLis
       if(modeId == R.id.upload720p){
           mode = CompressType.TYPE_SDR_720P;
       }else if(modeId == R.id.upload1080p){
-          mode = CompressType.TYPE_SDR_720P;
+          mode = CompressType.TYPE_SDR_1080P;
       }else if(modeId == R.id.localstore){
-          //mode = CompressType.TYPE_LOCAL_STORE;
+          mode = CompressType.TYPE_HDR_2K;
       }else if(modeId == R.id.bilibili){
-         // mode = CompressType.TYPE_BILIBILI;
+          mode = CompressType.TYPE_HDR_1080P;
       }
       doSelectAndCompress(mode);
 

@@ -16,6 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.hss01248.videocompress.CompressHepler;
 import com.hss01248.videocompress.R;
 import com.hss01248.videocompress.VideoCompressUtil;
@@ -69,25 +70,30 @@ public class CompressCompareActivity extends AppCompatActivity {
     }
 
     private void showThumail() {
-        {
-            MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-            retriever.setDataSource(originalFile);
-            Bitmap embeddedPicture = retriever.getFrameAtTime();
-            if(embeddedPicture != null ){
+        try{
+            {
+                MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+                retriever.setDataSource(originalFile);
+                Bitmap embeddedPicture = retriever.getFrameAtTime();
+                if(embeddedPicture != null ){
                     iv1.setImageBitmap(embeddedPicture);
 
+                }
             }
+
+            {
+                MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+                retriever.setDataSource(compressedFile);
+                Bitmap embeddedPicture = retriever.getFrameAtTime();
+                if(embeddedPicture != null ){
+                    iv2.setImageBitmap(embeddedPicture);
+
+                }
+            }
+        }catch (Throwable throwable){
+            LogUtils.w(throwable);
         }
 
-        {
-            MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-            retriever.setDataSource(compressedFile);
-            Bitmap embeddedPicture = retriever.getFrameAtTime();
-            if(embeddedPicture != null ){
-                iv2.setImageBitmap(embeddedPicture);
-
-            }
-        }
 
 
     }

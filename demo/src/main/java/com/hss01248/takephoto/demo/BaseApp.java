@@ -1,14 +1,13 @@
 package com.hss01248.takephoto.demo;
 
-import android.app.Application;
+
 
 import androidx.multidex.MultiDexApplication;
 
 import com.blankj.utilcode.util.AppUtils;
-import com.hss01248.base.compressorimpl.FFmpegCompressImpl;
 import com.hss01248.takephoto.api.TakePhotoUtil3;
 import com.hss01248.videocompress.VideoCompressUtil;
-import com.hss01248.videocompress.bitrate.LowThanBiliBitrateConfig;
+import com.hss01248.videocompress.bitrate.YoutubeBitrateConfig;
 
 public class BaseApp extends MultiDexApplication {
 
@@ -18,6 +17,6 @@ public class BaseApp extends MultiDexApplication {
         TakePhotoUtil3.init(this,true, AppUtils.isAppDebug());
 
         //VideoCompressUtil.setCompressor(new FFmpegCompressImpl());
-        VideoCompressUtil.setGlobalBitRateConfig(new LowThanBiliBitrateConfig());
+        VideoCompressUtil.setGlobalBitRateConfig(new YoutubeBitrateConfig());
     }
 }

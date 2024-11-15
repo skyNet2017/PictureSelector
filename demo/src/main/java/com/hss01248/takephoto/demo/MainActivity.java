@@ -2,6 +2,7 @@ package com.hss01248.takephoto.demo;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -9,6 +10,8 @@ import android.widget.ImageView;
 
 import com.blankj.utilcode.util.ToastUtils;
 import com.bumptech.glide.Glide;
+import com.hss.utils.enhance.api.MyCommonCallback;
+import com.hss01248.media.pick.MediaPickUtil;
 import com.hss01248.takephoto.api.TakePhotoListener;
 import com.hss01248.takephoto.api.TakePhotoUtil3;
 import com.hss01248.videocompress.CompressType;
@@ -19,6 +22,7 @@ import com.hss01248.videocompress.bitrate.LowThanBiliBitrateConfig;
 import com.hss01248.videocompress.listener.DefaultDialogCompressListener;
 import com.hss01248.videocompress.listener.ICompressListener;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
@@ -139,5 +143,31 @@ public class MainActivity extends AppCompatActivity {
                                 });
             }
         });
+    }
+
+    public void albumBySys(View view) {
+        MediaPickUtil.pickVideo(new MyCommonCallback<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                File file = MediaPickUtil.transUriToInnerFilePath(uri.toString());
+                VideoCompressUtil.doCompressAsync(file.getAbsolutePath(), "",
+                        CompressType.TYPE_HDR_2K,
+                        new ICompressListener() {
+                            @Override
+                            public void onFinish(String outputFilePath) {
+                                Log.w("image","doCompressAsync outputFilePath:"+outputFilePath);
+                                ToastUtils.showLong("compress success: \n"+outputFilePath);
+
+                            }
+
+                            @Override
+                            public void onError(String message) {
+                                Log.e("error","msg:"+message);
+
+                            }
+                        });
+            }
+        });
+
     }
 }

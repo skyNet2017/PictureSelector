@@ -13,7 +13,7 @@
         android:id="@+id/button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="选图"
+        android:text="选视频"
         tools:layout_editor_absoluteX="97dp"
         tools:layout_editor_absoluteY="62dp" />
 
@@ -34,6 +34,14 @@
         android:text="系统intent-拍照/拍视频"
         tools:layout_editor_absoluteX="97dp"
         tools:layout_editor_absoluteY="199dp" />
+    <Button
+        android:onClick="albumBySys"
+        android:id="@+id/button4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="系统intent-选视频"
+        tools:layout_editor_absoluteX="97dp"
+        tools:layout_editor_absoluteY="62dp" />
     <ImageView
         android:layout_width="match_parent"
         android:id="@+id/iv"
