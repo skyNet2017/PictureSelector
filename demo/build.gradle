@@ -62,7 +62,7 @@ dependencies {
     implementation project(':videocompress_ffmpeg')
      implementation("com.github.hss01248.utilcodeEnhance2:media:2.1.06")
     implementation("com.github.hss01248.utilcodeEnhance2:otg-usb-impls:2.1.06")
-    implementation("com.github.hss01248.utilcodeEnhance2:fileOperation:2.1.06")
+    //implementation("com.github.hss01248.utilcodeEnhance2:fileOperation:2.1.06")
     //implementation "com.simple:spiderman:1.1.7"
 }
 

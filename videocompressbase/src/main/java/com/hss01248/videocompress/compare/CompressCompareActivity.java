@@ -116,7 +116,7 @@ public class CompressCompareActivity extends AppCompatActivity {
                     }
 
                     //String path,boolean canHaveUI, Observer<Boolean> callBack
-                    ReflectUtils.reflect("com.hss01248.fileoperation.FileDeleteUtil")
+                    ReflectUtils.reflect("com.hss01248.takephoto.demo.FileDeleteUtil")
                             .method("deleteImage", MediaCodecCompressImpl.uriMap.get(originalFile)+"",
                                     true, new Observer<Boolean>() {
                                 @Override

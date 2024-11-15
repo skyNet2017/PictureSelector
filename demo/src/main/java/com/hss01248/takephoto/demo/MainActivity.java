@@ -147,6 +147,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void albumBySys(View view) {
+        ///picker拿到的uri不能用来查询,只能用来拷贝,垃圾
+        MediaPickUtil.setUseAndroidPhotoPicker(false);
         MediaPickUtil.pickVideo(new MyCommonCallback<Uri>() {
             @Override
             public void onSuccess(Uri uri) {

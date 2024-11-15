@@ -80,7 +80,7 @@ public class MediaCodecCompressImpl implements ICompressor {
                             listener0.onError(e.getClass().getSimpleName()+" : "+e.getMessage());
                         }
                     }
-                },1500);
+                },500);
             }
 
             @Override
