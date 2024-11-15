@@ -218,6 +218,7 @@ public class VideoInfo {
         public int outFrameCount;
         public int outRsf;
         public String desc;
+        public String uriPath;
 
         public boolean needCompress = true;
 

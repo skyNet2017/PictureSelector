@@ -21,6 +21,7 @@ import com.hss01248.videocompress.VideoCompressUtil;
 import com.hss01248.videocompress.bitrate.LowThanBiliBitrateConfig;
 import com.hss01248.videocompress.listener.DefaultDialogCompressListener;
 import com.hss01248.videocompress.listener.ICompressListener;
+import com.hss01248.videocompress.mediacodec.MediaCodecCompressImpl;
 
 import java.io.File;
 import java.util.Arrays;
@@ -150,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Uri uri) {
                 File file = MediaPickUtil.transUriToInnerFilePath(uri.toString());
+                MediaCodecCompressImpl.uriMap.put(file.getAbsolutePath(),uri);
                 VideoCompressUtil.doCompressAsync(file.getAbsolutePath(), "",
                         CompressType.TYPE_HDR_2K,
                         new ICompressListener() {

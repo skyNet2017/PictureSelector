@@ -17,15 +17,21 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.ReflectUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.hss01248.videocompress.CompressHepler;
 import com.hss01248.videocompress.R;
 import com.hss01248.videocompress.VideoCompressUtil;
 import com.hss01248.videocompress.VideoInfo;
+import com.hss01248.videocompress.mediacodec.MediaCodecCompressImpl;
 
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 public class CompressCompareActivity extends AppCompatActivity {
 
@@ -106,11 +112,45 @@ public class CompressCompareActivity extends AppCompatActivity {
                 try {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                         //todo
-                        FileUtils.copy(new FileInputStream(compressedFile),new FileOutputStream(originalFile));
+                       // FileUtils.copy(new FileInputStream(compressedFile),new FileOutputStream(originalFile));
                     }
-                    new File(compressedFile).delete();
-                    CompressHepler.refreshMediaCenter(getApplication(),originalFile);
-                    toast("覆盖成功");
+
+                    //String path,boolean canHaveUI, Observer<Boolean> callBack
+                    ReflectUtils.reflect("com.hss01248.fileoperation.FileDeleteUtil")
+                            .method("deleteImage", MediaCodecCompressImpl.uriMap.get(originalFile)+"",
+                                    true, new Observer<Boolean>() {
+                                @Override
+                                public void onSubscribe(Disposable d) {
+
+                                }
+
+                                @Override
+                                public void onNext(Boolean aBoolean) {
+
+                                    if(aBoolean){
+                                        File file = new File(compressedFile);
+                                        boolean b = VideoCopyer.copyVideoToXCompressed(getApplication(), file, file.getName());
+                                        ToastUtils.showShort("保存到mediastore成功: "+b);
+                                    }else {
+                                        ToastUtils.showShort("替换失败");
+                                    }
+                                }
+
+                                @Override
+                                public void onError(Throwable e) {
+
+                                }
+
+                                @Override
+                                public void onComplete() {
+
+                                }
+                            });
+
+
+                    //new File(compressedFile).delete();
+                  //  CompressHepler.refreshMediaCenter(getApplication(),originalFile);
+                   // toast("覆盖成功");
                 } catch (Exception e) {
                     e.printStackTrace();
                     toast("覆盖失败:"+e.getMessage());
@@ -123,17 +163,13 @@ public class CompressCompareActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if(new File(compressedFile).exists()){
-            CompressHepler.refreshMediaCenter(getApplication(),compressedFile);
-        }
+
         super.onBackPressed();
     }
 
     @Override
     protected void onDestroy() {
-        if(new File(compressedFile).exists()){
-            CompressHepler.refreshMediaCenter(getApplication(),compressedFile);
-        }
+
         super.onDestroy();
     }
 
@@ -143,8 +179,11 @@ public class CompressCompareActivity extends AppCompatActivity {
     }
 
     public void keepBoth(View view) {
-        CompressHepler.refreshMediaCenter(getApplication(),compressedFile);
-        toast("ok");
+        File file = new File(compressedFile);
+        boolean b = VideoCopyer.copyVideoToXCompressed(getApplication(), file, file.getName());
+        ToastUtils.showShort("保存到mediastore成功: "+b);
+        //CompressHepler.refreshMediaCenter(getApplication(),compressedFile);
+        //toast("ok");
     }
 
     private void toast(String ok) {

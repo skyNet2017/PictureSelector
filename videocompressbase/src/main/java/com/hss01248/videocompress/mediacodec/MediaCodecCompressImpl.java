@@ -1,6 +1,7 @@
 package com.hss01248.videocompress.mediacodec;
 
 import android.media.MediaMetadataRetriever;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -147,6 +148,7 @@ public class MediaCodecCompressImpl implements ICompressor {
     }
 
     public static Map<String,VideoInfo.RealCompressInfo> infoMap = new HashMap<>();
+    public static Map<String, Uri> uriMap = new HashMap<>();
 
    public static void setToUserFFmpeg() {
         String className = "com.hss01248.base.compressorimpl.FFmpegCompressImpl";
