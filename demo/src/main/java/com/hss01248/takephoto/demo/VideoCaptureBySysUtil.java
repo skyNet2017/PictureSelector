@@ -1,4 +1,4 @@
-package com.hss01248.videocompress;
+package com.hss01248.takephoto.demo;
 
 import android.Manifest;
 import android.app.Activity;
@@ -18,6 +18,7 @@ import com.hss01248.activityresult.ActivityResultListener;
 import com.hss01248.activityresult.StartActivityUtil;
 import com.hss01248.openuri2.OpenUri2;
 import com.hss01248.permission.MyPermissions;
+import com.hss01248.videocompress.MyCommonCallback5;
 
 import java.io.File;
 import java.util.Arrays;
@@ -120,7 +121,6 @@ public class VideoCaptureBySysUtil {
                 }else {
                     callback.onError("file error","file saved error",null);
                 }
-
             }
 
             @Override

@@ -16,6 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ReflectUtils;
 import com.blankj.utilcode.util.ToastUtils;
@@ -72,6 +73,9 @@ public class CompressCompareActivity extends AppCompatActivity {
 
         tv1.setText(info1.toString());
         tv2.setText(info2.toString());
+        if(!AppUtils.isAppDebug()){
+            findViewById(R.id.btn_replace).setVisibility(View.GONE);
+        }
 
 
     }

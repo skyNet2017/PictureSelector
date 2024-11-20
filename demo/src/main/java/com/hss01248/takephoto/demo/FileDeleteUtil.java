@@ -15,6 +15,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.TextUtils;
+import android.util.Log;
 
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
@@ -35,10 +36,12 @@ import com.hss01248.permission.ext.IExtPermissionCallback;
 import com.hss01248.permission.ext.MyPermissionsExt;
 import com.hss01248.permission.ext.permissions.ManageMediaPermission;
 import com.hss01248.permission.ext.permissions.StorageManagerPermissionImpl;
+import com.hss01248.videocompress.mediacodec.MediaCodecCompressImpl;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.Observer;
 
@@ -68,6 +71,9 @@ import io.reactivex.Observer;
  *
  *
  * https://blog.csdn.net/CHENEY0314/article/details/124216224
+ *
+ *
+ * 总结: Android的这个deletereqeust就是一坨屎!!!id永远是临时的
  *
  * @Author hss
  * @Date 23/02/2022 11:23
@@ -123,10 +129,37 @@ public class FileDeleteUtil {
             callBack.onNext(true);
             return;
         }
+        if(MediaCodecCompressImpl.uriMap.containsKey(path)){
+            path = MediaCodecCompressImpl.uriMap.get(path)+"";
+        }
         if(path.startsWith("content://")){
             //Calling uid ( 10779 ) does not have permission to access picker uri
             //picker拿到的uri不能用来查询,只能用来拷贝,垃圾
-            path = ContentUriUtil.getRealPath(Uri.parse(path));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            Map<String, Object> infos = ContentUriUtil.getInfos(Uri.parse(path));
+            //每次查出来的id都会变,是假id
+
+           int id = (int) infos.get("_id");
+            Uri root = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+            if(path.endsWith(".mp4")){
+                root = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+            }
+            Uri uri = ContentUris.withAppendedId(root, id);
+                List<Uri> uris = new ArrayList<>();
+                uris.add(uri);
+                try {
+                    deleteByMediaDeleteReqeust(callBack, uris);
+                } catch (IntentSender.SendIntentException e) {
+                    LogUtils.w(path,e);
+                    callBack.onError(e);
+                }
+                return;
+            }else{
+                path = ContentUriUtil.getRealPath(Uri.parse(path));
+            }
+
+            //path = ContentUriUtil.getRealPath(Uri.parse(path));
+            LogUtils.d("path",path);
         }
 
 
@@ -177,6 +210,8 @@ public class FileDeleteUtil {
         //android10以上,通过createDeleteRequest来删除
         try {
             List<Uri> uris = new ArrayList<>();
+
+            //没有权限,就查询不了:查询不了,就无法构建删除请求
 
             //这个uri应该是从mediastore查出来的uri,而不是自己通过file构建的:
             //uris.add(OpenUri.fromFile(Utils.getApp(),new File(path)));
@@ -325,6 +360,7 @@ public class FileDeleteUtil {
     @RequiresApi(api = Build.VERSION_CODES.R)
     private static void deleteByMediaDeleteReqeust(Observer<Boolean> callBack, List<Uri> uris) throws IntentSender.SendIntentException {
         PendingIntent deleteRequest;
+        LogUtils.i(uris);
         //java.util.NoSuchElementException
         deleteRequest = MediaStore.createDeleteRequest(Utils.getApp().getContentResolver(), uris);
         // java.lang.IllegalArgumentException: All requested items must be referenced by specific ID

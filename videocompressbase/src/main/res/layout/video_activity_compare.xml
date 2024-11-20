@@ -50,19 +50,21 @@
 
     </LinearLayout>
     <Button
+        android:id="@+id/btn_replace"
         android:onClick="replace"
         android:layout_width="match_parent"
         android:text="效果不错,覆盖原文件,并删除压缩文件"
         android:layout_height="wrap_content"/>
-    <Button
-        android:onClick="cancel"
-        android:layout_width="match_parent"
-        android:text="不压了,删除压缩的文件"
-        android:layout_height="wrap_content"/>
+
     <Button
         android:onClick="keepBoth"
         android:layout_width="match_parent"
-        android:text="两个都保留吧,后面再看看"
+        android:text="保存到相册"
+        android:layout_height="wrap_content"/>
+    <Button
+        android:onClick="cancel"
+        android:layout_width="match_parent"
+        android:text="删除压缩的文件"
         android:layout_height="wrap_content"/>
 </LinearLayout>
 </ScrollView>

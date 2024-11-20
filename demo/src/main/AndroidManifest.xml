@@ -4,6 +4,8 @@
     package="com.hss01248.takephoto.demo">
 
 
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO"/>
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
 
     <uses-sdk tools:overrideLibrary="com.luck.picture.lib,com.hw.videoprocessor,com.yalantis.ucrop,
     com.shuyu.gsyvideoplayer,com.shuyu.gsy.base,shuyu.com.androidvideocache"/>

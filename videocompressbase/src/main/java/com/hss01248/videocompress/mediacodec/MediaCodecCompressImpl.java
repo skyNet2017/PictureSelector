@@ -52,7 +52,7 @@ public class MediaCodecCompressImpl implements ICompressor {
                     @Override
                     public void run() {
                         try {
-                            LogUtils.d("----------> 1.5s after onFinished() called, check and call real onfinished() ");
+                            LogUtils.d("----------> 0.5s after onFinished() called, check and call real onfinished() ");
                             File file = new File(outputFilePath);
                             if(!file.exists() || file.length() ==0){
                                 listener0.onError("compress failed: file length is 0");
