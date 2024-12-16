@@ -149,29 +149,37 @@ public class CompressHepler {
                 return false;
             }else {
                 LogUtils.d("尺寸不需要压缩,但需要压缩码率");
-                info.desc = "尺寸不需要压缩,但需要压缩码率:"+expetedRatesInkps/8/1024/1024+"MB/s";
+                info.desc = "尺寸不需要压缩,但需要压缩码率:"+expetedRatesInkps/8/1024/1024.0f+"MB/s";
                 info.outWidth = inputWidth;
                 info.outHeight = inputHeight;
                 info.outBitRate = expetedRatesInkps;
             }
         }else {
-            LogUtils.d("需要压缩尺寸+码率: 尺寸从大往小压,码率也是从大往小",sourceResolution+"p -> "+targetResolution+"p");
+
             int expetedRatesInkps = VideoCompressUtil.getGlobalBitRateConfig().getExpectedBitRate(compressType);
-            info.desc = "需要压缩尺寸+码率: 尺寸从大往小压,码率也是从大往小:"+expetedRatesInkps/8/1024/1024+"MB/s";
+            LogUtils.d("需要压缩尺寸+码率: 尺寸从大往小压,码率也是从大往小",sourceResolution+"p -> "
+                    +targetResolution+"p,originalBitrate:"+originalBitrate+",expetedRatesInkps:"+expetedRatesInkps);
+            info.desc = "需要压缩尺寸+码率: 尺寸从大往小压,码率也是从大往小:"+originalBitrate+","+expetedRatesInkps/8/1024/1024.0f+"MB/s";
             if(originalBitrate < expetedRatesInkps){
                 info.desc = "原始尺寸更大,但码率却更小,那么使用原始码率";
                 LogUtils.i("原始尺寸更大,但码率却更小,那么使用原始码率,",originalBitrate,expetedRatesInkps);
             }
             info.outBitRate = Math.min(originalBitrate,expetedRatesInkps);
+            float rate = 0;
             if(inputWidth < inputHeight){
+                rate = inputWidth*1.0f/targetResolution;
                 int targetHeight = Math.round(targetResolution*inputHeight*1.0f/inputWidth);
                 info.outWidth = targetResolution;
                 info.outHeight = targetHeight;
             }else {
+                rate = inputHeight*1.0f/targetResolution;
                 int targetW = Math.round(targetResolution*inputWidth*1.0f/inputHeight);
                 info.outWidth = targetW;
                 info.outHeight = targetResolution;
             }
+            //实际传入码率需要除以尺寸的倍率:也不对,码率不稳定
+           // LogUtils.i("实际传入码率需要除以尺寸的倍率:",info.outBitRate,rate,"最终码率:"+Math.round(info.outBitRate/rate));
+            //info.outBitRate = Math.round(info.outBitRate/rate);
         }
         info.needCompress = true;
         return true;
