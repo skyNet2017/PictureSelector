@@ -52,8 +52,11 @@ public class VideoInfo {
             if (info.bitRates <= 0 && info.duration > 0) {
                 info.bitRates = (int) (file.length() * 8 / info.duration) / 1024 ;
             }
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
-                info.framePs = toInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_FRAME_COUNT));
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                info.framePs = toInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_CAPTURE_FRAMERATE));
+                if(info.framePs ==0){
+                    info.framePs = CompressHepler.calFramCount(retriever);
+                }
             }
         }catch (Throwable throwable){
             LogUtils.w(throwable);
@@ -186,6 +189,7 @@ public class VideoInfo {
                 value = Integer.valueOf(s);
             }
         } catch (Exception e) {
+            LogUtils.w(e);
             value = defaultValue;
         }
 

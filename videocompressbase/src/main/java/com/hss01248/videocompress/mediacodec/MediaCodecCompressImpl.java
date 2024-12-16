@@ -115,13 +115,23 @@ public class MediaCodecCompressImpl implements ICompressor {
                         return;
                     }
 
+                    int frameCount = info.inputFrameCount;
+                    if(frameCount > 30 || frameCount ==0){
+                        LogUtils.i("视频帧率>30或=0,则设置为30:"+inputPath+", "+frameCount);
+                        frameCount = 30;
+                    }
+
                     VideoProcessor.Processor processor = VideoProcessor.processor(Utils.getApp())
+                            //给activity添加硬件加速后压缩效率和时间会提高很多//打开了还是一样呢
                             .input(inputPath)
                             .output(outPath)
                             .outWidth(info.outWidth)
                             .outHeight(info.outHeight)
                             .bitrate(info.outBitRate)
-                            .frameRate(24)
+                            //压缩视频码率设置跟最终生成的不一致:
+                            // 压缩的时候没有设置帧率，你那默认是用的30而不是读取视频的真实帧率
+                            //如果帧率设置为视频的真实帧率，码率就一致了
+                            .frameRate(frameCount)
                             .progressListener(new VideoProgressListener() {
                                 @Override
                                 public void onProgress(float progress) {

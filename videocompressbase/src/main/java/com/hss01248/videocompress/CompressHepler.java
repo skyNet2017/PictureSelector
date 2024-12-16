@@ -29,7 +29,7 @@ public class CompressHepler {
 
 
     /**
-     *
+     * https://www.cnblogs.com/zhyan8/p/17233582.html
      * @param inputPath
      *
      * @return
@@ -53,12 +53,16 @@ public class CompressHepler {
             info.inputBitRate = bitrate;
             info.inputWidth = originWidth;
             info.inputHeight = originHeight;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                info.inputFrameCount = parseInt2(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_FRAME_COUNT),"FRAME_COUNT");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                //METADATA_KEY_VIDEO_FRAME_COUNT  关键帧总数
+                //METADATA_KEY_CAPTURE_FRAMERATE 帧率
+                info.inputFrameCount = parseInt2(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_CAPTURE_FRAMERATE),"CAPTURE_FRAMERATE");
+                if(info.inputFrameCount == 0){
+                    info.inputFrameCount = calFramCount(retriever);
+                }
             }
 
             int targetResolution = CompressType.typeToResolution(compressType);
-
             calCompressConfig(info,targetResolution,originWidth,originHeight,bitrate,compressType);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 retriever.close();
@@ -67,6 +71,26 @@ public class CompressHepler {
         } catch (Throwable e) {
             throw e;
         }
+    }
+
+    public static int calFramCount( MediaMetadataRetriever retriever) {
+        try {
+            //获取视频帧数
+            String count_s = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+                count_s = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_FRAME_COUNT);
+                long count = Long.parseLong(count_s);
+//计算帧率
+                //获取视频时长，单位：毫秒(ms)
+                String duration_s = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+                long duration = Long.parseLong(duration_s);
+                long dt = Math.round(count*1000.0/duration);
+                return  (int) dt;
+            }
+        }catch (Throwable throwable){
+            LogUtils.d(throwable);
+        }
+        return 0;
     }
 
     private static int parseInt2(String s,String desc) {
