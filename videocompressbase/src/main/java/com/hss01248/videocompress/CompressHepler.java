@@ -149,7 +149,7 @@ public class CompressHepler {
                 return false;
             }else {
                 LogUtils.d("尺寸不需要压缩,但需要压缩码率");
-                info.desc = "尺寸不需要压缩,但需要压缩码率";
+                info.desc = "尺寸不需要压缩,但需要压缩码率:"+expetedRatesInkps/8/1024/1024+"MB/s";
                 info.outWidth = inputWidth;
                 info.outHeight = inputHeight;
                 info.outBitRate = expetedRatesInkps;
@@ -157,7 +157,7 @@ public class CompressHepler {
         }else {
             LogUtils.d("需要压缩尺寸+码率: 尺寸从大往小压,码率也是从大往小",sourceResolution+"p -> "+targetResolution+"p");
             int expetedRatesInkps = VideoCompressUtil.getGlobalBitRateConfig().getExpectedBitRate(compressType);
-            info.desc = "需要压缩尺寸+码率: 尺寸从大往小压,码率也是从大往小";
+            info.desc = "需要压缩尺寸+码率: 尺寸从大往小压,码率也是从大往小:"+expetedRatesInkps/8/1024/1024+"MB/s";
             if(originalBitrate < expetedRatesInkps){
                 info.desc = "原始尺寸更大,但码率却更小,那么使用原始码率";
                 LogUtils.i("原始尺寸更大,但码率却更小,那么使用原始码率,",originalBitrate,expetedRatesInkps);
