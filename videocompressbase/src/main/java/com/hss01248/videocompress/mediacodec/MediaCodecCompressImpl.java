@@ -131,6 +131,7 @@ public class MediaCodecCompressImpl implements ICompressor {
                             //压缩视频码率设置跟最终生成的不一致:
                             // 压缩的时候没有设置帧率，你那默认是用的30而不是读取视频的真实帧率
                             //如果帧率设置为视频的真实帧率，码率就一致了
+                            //不能低码率往高码率转
                             .frameRate(frameCount)
                             .progressListener(new VideoProgressListener() {
                                 @Override
