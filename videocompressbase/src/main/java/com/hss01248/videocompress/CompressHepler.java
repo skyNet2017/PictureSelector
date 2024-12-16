@@ -167,12 +167,12 @@ public class CompressHepler {
             info.outBitRate = Math.min(originalBitrate,expetedRatesInkps);
             float rate = 0;
             if(inputWidth < inputHeight){
-                rate = inputWidth*1.0f/targetResolution;
+                //rate = inputWidth*1.0f/targetResolution;
                 int targetHeight = Math.round(targetResolution*inputHeight*1.0f/inputWidth);
                 info.outWidth = targetResolution;
                 info.outHeight = targetHeight;
             }else {
-                rate = inputHeight*1.0f/targetResolution;
+                //rate = inputHeight*1.0f/targetResolution;
                 int targetW = Math.round(targetResolution*inputWidth*1.0f/inputHeight);
                 info.outWidth = targetW;
                 info.outHeight = targetResolution;
